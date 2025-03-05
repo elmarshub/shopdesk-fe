@@ -164,7 +164,7 @@ const Page = () => {
 
       <section className="min-h-[834px] bg-white py-[96px] flex flex-col gap-[64px] mb-[30px]">
         <div className="flex flex-col gap-[20px] px-[32px] items-center">
-          <p className="py-2 px-4 rounded-[24px] bg-[rgba(0,154,73,0.05)] text-[#009A49] font-[500] text-[16px] leading-[24px] font-['Circular_Std">
+          <p className="py-2 px-4 rounded-[24px] bg-[rgba(0,154,73,0.05)] text-[#009A49] font-[500] text-[16px] leading-[24px] font-['Circular_Std']">
             Features
           </p>
           <h3 className="font-['Circular_Std'] font-[500] text-[36px] leading-[44px] text-[#2a2a2a] tracking-[-0.02em] text-center">
