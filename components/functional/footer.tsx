@@ -113,9 +113,7 @@ const Footer = () => {
 
             <ul className="text-[14px] text-[#52525B] flex flex-col gap-6 mt-8">
               <li>About us</li>
-              <li>
-                <Link href="/careers">Careers</Link>
-              </li>
+              <li>Careers</li>
               <li>Blog</li>
               <li>Contact</li>
               <li>Newsletter</li>
