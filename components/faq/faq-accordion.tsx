@@ -1,5 +1,7 @@
 "use client";
-import { Minus, Plus } from "lucide-react";
+import Image from 'next/image';
+import plus from '@/public/icons/plus-circle.svg'
+import minus from '@/public/icons/minus-circle.svg'
 
 import {
   Accordion,
@@ -13,7 +15,7 @@ export default function FAQAccordion() {
   return (
     <div className="container mx-auto py-8">
       <Tabs defaultValue="general" className="w-full bg-white">
-        <TabsList className="flex gap-4 mb-8 justify-start lg:justify-center bg-white overflow-x-auto whitespace-nowrap w-full scrollbar-hide">
+        <TabsList className="flex gap-4 mb-8 justify-start md:justify-center bg-white overflow-x-auto whitespace-nowrap w-full scrollbar-hide">
           <TabsTrigger
             value="general"
             className="data-[state=active]:bg-[#2A2A2A] data-[state=active]:text-white bg-white py-3 px-6 font-medium text-[#2A2A2A] rounded-2xl md:rounded-full border border-[#1b1b1b] cursor-pointer"
@@ -178,8 +180,8 @@ function AccordionIcon() {
   return (
     <>
       <div className="flex">
-        <Plus className="h-6 w-6 text-green-500 group-data-[state=open]:hidden" />
-        <Minus className="h-6 w-6 text-green-500 hidden group-data-[state=open]:block" />
+        <Image src={plus} alt='plus-icon' className="h-6 w-6 text-green-500 group-data-[state=open]:hidden" />
+        <Image src={minus} alt='minus-icon' className="h-6 w-6 text-green-500 hidden group-data-[state=open]:block" />
       </div>
     </>
   );
