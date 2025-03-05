@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Project Name
+
+# **Shopdesk**
+
+## Project Description
+
+Shopdesk is a web-based retail management system that simplifies stock tracking for retailers. It solves the problem of inefficient stock management by providing a user-friendly interface for adding, viewing, editing, and soft-deleting stock items. With secure user authentication, retailers can confidently manage their inventory and ensure accurate stock records.
+
+---
+
+## Features
+
+- **User Authentication**:
+
+  - Users can log in with their email and password.
+  - Incorrect credentials block access to the system.
+
+- **Stock Management**:
+
+  - **Add Stock**: Users can add new stock items with details like name, SKU code, price, and quantity.
+  - **View Stock**: Users can view a list of all active stock items.
+  - **Edit Stock**: Users can update stock details (name, price, quantity) while keeping SKU codes read-only.
+  - **Soft-Delete Stock**: Users can soft-delete stock items, which are marked as "Is deleted" in the database and hidden from the stock list.
+
+
+
+## Technologies Used
+
+- **Frontend**:
+  - Next.js (React framework for server-side rendering and static site generation).
+  - Tailwind CSS (utility-first CSS framework for styling).
+  - **shadcn/ui**: A collection of reusable, accessible, and customizable UI components built with Radix UI and Tailwind CSS.
+
+---
+
+## Contributors
+
+//will be added
+
+## Live Demo
+
+https://g1pgkdnt-3000.uks1.devtunnels.ms/
 
 ## Getting Started
 
-First, run the development server:
+Follow these steps to set up and run the project locally.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Prerequisites
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Node.js (version 16.8 or later)
+- npm or yarn
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Installation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Clone the repository**:
 
-## Learn More
+   ```bash
+   git clone https://github.com/hngprojects/shopdesk-fe.git
 
-To learn more about Next.js, take a look at the following resources:
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Navigate to the project directory**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+        cd SHOPDESK-FE
 
-## Deploy on Vercel
+3. **Install dependencies**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+        npm install
+           or
+        yarn install
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4.  **Run the development server**
+
+        npm run dev
+           or
+        yarn dev
+
+5.  **Access the application**
+
+    Open your browser and navigate to:
+
+    http://localhost:3000
