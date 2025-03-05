@@ -5,16 +5,28 @@
 @custom-variant dark (&:is(.dark *));
 
 @font-face {
-  font-family: "Circular Std";
-  src: url("/fonts/circular-std-medium-500.ttf");
+  font-family: "Circular Std Normal";
+  src: url("/fonts/CircularStd-Book.ttf");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
+  font-family: "Circular Std Medium";
+  src: url("/fonts/CircularStd-Medium.ttf");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
   font-family: "Circular Std Bold";
   src: url("/fonts/CircularStd-Bold.ttf");
   font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Circular Std Black";
+  src: url("/fonts/CircularStd-Black.ttf");
+  font-weight: 800;
   font-style: normal;
 }
 
@@ -53,11 +65,11 @@ body {
   max-width: 1440px;
 }
 
-html, body {
+html,
+body {
   overflow-x: hidden;
   width: 100%;
 }
-
 
 @theme {
   --font-circular-bold: "Circular Std Bold";

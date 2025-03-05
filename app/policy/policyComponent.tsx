@@ -3,6 +3,7 @@
 function cn(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
+
 import { ChevronDown, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -85,7 +86,7 @@ const Policy = () => {
     <div className="md:py-24 px-4 py-16">
       <div className="text-center flex flex-col gap-4">
         <h1 className="text-4xl font-bold">ShopDesk Legal Center</h1>
-        <p className="text-gray-600 mt-2 max-w-2xl mx-auto font-normal">
+        <p className="text-gray-600 mt-2 max-w-2xl mx-auto font-normal ">
           Everything You Need to Know About Using ShopDesk.
         </p>
       </div>
@@ -144,7 +145,7 @@ const Policy = () => {
                 selectedPolicy.content.map((section, index) => (
                   <div key={index} className="mt-4">
                     <h2 className="text-lg font-medium">{section.title}</h2>
-                    <p className="text-gray-700">{section.body}</p>
+                    <p className="text-gray-700 font-normal">{section.body}</p>
                   </div>
                 ))
               )}
