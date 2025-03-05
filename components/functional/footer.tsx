@@ -44,7 +44,7 @@ const Footer = () => {
           </div>
 
 
-          <div className='flex gap-0.5 text-[14px] mt-1 max-[650px]:hidden'>
+          <div className='flex gap-0.5 justify-self-center w-full max-w-[600px] text-[14px] mt-1 max-[650px]:hidden'>
             <p>
               We protect your data in our 
             </p>
