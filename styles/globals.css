@@ -5,34 +5,46 @@
 @custom-variant dark (&:is(.dark *));
 
 @font-face {
-  font-family: 'Circular Std';
-  src: url('/fonts/circular-std-medium-500.ttf');
+  font-family: "Circular Std Normal";
+  src: url("/fonts/CircularStd-Book.ttf");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Circular Std Bold';
-  src: url('/fonts/CircularStd-Bold.ttf');
+  font-family: "Circular Std Medium";
+  src: url("/fonts/CircularStd-Medium.ttf");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Circular Std Bold";
+  src: url("/fonts/CircularStd-Bold.ttf");
   font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Circular Std Black";
+  src: url("/fonts/CircularStd-Black.ttf");
+  font-weight: 800;
   font-style: normal;
 }
 
 @layer components {
   .btn-primary {
     padding: 12px 24px;
-    background-color: #1B1B1B;
+    background-color: #1b1b1b;
     border-radius: 12px;
     font-size: 16px;
     font-weight: 500;
     color: white;
   }
 
-  .btn-outline{
+  .btn-outline {
     padding: 12px 24px;
-    color: #1B1B1B;
+    color: #1b1b1b;
     border-width: 1px;
-    border-color: #1B1B1B;
+    border-color: #1b1b1b;
     border-radius: 12px;
     font-size: 16px;
     font-weight: 500;
@@ -48,13 +60,13 @@ html {
 }
 
 body {
-  font-family: 'Circular Std';
+  font-family: "Circular Std";
   width: 100%;
   max-width: 1440px;
 }
 
 @theme {
-  --font-circular-bold: 'Circular Std Bold';
+  --font-circular-bold: "Circular Std Bold";
 }
 
 @theme inline {
