@@ -4,7 +4,7 @@ import React from "react";
 
 const Page = () => {
   return (
-    <div className="flex flex-col justify-center items-center gap-6 lg:gap-8 px-4 py-12">
+    <div className="flex flex-col justify-center items-center gap-6 lg:gap-8 px-4 py-12 md:max-w-[768px] xl:max-w-[1280px] mx-auto">
       <div className="text-center grid gap-5 max-w-[768px]">
         <h2 className="text-[#101828] text-4xl font-bold">
           Frequently asked questions
