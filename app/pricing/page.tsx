@@ -1,9 +1,30 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
+import localFont from "next/font/local";
+
+const customFont = localFont({
+  src: [
+    {
+      path: "../../public/fonts/circular-std-medium-500.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/circular-std-medium-500.ttf",
+      weight: "450",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/CircularStd-Bold.ttf",
+      weight: "800",
+      style: "normal",
+    },
+  ],
+  variable: "--font-custom",
+});
 
 const Page = () => {
-  const sharedClassNames: string =
-    "py-4 px-6 font-[500] font-['Circular_Std'] text-[14px] leading-[24px] box-border rounded-[6px] flex items-center h-[44px]";
+  const sharedClassNames: string = `${customFont.variable} py-4 px-6 font-[500] text-[14px] leading-[24px] box-border rounded-[6px] flex items-center h-[44px]`;
   interface PriceCardContentOptions {
     plan: string;
     price: string;
@@ -91,8 +112,8 @@ const Page = () => {
   ];
 
   return (
-    <main>
-      <section className="w-screen bg-[#fafafb] -ml-[clamp(25px,5vw,120px)] pt-[96px] pb-[61px] flex flex-col items-center gap-[48px] font-['Circular_Std']">
+    <main className={customFont.className}>
+      <section className="w-screen bg-[#fafafb] pt-[96px] pb-[61px] flex flex-col items-center gap-[48px]">
         <div className="flex flex-col gap-[24px] items-center">
           <h2 className="font-[500] text-[60px] leading-[120%] max-w-[30ch] text-center text-[#2a2a2a]">
             Simple, Transparent Pricing for Every Business
@@ -123,7 +144,7 @@ const Page = () => {
                   className="flex column justify-center items-center flex-col p-[32px] gap-[35px] bg-white rounded-[16px] border-[1px] border-[#dedede]"
                   key={index}
                 >
-                  <div className="flex flex-col gap-6 items-center *:font-['Circular_Std'] *:font-[500] *:text-[#2a2a2a]">
+                  <div className="flex flex-col gap-6 items-center *:font-[500] *:text-[#2a2a2a]">
                     <p className="bg-[#f1f1f1] rounded-[6px] p-2 flex justify-center items-center  text-[12px] leading-[16px] uppercase">
                       {cardContent.plan}
                     </p>
@@ -164,13 +185,13 @@ const Page = () => {
 
       <section className="min-h-[834px] bg-white py-[96px] flex flex-col gap-[64px] mb-[30px]">
         <div className="flex flex-col gap-[20px] px-[32px] items-center">
-          <p className="py-2 px-4 rounded-[24px] bg-[rgba(0,154,73,0.05)] text-[#009A49] font-[500] text-[16px] leading-[24px] font-['Circular_Std">
+          <p className="py-2 px-4 rounded-[24px] bg-[rgba(0,154,73,0.05)] text-[#009A49] font-[500] text-[16px] leading-[24px]">
             Features
           </p>
-          <h3 className="font-['Circular_Std'] font-[500] text-[36px] leading-[44px] text-[#2a2a2a] tracking-[-0.02em] text-center">
+          <h3 className="font-[500] text-[36px] leading-[44px] text-[#2a2a2a] tracking-[-0.02em] text-center">
             Unlock Effortless Shop Management
           </h3>
-          <p className="text-[#717171] text-[20px] leading-[30px] font-['Circular_Std'] font-[450] text-center max-w-prose">
+          <p className="text-[#717171] text-[20px] leading-[30px] font-[450] text-center max-w-prose">
             Track inventory in real-time, monitor multi-currency sales, and
             generate actionable reports—all while working offline. ShopDesk
             simplifies your retail operations, so you can focus on growing your
@@ -196,11 +217,11 @@ const Page = () => {
                     />
                   </div>
 
-                  <p className="text-[#2a2a2a] font-['Circular_Std'] text-[20px] leading-[30px] font-[500] text-center">
+                  <p className="text-[#2a2a2a] text-[20px] leading-[30px] font-[500] text-center">
                     {content.title}
                   </p>
 
-                  <p className="text-[#717171] font-['Circular_Std'] text-[16px] leading-[24px] font-[450] text-center">
+                  <p className="text-[#717171] text-[16px] leading-[24px] font-[450] text-center">
                     {content.text}
                   </p>
                 </div>
