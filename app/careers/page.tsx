@@ -26,7 +26,7 @@ const Page = () => {
   ];
 
   return (
-    <div className="pt-14 pb-44 space-y-8 w-full">
+    <div className="pt-14 pb-44 px-[clamp(16px,_4vw,_120px)] space-y-8 w-full">
       <div className="w-full space-y-6">
         <h1 className="text-[#19A45B] text-4xl text-center font-medium">
           Careers
