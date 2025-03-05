@@ -14,7 +14,7 @@ const Page = () => {
           browse by category
         </p>
       </div>
-      <div className="max-w-[606px] w-full flex gap-4">
+      <div className="max-w-[580px] w-full flex gap-4">
         <input
           type="text"
           name="search"

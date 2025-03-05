@@ -15,7 +15,7 @@ export default function FAQAccordion() {
   return (
     <div className="container mx-auto py-8">
       <Tabs defaultValue="general" className="w-full bg-white">
-        <TabsList className="flex gap-4 mb-8 justify-start md:justify-center bg-white overflow-x-auto whitespace-nowrap w-full scrollbar-hide">
+        <TabsList className="flex gap-5 mb-8 justify-start md:justify-center bg-white overflow-x-auto whitespace-nowrap w-full scrollbar-hide">
           <TabsTrigger
             value="general"
             className="data-[state=active]:bg-[#2A2A2A] data-[state=active]:text-white bg-white py-3 px-6 font-medium text-[#2A2A2A] rounded-2xl md:rounded-full border border-[#1b1b1b] cursor-pointer"
@@ -167,7 +167,7 @@ function CustomAccordion({ type = "general" }: { type?: string }) {
             {item.question}
             <AccordionIcon />
           </AccordionTrigger>
-          <AccordionContent className="text-[#667085] pt-4">
+          <AccordionContent className="text-[#667085] text-[16px] pt-4">
             {item.answer}
           </AccordionContent>
         </AccordionItem>
