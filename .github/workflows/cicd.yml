@@ -1,0 +1,36 @@
+name: CI/CD Pipeline
+
+on:
+  workflow_dispatch
+
+jobs:
+  ssh-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install SSHpass
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass
+
+      - name: SSH into server and run commands
+        env:
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+          SSH_IP: ${{ secrets.SSH_IP }}
+          REPO_URL: ${{ secrets.REPO_URL }}
+        run: |
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USERNAME@$SSH_IP" "
+            if [ -d 'shopdesk-fe' ]; then
+              cd shopdesk-fe && git pull origin main
+            else
+              git clone $REPO_URL &&
+              cd $(basename $REPO_URL .git)
+            fi &&
+            echo 'Running command...' &&
+            npm run dev
+          "
+            
