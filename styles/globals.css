@@ -53,6 +53,12 @@ body {
   max-width: 1440px;
 }
 
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+
 @theme {
   --font-circular-bold: 'Circular Std Bold';
 }
