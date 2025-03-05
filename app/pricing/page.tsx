@@ -130,7 +130,7 @@ const Page = () => {
             Monthly
           </Button>
           <Button
-            className={`${sharedClassNames} h-[44px] text-[#2a2a2a] bg-transparent shadow-none`}
+            className={`${sharedClassNames} h-[44px] text-[#2a2a2a] bg-transparent shadow-none hover:bg-transparent`}
           >
             Annually
           </Button>
