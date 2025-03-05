@@ -92,7 +92,7 @@ const Page = () => {
 
   return (
     <main>
-      <section className="w-screen bg-[#fafafb] -ml-[clamp(25px,5vw,120px)] pt-[96px] pb-[61px] flex flex-col items-center gap-[48px] font-['Circular_Std']">
+      <section className="w-screen bg-[#fafafb] pt-[96px] pb-[61px] flex flex-col items-center gap-[48px] font-['Circular_Std']">
         <div className="flex flex-col gap-[24px] items-center">
           <h2 className="font-[500] text-[60px] leading-[120%] max-w-[30ch] text-center text-[#2a2a2a]">
             Simple, Transparent Pricing for Every Business
