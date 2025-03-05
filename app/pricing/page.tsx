@@ -113,12 +113,12 @@ const Page = () => {
 
   return (
     <main className={customFont.className}>
-      <section className="w-screen bg-[#fafafb] pt-[96px] pb-[61px] flex flex-col items-center gap-[48px]">
+      <section className="w-full bg-[#fafafb] pt-[96px] flex flex-col items-center gap-[48px] px-2">
         <div className="flex flex-col gap-[24px] items-center">
-          <h2 className="font-[500] text-[60px] leading-[120%] max-w-[30ch] text-center text-[#2a2a2a]">
+          <h2 className="font-[500] text-[36px] leading-[42px] md:text-[60px] md:leading-[120%] max-w-[30ch] text-center text-[#2a2a2a]">
             Simple, Transparent Pricing for Every Business
           </h2>
-          <p className="text-center font-[400] text-[#717171] text-[20px] leading-[150%]">
+          <p className="text-center font-[400] text-[#717171] text-[18px] md:text-[20px] leading-[150%]">
             Choose a plan that fits your business needs. No hidden fees, cancel
             anytime.
           </p>
@@ -136,12 +136,12 @@ const Page = () => {
           </Button>
         </div>
 
-        <section className="w-[min(85%,1210px)] h-[490px] grid grid-cols-3 gap-[29px]">
+        <section className="w-full px-[10px] pt-[4px] pb-[64px] lg:p-0 lg:pb-[64px] lg:w-[min(85%,1210px)] lg:grid lg:grid-cols-3 lg:gap-[29px] flex flex-wrap justify-center gap-4 bg-white lg:bg-transparent">
           {priceCardContent.map(
             (cardContent: PriceCardContentOptions, index: number) => {
               return (
                 <div
-                  className="flex column justify-center items-center flex-col p-[32px] gap-[35px] bg-white rounded-[16px] border-[1px] border-[#dedede]"
+                  className="flex column items-center flex-col p-[32px] gap-[35px] bg-white rounded-[16px] border-[1px] border-[#dedede] w-[min(100%,371px)] lg:w-full"
                   key={index}
                 >
                   <div className="flex flex-col gap-6 items-center *:font-[500] *:text-[#2a2a2a]">
@@ -173,7 +173,7 @@ const Page = () => {
                     ))}
                   </div>
                   <div className={`${horizontalRuleStyles}`}></div>
-                  <Button className="w-full py-[10px] px-[18px] rounded-[8px] border-[1px] border-[#1b1b1b] bg-[#2a2a2a]">
+                  <Button className="w-full py-[10px] px-[18px] rounded-[8px] border-[1px] border-[#1b1b1b] bg-[#2a2a2a] mt-auto">
                     Get Started
                   </Button>
                 </div>
@@ -183,9 +183,9 @@ const Page = () => {
         </section>
       </section>
 
-      <section className="min-h-[834px] bg-white py-[96px] flex flex-col gap-[64px] mb-[30px]">
+      <section className="bg-[#fafafb] lg:bg-white py-[64px] flex flex-col gap-[48px] mb-[40px]">
         <div className="flex flex-col gap-[20px] px-[32px] items-center">
-          <p className="py-2 px-4 rounded-[24px] bg-[rgba(0,154,73,0.05)] text-[#009A49] font-[500] text-[16px] leading-[24px]">
+          <p className="py-2 px-4 rounded-[24px] md:bg-[rgba(0,154,73,0.05)] text-[#009A49] font-[500] text-[16px] leading-[24px]">
             Features
           </p>
           <h3 className="font-[500] text-[36px] leading-[44px] text-[#2a2a2a] tracking-[-0.02em] text-center">
@@ -198,7 +198,7 @@ const Page = () => {
             business
           </p>
         </div>
-        <div className="grid grid-cols-3 grid-rows-2 gap-x-[32px] gap-y-[64px] px-[32px]">
+        <div className="px-4 gap-[40px] flex flex-col md:grid md:grid-cols-3 md:grid-rows-2 md:gap-x-[32px] md:gap-y-[64px] md:px-[32px]">
           {featuresSectionContent.map(
             (content: FeaturesSectionOptions, index: number) => {
               return (
@@ -221,7 +221,7 @@ const Page = () => {
                     {content.title}
                   </p>
 
-                  <p className="text-[#717171] text-[16px] leading-[24px] font-[450] text-center">
+                  <p className="text-[#717171] text-[16px] leading-[24px] font-[450] text-center max-w-[40ch]">
                     {content.text}
                   </p>
                 </div>
