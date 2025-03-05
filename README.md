@@ -39,7 +39,7 @@ Shopdesk is a web-based retail management system that simplifies stock tracking 
 
 ## Live Demo
 
-https://g1pgkdnt-3000.uks1.devtunnels.ms/
+http://157.180.27.189:3001/
 
 ## Getting Started
 
