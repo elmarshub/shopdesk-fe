@@ -64,7 +64,7 @@ const CookiePolicy = () => {
       <div className="bg-green-600 text-white text-left">
         <div className="max-w-4xl mx-auto px-4 py-12">
           <h1 className="text-3xl font-bold">Cookie Policy</h1>
-          <p className="mt-2 max-w-md text-xl">
+          <p className="mt-3 max-w-md text-xl">
             We use cookies to give you a smoother experience. Build a stunning
             site, stay motivated, and keep costs low—no compromise needed.
           </p>

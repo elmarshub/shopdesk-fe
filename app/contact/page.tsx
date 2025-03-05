@@ -2,19 +2,20 @@ import React from "react";
 
 const contact = () => {
   return (
-    <div className="py-24">
+    <div className="container mx-auto py-10 px-4" >
+
       <div className="text-center">
-        <h1 className="text-3xl font-bold">
+        <h1 className="md:text-3xl text-4xl font-bold">
           Get in <span className="text-green-500">touch</span> with us today
         </h1>
-        <p className="text-gray-600 mt-2 max-w-2xl mx-auto">
+        <p className="text-gray-600 py-[2.5rem] max-w-2xl  mx-auto">
           We’re here to help! Whether you have a question, need assistance, or
           want to provide feedback, we’d love to hear from you. Reach out to us
           by filling the form below.
         </p>
       </div>
 
-      <form className="mt-8 space-y-4">
+      <form className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <input
             type="text"
