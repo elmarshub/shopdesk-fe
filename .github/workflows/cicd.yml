@@ -31,32 +31,36 @@ jobs:
             if [ -d '/var/www/shopdesk-fe' ]; then
               cd /var/www/shopdesk-fe && git pull origin main
             else
-              sudo git clone $REPO_URL /var/www/shopdesk-fe
-              sudo chown -R $USER:$USER /var/www/shopdesk-fe
+              git clone $REPO_URL &&
+              cd $(basename $REPO_URL .git)
             fi &&
 
-            echo 'Building frontend...' &&
-            cd /var/www/shopdesk-fe &&
-            npm install &&
-            npm run build &&
+            # Install and configure Nginx
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq nginx
+            sudo rm -f /etc/nginx/sites-enabled/default
 
-            echo 'Configuring NGINX...' &&
-            sudo bash -c 'cat > /etc/nginx/sites-available/shopdesk-fe << EOF
+            # Create Nginx configuration
+            sudo bash -c 'cat > /etc/nginx/sites-available/shopdesk-fe <<EOF
             server {
-              listen 80;
-              server_name _;
+                listen 80;
+                server_name 157.180.27.189;
 
-              root /var/www/shopdesk-fe/dist;
-              index index.html;
-
-              location / {
-                try_files \$uri /index.html;
-              }
+                location / {
+                    proxy_pass http://localhost:7777;
+                    proxy_set_header Host \$host;
+                    proxy_set_header X-Real-IP \$remote_addr;
+                    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+                    proxy_set_header X-Forwarded-Proto \$scheme;
+                }
             }
-            EOF' &&
+            EOF'
 
-            sudo ln -sf /etc/nginx/sites-available/shopdesk-fe /etc/nginx/sites-enabled/ &&
-            sudo nginx -t &&
-            sudo systemctl restart nginx &&
-            echo 'Deployment completed. Your site is live!'
+            # Enable configuration and reload Nginx
+            sudo ln -sf /etc/nginx/sites-available/shopdesk-fe /etc/nginx/sites-enabled/
+            sudo nginx -t && sudo systemctl reload nginx
+
+            echo 'Running command...' &&
+            npm run dev
           "
+            
