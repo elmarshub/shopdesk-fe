@@ -51,7 +51,6 @@ body {
   font-family: 'Circular Std';
   width: 100%;
   max-width: 1440px;
-  padding-inline: clamp(20px, 5vw, 120px);
 }
 
 @theme {

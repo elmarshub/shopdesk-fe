@@ -6,7 +6,7 @@ import menu from '../../public/icons/menu.svg'
 
 const Header = () => {
   return (
-    <header className='py-4 flex items-center justify-between'>
+    <header className='py-4 flex items-center justify-between px-[clamp(16px,_4vw,_120px)]'>
       <div className='flex items-center justify-center'>
         <Image src={logo} alt='logo'/>
         <p className='text-2xl'>ShopDesk</p>
