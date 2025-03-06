@@ -38,11 +38,9 @@ const cardVariants = cva(
 
 interface CardProps 
   extends React.HTMLAttributes<HTMLDivElement>, 
-  VariantProps<typeof cardVariants> {
-  children?: React.ReactNode
-}
+  VariantProps<typeof cardVariants> {}
 
-function Card({ 
+const CardRoot = React.forwardRef<HTMLDivElement, CardProps>(({ 
   className, 
   variant, 
   size, 
@@ -50,9 +48,10 @@ function Card({
   layout,
   children, 
   ...props 
-}: CardProps) {
+}, ref) => {
   return (
     <div
+      ref={ref}
       data-slot="card"
       className={cn(cardVariants({ variant, size, highlight, layout, className }))}
       {...props}
@@ -60,63 +59,115 @@ function Card({
       {children}
     </div>
   )
-}
+})
+CardRoot.displayName = "Card"
 
-function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+const CardHeader = React.forwardRef<
+  HTMLDivElement, 
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
   return (
     <div
+      ref={ref}
       data-slot="card-header"
       className={cn("flex flex-col gap-1.5 px-6", className)}
       {...props}
     />
   )
-}
+})
+CardHeader.displayName = "Card.Header"
 
-function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+const CardTitle = React.forwardRef<
+  HTMLDivElement, 
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
   return (
     <div
+      ref={ref}
       data-slot="card-title"
       className={cn("text-xl leading-none font-semibold", className)}
       {...props}
     />
   )
-}
+})
+CardTitle.displayName = "Card.Title"
 
-function CardDescription({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+const CardDescription = React.forwardRef<
+  HTMLDivElement, 
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
   return (
     <div
+      ref={ref}
       data-slot="card-description"
       className={cn("text-muted-foreground text-sm", className)}
       {...props}
     />
   )
-}
+})
+CardDescription.displayName = "Card.Description"
 
-function CardContent({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+const CardContent = React.forwardRef<
+  HTMLDivElement, 
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
   return (
     <div
+      ref={ref}
       data-slot="card-content"
       className={cn("px-6 flex-grow", className)}
       {...props}
     />
   )
-}
+})
+CardContent.displayName = "Card.Content"
 
-function CardFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+const CardFooter = React.forwardRef<
+  HTMLDivElement, 
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
   return (
     <div
+      ref={ref}
       data-slot="card-footer"
       className={cn("flex items-center px-6 mt-auto", className)}
       {...props}
     />
   )
-}
+})
+CardFooter.displayName = "Card.Footer"
 
-export { 
-  Card, 
-  CardHeader, 
-  CardFooter, 
-  CardTitle, 
-  CardDescription, 
-  CardContent 
-}
+// Helper function for simple card creation
+const createCard = (
+  content: React.ReactNode,
+  title?: React.ReactNode,
+  description?: React.ReactNode,
+  footer?: React.ReactNode,
+  cardProps?: Omit<CardProps, 'children'>
+) => {
+  return (
+    <CardRoot {...cardProps}>
+      {(title || description) && (
+        <CardHeader>
+          {title && <CardTitle>{title}</CardTitle>}
+          {description && <CardDescription>{description}</CardDescription>}
+        </CardHeader>
+      )}
+      <CardContent>{content}</CardContent>
+      {footer && <CardFooter>{footer}</CardFooter>}
+    </CardRoot>
+  );
+};
+
+
+const Card = Object.assign(CardRoot, {
+  Header: CardHeader,
+  Title: CardTitle,
+  Description: CardDescription,
+  Content: CardContent,
+  Footer: CardFooter,
+  create: createCard
+});
+
+
+export { Card }
