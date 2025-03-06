@@ -42,7 +42,7 @@ const Header = () => {
       <div className="py-4 flex items-center justify-between max-w-screen-xl">
         <Logo />
 
-        <nav className="hidden md:flex gap-6 text-[16px]">
+        <nav className="flex gap-6 text-[16px] max-[850px]:hidden">
           <Link href="/features" className="hover:text-green-500 transition">
             Features
           </Link>
@@ -60,7 +60,7 @@ const Header = () => {
           </Link>
         </nav>
 
-        <div className="hidden md:flex items-center gap-4">
+        <div className="flex items-center gap-4 max-[900px]:hidden">
           <button
             type="button"
             onClick={() => router.push("/sign-in")}
@@ -70,25 +70,35 @@ const Header = () => {
           </button>
           <button
             type="button"
+            onClick={() => router.push("/sign-in")}
             className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
           >
             Start for free
           </button>
         </div>
 
-        <button
-          type="button"
-          aria-label="Menu"
-          className="md:hidden"
-          onClick={() => setIsOpen(!isOpen)}
-          ref={menuBtnRef}
-        >
-          <Image src={menu} alt="menu" width={28} height={28} />
-        </button>
+        <div className="flex items-center gap-2">
+          <button 
+          onClick={() => router.push("/sign-in")}
+          className="btn-primary min-[900px]:hidden max-[500]:hidden max-[600px]:text-[14px]">
+            Get Started
+          </button>
+
+          <button
+            type="button"
+            aria-label="Menu"
+            className="min-[850px]:hidden"
+            onClick={() => setIsOpen(!isOpen)}
+            ref={menuBtnRef}
+          >
+            <Image src={menu} alt="menu" width={28} height={28} />
+          </button>          
+        </div>
+
       </div>
 
       {isOpen && (
-        <div ref={menuRef} className="absolute z-50 top-16 left-0 w-screen bg-white shadow-lg flex flex-col items-left py-6 md:hidden overflow-hidden px-4">
+        <div ref={menuRef} className="absolute z-50 top-16 left-0 w-screen bg-white shadow-lg flex flex-col items-left py-6 overflow-hidden px-4 min-[850px]:hidden">
           <Link
             href="/features"
             className="hover:text-green-500 transition py-5"
