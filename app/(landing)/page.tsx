@@ -14,6 +14,7 @@ import coinbase from "@/public/home-images/coinbase.svg";
 import griffin from "@/public/home-images/griffin.svg";
 import helpscout from "@/public/home-images/helpscout.svg";
 import plaid from "@/public/home-images/plaid.svg"; 
+import Testimonials from "@/components/functional/testimonials";
 
 export default function Home() {
   interface FeatureCardProps {
@@ -367,6 +368,8 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        <Testimonials />
       </section>
     );
   };
