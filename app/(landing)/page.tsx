@@ -6,7 +6,6 @@ import Mobile2 from "@/public/icons/mobile2.png";
 import Check from "@/public/icons/check.png";
 import Play from "@/public/icons/play.png";
 import Desktopsm from "@/public/icons/desktopsm.png";
-import Testimonials from "@/components/functional/testimonials";
 
 export default function Home() {
   interface FeatureCardProps {
@@ -338,7 +337,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <Testimonials />
       </section>
     );
   };
