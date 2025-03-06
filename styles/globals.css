@@ -60,7 +60,7 @@ html {
 }
 
 body {
-  font-family: "Circular Std";
+  font-family: "Circular Std Normal";
   width: 100%;
   max-width: 1440px;
 }
@@ -72,7 +72,10 @@ body {
 }
 
 @theme {
+  --font-circular-normal: "Circular Std Normal";
+  --font-circular-medium: "Circular Std Medium";
   --font-circular-bold: "Circular Std Bold";
+  --font-circular-extrabold: "Circular Std Black";
 }
 
 @theme inline {
