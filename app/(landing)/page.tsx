@@ -44,7 +44,7 @@ export default function Home() {
       <img src={iconSrc} alt={title} className="w-8 h-8 mb-4 mt-2.5" />
       <h3 className="text-2xl leading-6 font-medium text-gray-900">{title}</h3>
       <p className="text-gray-700 text-lg leading-6">{description}</p>
-      <button className="w-full text-green-600 font-medium flex items-center text-left bg-white justify-between md:text-base text-sm ">
+      <button className="w-full text-green-600 font-medium flex items-center text-left justify-between md:text-base text-sm ">
         {buttonText} <span className="ml-1">→</span>
       </button>
     </div>
