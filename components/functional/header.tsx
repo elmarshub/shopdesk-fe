@@ -1,9 +1,10 @@
 "use client";
+
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import logo from "../../public/icons/logo.svg";
-import menu from "../../public/icons/menu.svg";
+import menu from "@/public/icons/menu.svg";
+import Logo from "./logo";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,10 +12,7 @@ const Header = () => {
   return (
     <header className="bg-white px-[clamp(16px,_4vw,_120px)]">
       <div className="py-4 flex items-center justify-between max-w-screen-xl">
-        <div className="flex items-center gap-2">
-          <Image src={logo} alt="logo" width={32} height={32} />
-          <p className="text-2xl font-semibold">ShopDesk</p>
-        </div>
+        <Logo />
 
         <nav className="hidden md:flex gap-6 text-[16px]">
           <Link href="/features" className="hover:text-green-500 transition">
