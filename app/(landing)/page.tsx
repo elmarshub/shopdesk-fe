@@ -1,12 +1,11 @@
-import Header from "@/components/functional/header";
 import Image from "next/image";
-import Desktop from "../public/icons/desktop-img.png";
-import Desktop2 from "../public/icons/Desktop 2.png";
-import Mobile from "../public/icons/mobile.png";
-import Mobile2 from "../public/icons/mobile2.png";
-import Check from "../public/icons/check.png";
-import Play from "../public/icons/play.png";
-import Desktopsm from "../public/icons/desktopsm.png";
+import Desktop from "@/public/icons/desktop-img.png";
+import Desktop2 from "@/public/icons/Desktop 2.png";
+import Mobile from "@/public/icons/mobile.png";
+import Mobile2 from "@/public/icons/mobile2.png";
+import Check from "@/public/icons/check.png";
+import Play from "@/public/icons/play.png";
+import Desktopsm from "@/public/icons/desktopsm.png";
 
 export default function Home() {
   interface FeatureCardProps {

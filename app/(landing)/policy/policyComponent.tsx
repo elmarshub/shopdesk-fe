@@ -8,11 +8,11 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { Button } from "../../components/ui/button";
-import caution from "../../public/icons/caution.svg";
-import file from "../../public/icons/file.svg";
-import lock from "../../public/icons/lock.svg";
-import shiled from "../../public/icons/shieldIcon.svg";
+import { Button } from "@/components/ui/button";
+import caution from "@/public/icons/caution.svg";
+import file from "@/public/icons/file.svg";
+import lock from "@/public/icons/lock.svg";
+import shiled from "@/public/icons/shieldIcon.svg";
 
 const policies = [
   {

@@ -5,9 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import menu from "@/public/icons/menu.svg";
 import Logo from "./logo";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   return (
     <header className="bg-white px-[clamp(16px,_4vw,_120px)]">
@@ -35,6 +37,7 @@ const Header = () => {
         <div className="hidden md:flex items-center gap-4">
           <button
             type="button"
+            onClick={() => router.push("/sign-in")}
             className="border border-black px-4 py-2 rounded-lg hover:bg-gray-100 transition"
           >
             Sign In
