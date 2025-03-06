@@ -14,7 +14,7 @@ Shopdesk is a web-based retail management system that simplifies stock tracking 
 
 ## Live Demo
 
-[Shopdesk Live Demo](http://157.180.27.189:3001/)
+[Shopdesk Live Demo](http://157.180.27.189:7777/)
 
 ---
 

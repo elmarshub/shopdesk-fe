@@ -26,6 +26,10 @@ jobs:
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USERNAME@$SSH_IP" "
             if [ -d 'shopdesk-fe' ]; then
               cd shopdesk-fe &&
+              # Kill any process running on port 7777
+              echo 'Killing any process running on port 7777...' &&
+              echo '$SSH_PASSWORD' | sudo -S fuser -k 7777/tcp || echo 'No process found on port 7777' &&
+              echo 'Pulling latest changes...' &&
               git reset --hard HEAD &&  # Discard local changes
               git pull origin main
             else
