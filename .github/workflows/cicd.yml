@@ -5,7 +5,7 @@ on:
 
 jobs:
   ssh-deploy:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, shopdesk]
 
     steps:
       - name: Checkout repository
