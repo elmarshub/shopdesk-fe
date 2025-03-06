@@ -39,7 +39,7 @@ export default function Home() {
     bgColor,
   }) => (
     <div
-      className={`rounded-[20px] w-[400px] flex flex-col justify-between gap-5 items-start p-4 ${bgColor}`}
+      className={`rounded-[20px] flex flex-1 min-w-[275px] max-w-[400px] flex-col justify-between gap-5 items-start p-4 ${bgColor}`}
     >
       <img src={iconSrc} alt={title} className="w-8 h-8 mb-4 mt-2.5" />
       <h3 className="text-2xl leading-6 font-medium text-gray-900">{title}</h3>
@@ -121,13 +121,13 @@ export default function Home() {
 
     return (
       <section>
-        <div className=" flex flex-col items-center gap-8 pt-10 pb-5 max-w-[867px] p-6 mx-auto">
-          <h1 className="text-4xl leading-14 font-bold md:text-6xl md:leading-16 md:-tracking-[3.5px] text-center">
-            <span className="text-green-500">Simplify</span> Inventory
+        <div className=" flex flex-col items-center gap-8 pt-10 pb-5 max-w-[915px] mx-auto px-5 min-[600px]:px-10">
+          <h1 className="text-[clamp(36px,_6vw,_69px)] leading-14 font-circular-bold md:leading-16 text-center">
+            <span className="text-[#19A45B]">Simplify</span> Inventory
             Management for Your Business
           </h1>
 
-          <p className="text-gray-600 text-base leading-6  md:text-3xl md:leading-9 font-circular-normal text-center font-light">
+          <p className="text-gray-600 text-base leading-6  md:text-3xl md:leading-9 font-circular-light text-center font-light min-[400px]:px-5">
             Start with a stunning homepage. Stay motivated without hurting
             your pocket.
           </p>
@@ -168,7 +168,7 @@ export default function Home() {
           </div> */}
         </div>
 
-        <div className="w-full mt-[53px] flex flex-col items-center">
+        <div className="w-full mt-[40px] flex flex-col items-center">
           <Image
             src={displayScreen}
             alt="Display screen"
@@ -274,8 +274,9 @@ export default function Home() {
 
         </div>
 
-        <div className="mx-auto max-w-[1197px] py-10 px-8">
-          <div className="flex flex-col md:flex-row items-center md:items-stretch md:gap-4 gap-6 justify-between">
+        <div className="mx-auto  py-10 px-8">
+          {/* <div className="flex flex-col md:flex-row items-center md:items-stretch md:gap-4 gap-6 justify-between"> */}
+          <div className="flex items-stretch justify-center gap-4 flex-wrap">
             {features.map((feature, index) => (
               <FeatureCard key={index} {...feature} />
             ))}
