@@ -6,6 +6,14 @@ import Mobile2 from "@/public/icons/mobile2.png";
 import Check from "@/public/icons/check.png";
 import Play from "@/public/icons/play.png";
 import Desktopsm from "@/public/icons/desktopsm.png";
+import displayScreen from "@/public/home-images/displayscreen.svg";
+import patreon from "@/public/home-images/patreon.svg";
+import airbnb from "@/public/home-images/airbnb.svg";
+import fiberplane from "@/public/home-images/fiberplane.svg";
+import coinbase from "@/public/home-images/coinbase.svg";
+import griffin from "@/public/home-images/griffin.svg";
+import helpscout from "@/public/home-images/helpscout.svg";
+import plaid from "@/public/home-images/plaid.svg"; 
 
 export default function Home() {
   interface FeatureCardProps {
@@ -31,12 +39,12 @@ export default function Home() {
     bgColor,
   }) => (
     <div
-      className={`rounded-[20px] w-[400px] h-[350px] flex flex-col gap-5 items-start p-4 ${bgColor}`}
+      className={`rounded-[20px] w-[400px] flex flex-col justify-between gap-5 items-start p-4 ${bgColor}`}
     >
       <img src={iconSrc} alt={title} className="w-8 h-8 mb-4 mt-2.5" />
       <h3 className="text-2xl leading-6 font-medium text-gray-900">{title}</h3>
-      <p className="text-gray-700 text-lg mt-2 leading-6">{description}</p>
-      <button className="mt-2 text-green-600 font-medium flex items-center md:text-base text-sm leading-6">
+      <p className="text-gray-700 text-lg leading-6">{description}</p>
+      <button className="w-full text-green-600 font-medium flex items-center text-left bg-white justify-between md:text-base text-sm ">
         {buttonText} <span className="ml-1">→</span>
       </button>
     </div>
@@ -113,50 +121,71 @@ export default function Home() {
 
     return (
       <section>
-        <div className="relative">
-          <div className=" flex flex-col items-center gap-8 pt-10 pb-5 max-w-[867px] p-6 mx-auto">
-            <h1 className="text-4xl leading-14 font-bold md:text-6xl md:leading-16 md:-tracking-[3.5px] text-center">
-              <span className="text-green-500">Simplify</span> Inventory
-              Management for Your Business
-            </h1>
+        <div className=" flex flex-col items-center gap-8 pt-10 pb-5 max-w-[867px] p-6 mx-auto">
+          <h1 className="text-4xl leading-14 font-bold md:text-6xl md:leading-16 md:-tracking-[3.5px] text-center">
+            <span className="text-green-500">Simplify</span> Inventory
+            Management for Your Business
+          </h1>
 
-            <p className="text-gray-600 text-base leading-6  md:text-3xl md:leading-9 font-medium text-center">
-              Start with a stunning homepage. Stay motivated without hurting
-              your pocket.
-            </p>
+          <p className="text-gray-600 text-base leading-6  md:text-3xl md:leading-9 font-circular-normal text-center font-light">
+            Start with a stunning homepage. Stay motivated without hurting
+            your pocket.
+          </p>
 
-            <button className="btn-primary">Start Your Free Trial</button>
+          <button className="btn-primary">Start Your Free Trial</button>
 
-            <figure className="max-w-[854px] mx-auto">
-              <div className="relative">
-                <Image
-                  src={Desktop}
-                  alt="Desktop dashboard"
-                  className="w-[283px] h-[232px] md:w-[857px] md:h-[500px]"
-                />
-                <Image
-                  src={Mobile}
-                  alt="Desktop dashboard"
-                  className="absolute top-[32px] -right-10 md:top-[70px] md:-right-24 w-[106px] h-[210px] md:w-[295px] md:h-[420px]"
-                />
-              </div>
-            </figure>
+          
+          {/* <figure className="max-w-[854px]">
 
-            <div className="h-[117px] md:h-[115px] right-0 flex items-center flex-wrap left-0 absolute bottom-1 bg-green-500 md:bottom-5 p-6 px-[18px]">
-              <div className=" px-4">
-                <div className="flex flex-wrap justify-center items-center space-x-6 md:space-x-12">
-                  {companies.map((company) => (
-                    <div
-                      key={company.name}
-                      className="text-white  text-lg font-bold"
-                    >
-                      {company.logo}
-                    </div>
-                  ))}
-                </div>
+
+            <div className="relative">
+              <Image
+                src={Desktop}
+                alt="Desktop dashboard"
+                className="w-[283px] h-[232px] md:w-[857px] md:h-[500px]"
+              />
+              <Image
+                src={Mobile}
+                alt="Desktop dashboard"
+                className="absolute top-[32px] -right-10 md:top-[70px] md:-right-24 w-[106px] h-[210px] md:w-[295px] md:h-[420px]"
+              />
+            </div>
+          </figure> */}
+
+          {/* <div className="h-[117px] md:h-[115px] right-0 flex items-center flex-wrap left-0 absolute bottom-1 bg-green-500 md:bottom-5 p-6 px-[18px]">
+            <div className=" px-4">
+              <div className="flex flex-wrap justify-center items-center space-x-6 md:space-x-12">
+                {companies.map((company) => (
+                  <div
+                    key={company.name}
+                    className="text-white  text-lg font-bold"
+                  >
+                    {company.logo}
+                  </div>
+                ))}
               </div>
             </div>
+          </div> */}
+        </div>
+
+        <div className="w-full mt-[53px] flex flex-col items-center">
+          <Image
+            src={displayScreen}
+            alt="Display screen"
+            className="w-[clamp(320px,_70vw,_850px)] max-w-[850px] "
+          />
+
+          <div className="bg-[#19A45B] w-full px-[clamp(18px,_3vw,_80px)] p-6 flex items-center gap-[clamp(16px,_3vw,_48px)] justify-center flex-wrap">
+
+            <Image src={patreon} alt="Patreon" className="w-[clamp(70px,_11vw,_140px)]"/>
+            <Image src={airbnb} alt="Airbnb" className="w-[clamp(70px,_11vw,_140px)]"/>
+            <Image src={fiberplane} alt="Fiberplane" className="w-[clamp(80px,_11vw,_160px)]"/>
+            <Image src={coinbase} alt="Coinbase" className="w-[clamp(75px,_11vw,_150px)]"/>
+            <Image src={griffin} alt="Griffin" className="w-[clamp(60px,_11vw,_120px)]"/>
+            <Image src={helpscout} alt="Helpscout" className="w-[clamp(80px,_11vw,_160px)]"/>
+            <Image src={plaid} alt="Plaid" className="w-[clamp(60px,_11vw,_120px)]"/>
           </div>
+
         </div>
 
         <div className="mx-auto max-w-[1198px] px-6">
@@ -165,7 +194,7 @@ export default function Home() {
           </h2>
 
           <div className="max-w-[1198px] flex flex-col md:flex-row gap-8 items-center justify-between">
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-8 min-w-[300px]">
               <span className="text-base leading-5 text-green-500 font-bold">
                 Stock Inventory
               </span>
@@ -207,65 +236,65 @@ export default function Home() {
                 <Image
                   src={Desktop2}
                   alt="Desktop"
-                  className="w-full md:w-[767px] md:h-[546px] overflow-hidden"
+                  className="flex-1 overflow-hidden"
                 />
               </div>
 
-              <div className="w-full bg-[#FAFAFA] flex items-center p-1 rounded-3xl md:hidden">
+            </figure>
+              <div className="w-full max-w-[450px] bg-[#FAFAFA] flex flex-col items-center p-1 rounded-3xl md:hidden">
                 <Image
                   src={Desktopsm}
                   alt="Desktop"
-                  className="overflow-hidden h-[201px] w-[343px]"
+                  className="overflow-hidden h-[201px] w-full"
                 />
+                
+                <ul className="flex flex-col gap-6 text-base leading-6 md:hidden pt-8 self-start">
+                  <li className="flex items-center gap-2">
+                    <span>
+                      <Image src={Check} height={24} width={24} alt="" />
+                    </span>
+                    Automated Alerts
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span>
+                      <Image src={Check} height={24} width={24} alt="" />
+                    </span>
+                    Comprehensive Reporting
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span>
+                      <Image src={Play} height={24} width={24} alt="" />
+                    </span>
+                    Streamline Your Inventory Now
+                  </li>
+                </ul>
+
               </div>
-            </figure>
           </div>
 
-          <ul className="flex flex-col gap-6 text-base leading-6 md:hidden pt-8">
-            <li className="flex items-center gap-2">
-              <span>
-                <Image src={Check} height={24} width={24} alt="" />
-              </span>
-              Automated Alerts
-            </li>
-            <li className="flex items-center gap-2">
-              <span>
-                <Image src={Check} height={24} width={24} alt="" />
-              </span>
-              Comprehensive Reporting
-            </li>
-            <li className="flex items-center gap-2">
-              <span>
-                <Image src={Play} height={24} width={24} alt="" />
-              </span>
-              Streamline Your Inventory Now
-            </li>
-          </ul>
         </div>
 
         <div className="mx-auto max-w-[1197px] py-10 px-8">
-          <div className="flex flex-col md:flex-row items-center md:gap-4 gap-6 justify-between">
+          <div className="flex flex-col md:flex-row items-center md:items-stretch md:gap-4 gap-6 justify-between">
             {features.map((feature, index) => (
               <FeatureCard key={index} {...feature} />
             ))}
           </div>
         </div>
 
-        <div className="max-w-[1200px] mx-auto pb-10">
-          <h2 className="text-center py-3 font-medium leading-6 text-green-500">
+        <div className="max-w-[1200px] mx-auto pb-10 ">
+          <h2 className="text-center py-3 font-medium leading-6 text-green-500 mb-[52px]">
             How it works
           </h2>
 
-          <div className="flex md:flex-row flex-col-reverse md:gap-[200px] gap-10 items-center px-4">
-            <figure className="flex items-center justify-center w-full md:w-auto">
-              <Image
-                src={Mobile2}
-                alt="Mobile view"
-                className="max-w-[308px]"
-              />
-            </figure>
+          <div className="flex md:flex-row flex-col-reverse justify-between gap-10 items-center px-4">
+            <Image
+              src={Mobile2}
+              alt="Mobile view"
+              className="max-w-[308px] max-[1000px]:w-[250px] max-[900px]:w-[200px] max-[768px]:w-[308px]"
+            />
             <div className="flex justify-center w-full md:w-auto max-w-[692px]">
-              <div className="flex flex-col items-start gap-16 relative">
+              <div className="flex flex-col items-start gap-16 max-[1000px]:gap-4 relative">
                 {/* Horizontal connecting line */}
                 <div
                   className="absolute md:left-[105px] left-[71px] bg-gray-300"
