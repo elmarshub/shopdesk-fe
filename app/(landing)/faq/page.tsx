@@ -2,7 +2,6 @@ import FAQAccordion from "@/app/(landing)/faq/_components/faq-accordion";
 import QuestionsCTA from "@/app/(landing)/faq/_components/questions-cta";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
-import React from "react";
 
 const Page = () => {
   return (
