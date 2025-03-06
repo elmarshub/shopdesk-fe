@@ -33,7 +33,8 @@ jobs:
               cd $(basename $REPO_URL .git)
             fi &&
             echo 'Installing dependencies...' &&
-            npm install &&  # Install dependencies
-            echo 'Running command...' &&
-            npm run dev
+            bun install &&
+            bun run build &&
+            bun start
           "
+            
