@@ -5,12 +5,53 @@ import Image from "next/image";
 import shopdeskLogo from "@/public/icons/logo.svg";
 import headerImg from "@/public/people-office-work-day 1.png";
 // import { useParams } from "next/navigation";
+import BlogCard from "../_components/BlogCard";
+
+import Thumbnail1 from "@/public/blog-images/thumbnail-1.png";
+import Thumbnail2 from "@/public/blog-images/thumbnail-2.png";
+import Thumbnail3 from "@/public/blog-images/thumbnail-3.png";
+
+const relatedPosts = [
+  {
+    id: "simplify-product-management",
+    imageSrc: Thumbnail1,
+    category: "Inventory Management",
+    readTime: "3 min read",
+    title: "Simplify Your Product Management with Shopdesk",
+    excerpt:
+      "Managing your inventory and product listings shouldn't be a hassle. With Shopdesk, you can effortlessly add...",
+    author: "Shopdesk",
+    date: "17 Feb 2025",
+  },
+  {
+    id: "seamless-order-management",
+    imageSrc: Thumbnail2,
+    category: "Order Management",
+    readTime: "4 min read",
+    title: "Seamless Order Management for Growing Businesses",
+    excerpt:
+      "Tired of juggling orders manually? Shopdesk helps you stay on top of every sale, from inquiry to fulfillment...",
+    author: "Shopdesk",
+    date: "17 Feb 2025",
+  },
+  {
+    id: "grow-business-analytics",
+    imageSrc: Thumbnail3,
+    category: "Inventory Management",
+    readTime: "5 min read",
+    title: "Grow Your Business with Smarter Analytics",
+    excerpt:
+      "Selling on social media is no longer just about posting product pictures and waiting for customers to DM you. Shopdesk...",
+    author: "Shopdesk",
+    date: "17 Feb 2025",
+  },
+];
 
 const Page = () => {
   // const { id } = useParams();
 
   return (
-    <div className="w-full md:w-[1199px] m-auto text-[#2A2A2A]">
+    <div className="w-full md:max-w-[1199px] m-auto text-[#2A2A2A] px-4 mb-20">
       {/* <h1>This is Blog {id}</h1> */}
 
       {/* shopdesk mini header */}
@@ -43,7 +84,7 @@ const Page = () => {
       </div>
 
       {/* content */}
-      <div className=" w-full md:w-[958px] mx-auto flex flex-col gap-5 mt-14">
+      <div className=" w-full md:max-w-[958px] mx-auto flex flex-col gap-5 mt-14">
         <section className="w-full flex flex-col gap-4">
           <h3 className="text-[32px] font-medium text-[#1B1B1B]">
             Introduction
@@ -165,6 +206,19 @@ const Page = () => {
             workflows, reduce processing time, and improve customer
             satisfaction—all from a single platform.
           </p>
+        </div>
+      </div>
+
+      {/* related articles */}
+      <div className="mt-14 flex flex-col gap-6">
+        <h3 className="text-[#2A2A2A] text-3xl font-medium">
+          See Related Articles
+        </h3>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8 gap-y-6">
+          {relatedPosts.map((post) => (
+            <BlogCard key={post.id} {...post} />
+          ))}
         </div>
       </div>
     </div>
