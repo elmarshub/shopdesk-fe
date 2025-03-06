@@ -1,30 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import localFont from "next/font/local";
-
-const customFont = localFont({
-  src: [
-    {
-      path: "../../public/fonts/circular-std-medium-500.ttf",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/circular-std-medium-500.ttf",
-      weight: "450",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/CircularStd-Bold.ttf",
-      weight: "800",
-      style: "normal",
-    },
-  ],
-  variable: "--font-custom",
-});
 
 const Page = () => {
-  const sharedClassNames: string = `${customFont.variable} py-4 px-6 font-[500] text-[14px] leading-[24px] box-border rounded-[6px] flex items-center h-[44px]`;
   interface PriceCardContentOptions {
     plan: string;
     price: string;
@@ -112,7 +89,7 @@ const Page = () => {
   ];
 
   return (
-    <main className={customFont.className}>
+    <main>
       <section className="w-full bg-[#fafafb] pt-[96px] flex flex-col items-center gap-[48px] px-2">
         <div className="flex flex-col gap-[24px] items-center">
           <h2 className="font-[500] text-[36px] leading-[42px] md:text-[60px] md:leading-[120%] max-w-[30ch] text-center text-[#2a2a2a]">
@@ -125,12 +102,12 @@ const Page = () => {
         </div>
         <div className="flex p-[10px] rounded-[16px] items-center bg-[#f1f1f1] w-[227px] h-[64px]">
           <Button
-            className={`text-white bg-[#2a2a2a] border-[1px] border-[#1b1b1b] w-[102px] ${sharedClassNames}`}
+            className={`text-white bg-[#2a2a2a] border-[1px] border-[#1b1b1b] w-[102px] `}
           >
             Monthly
           </Button>
           <Button
-            className={`${sharedClassNames} h-[44px] text-[#2a2a2a] bg-transparent shadow-none hover:bg-transparent`}
+            className={` h-[44px] text-[#2a2a2a] bg-transparent shadow-none hover:bg-transparent`}
           >
             Annually
           </Button>
