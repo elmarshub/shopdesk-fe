@@ -54,8 +54,12 @@ const Page = () => {
         </div>
         <div className={`${sharedClass} gap-2.5 w-full`}>
           <form action="" className="flex items-center gap-4">
+            <label htmlFor="email" className="sr-only">
+              Email Address
+            </label>
             <input
               type="email"
+              id="email"
               placeholder="Enter your email for early access…"
               className="w-[425px] h-[62px] p-4 border-[1px] border-[#A0A0A0] rounded-[9px] placeholder:text-[#D0D0D0] placeholder:text-[20px] placeholder:leading-[30px] placeholder:font-[450] font-[450] text-[20px] text-leading-[30px]"
             />
