@@ -25,12 +25,15 @@ jobs:
         run: |
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USERNAME@$SSH_IP" "
             if [ -d 'shopdesk-fe' ]; then
-              cd shopdesk-fe && git pull origin main
+              cd shopdesk-fe &&
+              git reset --hard HEAD &&  # Discard local changes
+              git pull origin main
             else
               git clone $REPO_URL &&
               cd $(basename $REPO_URL .git)
             fi &&
-            echo 'Running command...' &&
-            npm run dev
+            echo 'Installing dependencies...' &&
+            bun install &&
+            bun run build &&
+            bun start
           "
-            
