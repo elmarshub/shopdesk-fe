@@ -1,9 +1,13 @@
-import React from 'react'
+import { Metadata } from "next";
+import Blog from "./_components/Blog";
 
-const Page = () => {
-  return (
-    <div>Blog</div>
-  )
-}
+export const metadata: Metadata = {
+  title: "Blog",
+  description: "Read our latest articles, news, and updates from ShopDesk",
+};
 
-export default Page
+const BlogPage = () => {
+  return <Blog />;
+};
+
+export default BlogPage;

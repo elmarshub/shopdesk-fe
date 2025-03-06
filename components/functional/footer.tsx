@@ -1,13 +1,13 @@
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
-import logo from "../../public/icons/logo.svg";
 import appStore from "../../public/icons/App Store.png";
 import playStore from "../../public/icons/Play Store.png";
 import twitter from "../../public/icons/twitter.svg";
 import facebook from "../../public/icons/facebook.svg";
 import instagram from "../../public/icons/instagram.svg";
 import github from "../../public/icons/github.svg";
+import Logo from "./logo";
 
 const Footer = () => {
   return (
@@ -64,9 +64,8 @@ const Footer = () => {
       <div className="mt-20">
         <div className="flex justify-between max-[950px]:grid max-[950px]:grid-cols-4 max-[650px]:grid-cols-3 max-[500px]:flex max-[500px]:flex-col max-[500px]:items-center max-[500px]:text-center max-[950px]:gap-y-12 gap-x-4">
           <div className="w-[248px] max-[950px]:col-span-2 ">
-            <div className="flex items-center mb-8 max-[500px]:justify-center">
-              <Image src={logo} alt="logo" />
-              <p className="text-2xl">ShopDesk</p>
+            <div className="mb-8">
+              <Logo />
             </div>
 
             <p className="text-base text-[#414141]">
