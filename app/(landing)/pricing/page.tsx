@@ -91,7 +91,7 @@ const Page = () => {
   return (
     <main>
       <section className="w-full bg-[#fafafb] pt-[96px] flex flex-col items-center gap-[48px] px-2">
-        <div className="flex flex-col gap-[24px] items-center">
+        <div className="flex flex-col gap-[24px] items-center p-2.5">
           <h2 className="font-[500] text-[36px] leading-[42px] md:text-[60px] md:leading-[120%] max-w-[30ch] text-center text-[#2a2a2a]">
             Simple, Transparent Pricing for Every Business
           </h2>
@@ -113,12 +113,12 @@ const Page = () => {
           </Button>
         </div>
 
-        <section className="w-full px-[10px] pt-[4px] pb-[64px] lg:p-0 lg:pb-[64px] lg:w-[min(85%,1210px)] lg:grid lg:grid-cols-3 lg:gap-[29px] flex flex-wrap justify-center gap-4 bg-white lg:bg-transparent">
+        <section className="w-full px-[10px] pt-[4px] pb-[64px] lg:px-4 lg:pb-[64px] lg:gap-[29px] flex flex-wrap justify-center gap-4 bg-white lg:bg-transparent">
           {priceCardContent.map(
             (cardContent: PriceCardContentOptions, index: number) => {
               return (
                 <div
-                  className="flex column items-center flex-col p-[32px] gap-[35px] bg-white rounded-[16px] border-[1px] border-[#dedede] w-[min(100%,371px)] lg:w-full"
+                  className="flex column items-center flex-col p-[32px] gap-[35px] bg-white rounded-[16px] border-[1px] border-[#dedede] w-[min(100%,351px)]"
                   key={index}
                 >
                   <div className="flex flex-col gap-6 items-center *:font-[500] *:text-[#2a2a2a]">
