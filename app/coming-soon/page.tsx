@@ -1,8 +1,10 @@
 import React from "react";
 import Logo from "@/components/functional/logo";
-import twitter from "../../public/icons/twitter.svg";
-import facebook from "../../public/icons/facebook.svg";
-import instagram from "../../public/icons/instagram.svg";
+import twitter from "@/public/icons/twitter.svg";
+import facebook from "@/public/icons/facebook.svg";
+import instagram from "@/public/icons/instagram.svg";
+import logo from "@/public/icons/logo.svg";
+import play from '@/public/coming-soon/Icon.svg'
 import Image from "next/image";
 
 const Page = () => {
@@ -25,7 +27,7 @@ const Page = () => {
           </button>
         </div>
       </header>
-      <section className={`${sharedClass} gap-16 w-full mb-[17px]`}>
+      <section className={`${sharedClass} gap-16 w-full mb-[61px]`}>
         <div className={`${sharedClass} gap-3`}>
           <h2 className="text-center p-5 backdrop-blur-[200px] text-black rounded-[500px] text-6xl leading-[100%] font-[700] max-w-[27ch]">
             The Future of{" "}
@@ -53,7 +55,24 @@ const Page = () => {
           </p>
         </div>
       </section>
-      <section></section>
+
+      <section className="flex justify-center pt-[24px] items-center mb-[62px]">
+        <div
+          className="w-[1003px] h-[613px] rounded-[24px] outline-[20px] outline-[#00000080] relative bg-cover flex flex-col items-center justify-between pt-5"
+          style={{
+            backgroundImage:
+              "linear-gradient(#000000B2, #000000B2), url('/coming-soon/coming-soon.jpeg')",
+          }}
+        >
+          <div className="flex gap-2 items-start">
+            <Image src={logo} alt="shop desk logo" priority width={20} />
+            <p className="text-[17px] text-white font-[500]">ShopDesk</p>
+          </div>
+          <div className="rounded-[12px] p-3 flex items-center bg-[#00000066] h-[53.5px] w-[53.5px] my-auto">
+            <Image src={play} alt="play button" width={30} priority  />
+          </div>
+        </div>
+      </section>
       <section></section>
       <section></section>
       <section></section>
