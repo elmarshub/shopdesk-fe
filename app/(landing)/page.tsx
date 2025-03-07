@@ -93,7 +93,7 @@ export default function Home() {
     const features = [
       {
         iconSrc: "/icons/stock.svg",
-        title: "Add and View Stock",
+        title: "Easy Stock Entry",
         description:
           "Retailers can add and view stock items with unique SKU codes, ensuring accurate tracking. Soft-deleted SKUs cannot be reused, and all added items appear in the stock list.",
         buttonText: "View Stock List",
@@ -101,7 +101,7 @@ export default function Home() {
       },
       {
         iconSrc: "/icons/note.svg",
-        title: "Edit and Update Stock",
+        title: "Quick Stock Updates",
         description:
           "Retailers can update stock names, prices, and quantities while keeping SKU codes locked for accuracy. This feature simplifies inventory management, reducing errors and improving stock tracking.",
         buttonText: "Manage Stock",
@@ -109,7 +109,7 @@ export default function Home() {
       },
       {
         iconSrc: "/icons/delete.svg",
-        title: "Soft Delete",
+        title: "Smart Stock Control",
         description:
           "Retailers can soft-delete stock items, removing them from the stock list without permanent deletion. Items are marked as “Is deleted” in the database for record-keeping and recovery.",
         buttonText: "Remove Stock",
@@ -119,15 +119,13 @@ export default function Home() {
 
     return (
       <section>
-        <div className=" flex flex-col items-center gap-6 pt-10 max-w-[915px] mx-auto px-5 min-[600px]:px-10">
-          <h1 className="text-[clamp(36px,_6vw,_69px)] leading-14 font-circular-bold md:leading-16 text-center">
-            <span className="text-[#19A45B]">Simplify</span> Inventory
-            Management for Your Business
+        <div className=" flex flex-col items-center gap-6 pt-10 max-w-[1000px] mx-auto px-5 min-[600px]:px-10">
+          <h1 className="text-[clamp(36px,_6vw,_60px)] max-w-[947px] leading-14 font-circular-bold md:leading-16 text-center">
+            <span className="text-[#19A45B]">Simplify</span> Inventory Management – No More Spreadsheets
           </h1>
 
           <p className="text-gray-600 text-base leading-6  md:text-3xl md:leading-9 font-circular-light text-center font-light min-[400px]:px-5">
-            Start with a stunning homepage. Stay motivated without hurting your
-            pocket.
+          Managing your stock shouldn’t be a hassle. With ShopDesk, you can securely track your inventory effortlessly all in one simple platform.
           </p>
 
           {/* <button className="btn-primary">Start Your Free Trial</button> */}
@@ -190,7 +188,7 @@ export default function Home() {
           </h2>
 
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="flex flex-col gap-8 min-w-[300px max-[850px]:min-w-[100px]">
+            <div className="flex flex-col gap-8 min-w-[300px]">
               <div className="gap-2">
                 <span className="text-sm leading-5 text-[#19A45B] mt-3 font-normal">
                   Stock Inventory

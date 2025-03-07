@@ -58,7 +58,7 @@ const Footer = () => {
       </div>
 
       <div className="mt-20">
-        <div className="flex justify-between max-[950px]:grid max-[950px]:grid-cols-4 max-[650px]:grid-cols-3 max-[500px]:flex max-[500px]:flex-col max-[500px]:items-center max-[500px]:text-center max-[950px]:gap-y-12 gap-x-4">
+        <div hidden className="add-this-back-flex hidden justify-between max-[950px]:grid max-[950px]:grid-cols-4 max-[650px]:grid-cols-3 max-[500px]:flex max-[500px]:flex-col max-[500px]:items-center max-[500px]:text-center max-[950px]:gap-y-12 gap-x-4">
           <div className="w-[248px] max-[950px]:col-span-2 ">
             <div className="mb-8">
               <Logo />
@@ -142,9 +142,9 @@ const Footer = () => {
           </div>
         </div>
 
-        <hr className="border border-[#E2E8F0] my-12" />
+        <hr className="border border-[#E2E8F0]  mb-6 md:my-12" />
 
-        <div className="w-full mb-12 flex justify-center gap-4 mt-[70px] min-[500px]:hidden">
+        <div hidden className="w-full hidden mb-12 add-this-back-flex justify-center gap-4 mt-[70px] min-[500px]:hidden">
           <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
             <Image src={twitter} alt="twitter" />
           </div>
