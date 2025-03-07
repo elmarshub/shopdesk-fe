@@ -32,22 +32,24 @@ const Page = () => {
   return (
     <main className="px-6 py-4 w-full">
       <div className="space-y-8 w-full">
-        <div className="lg:border px-4 py-2 lg:shadow-md rounded-lg lg:flex items-center justify-between mx-auto">
+        <div className="border px-4 py-2 shadow-md rounded-lg flex items-center justify-between">
           <div className="flex items-center gap-6">
-            <div className="flex justify-center lg:justify-start w-full lg:w-auto">
+            <div className="flex justify-center lg:block">
               <Logo />
             </div>
-            <small className="text-black text-left hidden lg:block">
+            <small className="text-black hidden lg:block">
               The simplest way to manage your shop!
             </small>
           </div>
           <div className="hidden lg:block">
             <DropdownMenu>
-              <DropdownMenuTrigger className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white">
-                <span className="py-2 px-4 rounded-lg bg-white text-black">
-                  ES
-                </span>
-                Emeka & Sons <ChevronDown strokeWidth={1.5} color="white" />
+              <DropdownMenuTrigger>
+                <button className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white">
+                  <span className="py-2 px-4 rounded-lg bg-white text-black">
+                    ES
+                  </span>
+                  Emeka & Sons <ChevronDown strokeWidth={1.5} color="white" />
+                </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem>Item name</DropdownMenuItem>
@@ -55,73 +57,50 @@ const Page = () => {
             </DropdownMenu>
           </div>
         </div>
-        <div className="space-y-0 w-full">
-          <div className="flex items-center justify-center gap-2 border p-2 rounded-tr-lg rounded-tl-lg w-full lg:w-24 font-semibold">
+        <div className="space-y-1.5 w-full">
+          <div className="flex items-center gap-2 border shadow-md p-2 rounded-tr-lg rounded-tl-lg">
             Stock
             <Image
-              src="/icons/ui-box.svg"
+              src="/icons/ui-box-2.svg"
               alt=""
               width={20}
               height={20}
-              className="w-5 h-5"
+              className="w-full lg:w-5 h-5"
             />
           </div>
           <div className="border shadow-md rounded-b-lg rounded-bl-lg relative">
             {stockItems.length === 0 ? (
-              <div className="relative">
-                <div className="w-full overflow-x-auto">
-                  <ul className="flex items-center justify-between overflow-x-auto snap-x snap-mandatory p-4 w-full">
-                    <li className="font-semibold text-black text-sm hover:cursor-pointer">
-                      ITEM NAME
-                    </li>
-                    <li className="font-semibold text-black text-sm hover:cursor-pointer">
-                      SKU CODE
-                    </li>
-                    <li className="font-semibold text-black text-sm hover:cursor-pointer">
-                      PRICE
-                    </li>
-                    <li className="font-semibold text-black text-sm hover:cursor-pointer hidden lg:flex">
-                      QUANTITY
-                    </li>
-                    <li className="font-semibold text-black text-sm hover:cursor-pointer hidden lg:flex">
-                      ACTION
-                    </li>
-                    <li className="font-semibold text-black text-xl hover:cursor-pointer hidden lg:flex">
-                      +
-                    </li>
-                  </ul>
-                  <span className="w-full h-px bg-[#DEDEDE] block"></span>
-                  <div className="relative h-[80vh] w-full">
-                    <div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
-                      <Image
-                        src="/icons/empty-note-pad.svg"
-                        alt=""
-                        width={56}
-                        height={56}
-                        className="mx-auto"
-                      />
-                      <p className="text-[#888888] text-sm">
-                        You have 0 items in stock
-                      </p>
-                      <button className="btn-outline hover:cursor-pointer">
-                        + Add New Stock
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-[#DEE5ED] p-2 absolute bottom-0 w-full lg:hidden">
-                  <p className="text-gray-400 text-sm flex items-center gap-1 justify-center text-center">
-                    You have <span className="text-black">0</span> stock
-                    (Displaying <span className="text-black">6</span>{" "}
-                      <Image
-                        src="/icons/ArrowDropDown.svg"
-                        alt=""
-                        width={56}
-                        height={56}
-                        className="mx-auto"
-                      />
-                      per page)
-                   </p>
+              <div className="w-full overflow-x-auto">
+                <ul className="flex lg:grid lg:grid-cols-6 overflow-x-auto place-items-center place-content-center p-4 w-full">
+                  <li className="font-semibold text-black text-sm flex items-center gap-3 hover:cursor-pointer">
+                    ITEM NAME
+                  </li>
+                  <li className="font-semibold text-black text-sm flex items-center gap-3 hover:cursor-pointer">
+                    SKU PRICE
+                  </li>
+                  <li className="font-semibold text-black text-sm flex items-center gap-3 hover:cursor-pointer">
+                    PRICE
+                  </li>
+                  <li className="font-semibold text-black text-sm flex items-center justify-center hover:cursor-pointer">
+                    QUANTITY
+                  </li>
+                  <li className="font-semibold text-black text-sm flex items-center justify-center hover:cursor-pointer">
+                    ACTION
+                  </li>
+                  <li className="font-semibold text-black text-xl flex items-center justify-center hover:cursor-pointer">
+                    +
+                  </li>
+                </ul>
+                <span className="w-full h-px bg-[#DEDEDE] block"></span>
+                <div className="relative h-[80vh] w-full">
+                  <div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
+                    <Image
+                      src="/icons/empty-note-pad.svg"
+                      alt=""
+                      width={56}
+                      height={56}
+                      className="mx-auto"
+                    />
                     <p className="text-[#888888] text-sm">
                       You have 0 items in stock
                     </p>
@@ -161,6 +140,20 @@ const Page = () => {
                 </TableBody>
               </Table>
             )}
+            <div className="bg-[#DEE5ED] p-2 absolute bottom-0 flex items-center gap-2">
+              <p className="text-gray-400 text-sm">
+                You have <span className="text-black">0</span> stock (Displaying{" "}
+                <span className="text-black">6</span>{" "}
+                <Image
+                  src="/icons/CaretDown.svg"
+                  alt=""
+                  width={12}
+                  height={12}
+                  className="w-3 h-3"
+                />{" "}
+                per page)
+              </p>
+            </div>
           </div>
         </div>
       </div>
