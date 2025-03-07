@@ -43,10 +43,6 @@ const Footer = () => {
             <button className="btn-primary min-[650px]:self-stretch max-[650px]:h-15 max-[650px]:my-3">
               Subscribe Now
             </button>
-
-            <p className="min-[650px]:hidden max-[650px]:text-[#717171]">
-              © Copyright 2024, Powered by Timbu Business
-            </p>
           </div>
 
           <div className="flex gap-0.5 justify-self-center w-full max-w-[600px] text-[14px] mt-1 max-[650px]:hidden">
@@ -163,10 +159,10 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="w-full flex items-center justify-between gap-4 text-[14px] text-[#71717A] mb-8 max-[900px]:justify-center">
+        <div className="w-full flex items-center gap-4 text-[14px] text-[#71717A] mb-8 justify-center">
           <p>© Copyright 2024, Powered by Timbu Business</p>
 
-          <ul className="flex gap-5 max-[900px]:hidden">
+          <ul className="add-this-back-flex gap-5 hidden max-[900px]:hidden">
             <li>
               <Link href="/cookies">Cookies</Link>
             </li>
