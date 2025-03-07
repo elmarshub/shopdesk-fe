@@ -1,58 +1,100 @@
-'use client';
-import { useState } from 'react';
-import Image from 'next/image';
-import { FaChevronDown, FaSearch, FaMinus, FaPlus, FaTimes } from 'react-icons/fa';
+'use client'
+import { useState } from 'react'
+import Image from 'next/image'
+import {
+  FaChevronDown,
+  FaSearch,
+  FaMinus,
+  FaPlus,
+  FaTimes,
+} from 'react-icons/fa'
 
 const currencies = [
-  { name: 'Nigerian Naira', code: 'NGN', symbol: '₦', flag: '/modal-images/nigeria-flag.svg' },
-  { name: 'Egyptian Pound', code: 'EGP', symbol: 'ج.م', flag: '/modal-images/egypt-flag.svg' },
-  { name: 'Ethiopian Birr', code: 'ETB', symbol: 'Br', flag: '/modal-images/ethiopia-flag.svg' },
-  { name: 'Ghanaian Cedi', code: 'GHS', symbol: '₵', flag: '/modal-images/ghana-flag.svg' },
-  { name: 'Indian Rupee', code: 'INR', symbol: '₹', flag: '/modal-images/india-flag.svg' },
-  { name: 'Kenyan Shilling', code: 'KES', symbol: 'KSh', flag: '/modal-images/kenya-flag.svg' },
-];
+  {
+    name: 'Nigerian Naira',
+    code: 'NGN',
+    symbol: '₦',
+    flag: '/modal-images/nigeria-flag.svg',
+  },
+  {
+    name: 'Egyptian Pound',
+    code: 'EGP',
+    symbol: 'ج.م',
+    flag: '/modal-images/egypt-flag.svg',
+  },
+  {
+    name: 'Ethiopian Birr',
+    code: 'ETB',
+    symbol: 'Br',
+    flag: '/modal-images/ethiopia-flag.svg',
+  },
+  {
+    name: 'Ghanaian Cedi',
+    code: 'GHS',
+    symbol: '₵',
+    flag: '/modal-images/ghana-flag.svg',
+  },
+  {
+    name: 'Indian Rupee',
+    code: 'INR',
+    symbol: '₹',
+    flag: '/modal-images/india-flag.svg',
+  },
+  {
+    name: 'Kenyan Shilling',
+    code: 'KES',
+    symbol: 'KSh',
+    flag: '/modal-images/kenya-flag.svg',
+  },
+]
 
 interface ShopDeskModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen: boolean
+  onClose: () => void
 }
 
 export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isCurrencyModalOpen, setCurrencyModalOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<'cost' | 'selling' | null>(null);
-  const [quantity, setQuantity] = useState(0);
-  const [selectedCostCurrency, setSelectedCostCurrency] = useState(currencies[0]);
-  const [selectedSellingCurrency, setSelectedSellingCurrency] = useState(currencies[0]);
+  const [searchQuery, setSearchQuery] = useState('')
+  const [isCurrencyModalOpen, setCurrencyModalOpen] = useState(false)
+  const [activeDropdown, setActiveDropdown] = useState<
+    'cost' | 'selling' | null
+  >(null)
+  const [quantity, setQuantity] = useState(0)
+  const [selectedCostCurrency, setSelectedCostCurrency] = useState(
+    currencies[0],
+  )
+  const [selectedSellingCurrency, setSelectedSellingCurrency] = useState(
+    currencies[0],
+  )
 
-  const increment = () => setQuantity((prev) => prev + 1);
-  const decrement = () => setQuantity((prev) => (prev > 0 ? prev - 1 : 0));
+  const increment = () => setQuantity((prev) => prev + 1)
+  const decrement = () => setQuantity((prev) => (prev > 0 ? prev - 1 : 0))
 
   const filteredCurrencies = currencies.filter((currency) =>
-    currency.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+    currency.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  )
 
   const toggleCurrencyModal = (dropdown: 'cost' | 'selling') => {
-    setActiveDropdown(dropdown);
-    setCurrencyModalOpen(!isCurrencyModalOpen);
-  };
+    setActiveDropdown(dropdown)
+    setCurrencyModalOpen(!isCurrencyModalOpen)
+  }
 
   const handleCurrencySelect = (currency: typeof currencies[0]) => {
     if (activeDropdown === 'cost') {
-      setSelectedCostCurrency(currency);
+      setSelectedCostCurrency(currency)
     } else if (activeDropdown === 'selling') {
-      setSelectedSellingCurrency(currency);
+      setSelectedSellingCurrency(currency)
     }
-    setCurrencyModalOpen(false);
-  };
+    setCurrencyModalOpen(false)
+  }
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <div className="fixed inset-0 bg-[#24242433] bg-opacity-20 flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg shadow-lg w-[720px] flex flex-col gap-[28px]">
-        <div className="flex gap-[16px]">
-          <div className="flex justify-center items-center p-2">
+        <div className="flex gap-[10px]">
+          <div className="flex p-2">
             <div className="bg-[#CCEBDB] p-4 rounded-lg flex items-center justify-center">
               <Image
                 src="/modal-images/ui-box.svg"
@@ -64,8 +106,10 @@ export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
             </div>
           </div>
           <div className="flex-grow h-full p-2">
-            <h1 className="font-circular-medium text-[24px]">Add New Stock</h1>
-            <p className="font-circular-normal text-[16px] text-[#717171]">
+            <h1 className="font-circular-medium text-[24px] text-left">
+              Add New Stock
+            </h1>
+            <p className="font-circular-normal text-[16px] text-[#717171] text-left">
               Always know the items you have available.
             </p>
           </div>
@@ -266,5 +310,5 @@ export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
         </form>
       </div>
     </div>
-  );
+  )
 }
