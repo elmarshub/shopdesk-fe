@@ -2,19 +2,52 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import Illustration from "@/public/auth/illustration.svg";
 import Cube from "@/public/auth/cube.svg";
 import { AuthFooter } from "./footer";
 import Logo from "@/components/functional/logo";
+import { loginUser } from "@/services/auth";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [touched, setTouched] = useState({ email: false, password: false });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     console.log({ email, password });
+
+    setTouched({ email: true, password: true });
+
+    // Check if fields are empty
+    if (!email.trim() || !password.trim()) {
+      setError("Please fill in all required fields.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const data = await loginUser(email, password);
+      console.log({ email, password });
+
+      if (!data || data.error) {
+        throw new Error(data?.message || "Invalid email or password.");
+      }
+
+      router.push("/dashboard");
+    } catch (err: any) {
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -26,7 +59,7 @@ export default function SignIn() {
       <main className="size-full flex justify-center lg:justify-between items-center">
         {/* left */}
         <div className="hidden lg:flex flex-col gap-8 justify-center items-center max-w-[278px]">
-          <div className="">
+          <div>
             <div className="flex flex-col gap-2">
               <Image src={Cube} alt="cube" width={56} height={56} />
               <h1 className="md:text-4xl lg:text-5xl font-bold">ShopDesk</h1>
@@ -63,14 +96,28 @@ export default function SignIn() {
                 <input
                   type="email"
                   id="email"
-                  className="w-full p-3 border rounded-[9px] focus:ring-2 focus:ring-[#CCEBDB] focus:border-[#009A49] outline-none text-[#2A2A2A]"
+                  className={`w-full p-3 border rounded-[9px] outline-none text-[#2A2A2A]
+                    ${
+                      touched.email && !email
+                        ? "border-red-500"
+                        : "border-gray-300"
+                    }
+                    ${
+                      email ? "focus:border-[#009A49] focus:ring-[#CCEBDB]" : ""
+                    }`}
                   placeholder="johnwick@gmail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  required
+                  onBlur={() =>
+                    setTouched((prev) => ({ ...prev, email: true }))
+                  }
                 />
+                {touched.email && !email && (
+                  <p className="text-red-500 text-sm">Email is required.</p>
+                )}
               </div>
 
+              {/* Password Field */}
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="password" className="block text-sm font-medium">
                   Your password <span className="text-[#FF1925]">*</span>
@@ -78,19 +125,42 @@ export default function SignIn() {
                 <input
                   type="password"
                   id="password"
-                  className="w-full p-3 border rounded-[9px] focus:ring-2 focus:ring-[#CCEBDB] focus:border-[#009A49] outline-none text-[#2A2A2A]"
+                  className={`w-full p-3 border rounded-[9px] outline-none text-[#2A2A2A]
+                    ${
+                      touched.password && !password
+                        ? "border-red-500"
+                        : "border-gray-300"
+                    }
+                    ${
+                      password
+                        ? "focus:border-[#009A49] focus:ring-[#CCEBDB]"
+                        : ""
+                    }`}
                   placeholder="*************"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  required
+                  onBlur={() =>
+                    setTouched((prev) => ({ ...prev, password: true }))
+                  }
                 />
+                {touched.password && !password && (
+                  <p className="text-red-500 text-sm">Password is required.</p>
+                )}
               </div>
+
+              {/* Error Message */}
+              {error && <p className="text-red-600 text-center">{error}</p>}
 
               <button
                 type="submit"
-                className="w-full bg-[#2A2A2A] text-white p-3 rounded-lg font-medium hover:bg-black transition duration-200"
+                className="w-full bg-[#2A2A2A] text-white p-3 rounded-lg font-medium hover:bg-black transition duration-200 flex justify-center items-center gap-2"
+                disabled={loading}
               >
-                Sign in
+                {loading ? (
+                  <span className="size-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                ) : (
+                  "Sign in"
+                )}
               </button>
             </form>
           </div>
