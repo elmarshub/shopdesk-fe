@@ -1,4 +1,18 @@
 "use client";
+<<<<<<< HEAD
+=======
+import ShopDeskModal from '@/components/modal/add-item'
+import { useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Search } from "lucide-react";
+import { ChevronDown } from "lucide-react";
+>>>>>>> upstream/main
 
 import {
   DropdownMenu,
@@ -33,6 +47,11 @@ import { DialogContent, DialogTitle } from "@radix-ui/react-dialog";
 import Image from "next/image";
 
 const Page = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
+
   const [stockItems] = useState([]);
 
   const [email, setEmail] = useState("");
@@ -48,33 +67,31 @@ const Page = () => {
       <div className="space-y-8 w-full">
         <div className="border px-4 py-2 shadow-md rounded-lg flex items-center justify-between">
           <div className="flex items-center gap-6">
-            <Logo />
+            <div className="flex justify-center lg:block">
+              <Logo />
+            </div>
             <small className="text-black hidden lg:block">
               The simplest way to manage your shop!
             </small>
           </div>
-          <Image
-            src="/icons/menu.svg"
-            alt=""
-            width={20}
-            height={20}
-            className="w-5 h-5 lg:hidden"
-          />
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <button className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white">
-                <span className="py-2 px-4 rounded-lg bg-white text-black">
-                  ES
-                </span>
-                Emeka & Sons <ChevronDown strokeWidth={1.5} color="white" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>Item name</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="hidden lg:block">
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <button className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white">
+                  <span className="py-2 px-4 rounded-lg bg-white text-black">
+                    ES
+                  </span>
+                  Emeka & Sons <ChevronDown strokeWidth={1.5} color="white" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>Item name</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
         <div className="space-y-1.5 w-full">
+<<<<<<< HEAD
           <div className="flex flex-col lg:flex-row lg:not-first:items-center gap-2 lg:gap-0 lg:justify-between">
             <div className="relative lg:hidden">
               <Search
@@ -110,56 +127,43 @@ const Page = () => {
                 className="text-black placeholder:text-gray-400 text-sm rounded-md border outline-none focus:ring-gray-400 focus:border-2 w-80 h-9 indent-8"
               />
             </div>
+=======
+          <div className="flex items-center gap-2 border shadow-md p-2 rounded-tr-lg rounded-tl-lg">
+            Stock
+            <Image
+              src="/icons/ui-box-2.svg"
+              alt=""
+              width={20}
+              height={20}
+              className="w-full lg:w-5 h-5"
+            />
+>>>>>>> upstream/main
           </div>
-          <div className="border shadow-md rounded-b-lg rounded-bl-lg">
+          <div className="border shadow-md rounded-b-lg rounded-bl-lg relative">
             {stockItems.length === 0 ? (
               <div className="w-full overflow-x-auto">
                 <ul className="flex lg:grid lg:grid-cols-6 overflow-x-auto place-items-center place-content-center p-4 w-full">
                   <li className="font-semibold text-black text-sm flex items-center gap-3 hover:cursor-pointer">
                     ITEM NAME
-                    <Image
-                      src="/icons/CaretDown.svg"
-                      alt=""
-                      width={12}
-                      height={12}
-                      className="w-3 h-3"
-                    />
                   </li>
                   <li className="font-semibold text-black text-sm flex items-center gap-3 hover:cursor-pointer">
-                    SELL PRICE
-                    <Image
-                      src="/icons/CaretDown.svg"
-                      alt=""
-                      width={12}
-                      height={12}
-                      className="w-3 h-3"
-                    />
+                    SKU PRICE
                   </li>
                   <li className="font-semibold text-black text-sm flex items-center gap-3 hover:cursor-pointer">
-                    AVAILABLE
-                    <Image
-                      src="/icons/CaretDown.svg"
-                      alt=""
-                      width={12}
-                      height={12}
-                      className="w-3 h-3"
-                    />
+                    PRICE
                   </li>
                   <li className="font-semibold text-black text-sm flex items-center justify-center hover:cursor-pointer">
-                    <span className="bg-[#F6F8FA] p-4 rounded-lg">
-                      SHOW PROFIT
-                    </span>
+                    QUANTITY
                   </li>
                   <li className="font-semibold text-black text-sm flex items-center justify-center hover:cursor-pointer">
-                    <span className="bg-[#F6F8FA] p-4 rounded-lg">
-                      SHOW SALES
-                    </span>
+                    ACTION
                   </li>
                   <li className="font-semibold text-black text-xl flex items-center justify-center hover:cursor-pointer">
                     +
                   </li>
                 </ul>
                 <span className="w-full h-px bg-[#DEDEDE] block"></span>
+<<<<<<< HEAD
                 <Dialog>
                   <div className="h-[80vh] w-full flex items-center justify-center">
                     <div className="space-y-4 flex flex-col text-center justify-center">
@@ -182,6 +186,24 @@ const Page = () => {
                         </button>
                       </DialogTrigger>
                     </div>
+=======
+                <div className="relative h-[80vh] w-full">
+                  <div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
+                    <Image
+                      src="/icons/empty-note-pad.svg"
+                      alt=""
+                      width={56}
+                      height={56}
+                      className="mx-auto"
+                    />
+                    <p className="text-[#888888] text-sm">
+                      You have 0 items in stock
+                    </p>
+                    <button onClick={openModal} className="btn-outline hover:cursor-pointer">
+                      + Add New Stock
+                    </button>
+                    <ShopDeskModal isOpen={isOpen} onClose={closeModal} />
+>>>>>>> upstream/main
                   </div>
 
                   <DialogContent>
@@ -271,43 +293,18 @@ const Page = () => {
                   <TableRow className="flex lg:grid lg:grid-cols-6 overflow-x-auto place-items-center place-content-center py-4 w-full">
                     <TableHead className="font-semibold text-black px-4 flex items-center gap-3">
                       ITEM NAME
-                      <Image
-                        src="/icons/CaretDown.svg"
-                        alt=""
-                        width={12}
-                        height={12}
-                        className="w-3 h-3"
-                      />
                     </TableHead>
                     <TableHead className="font-semibold text-black px-4 flex items-center gap-3">
-                      SELL PRICE
-                      <Image
-                        src="/icons/CaretDown.svg"
-                        alt=""
-                        width={12}
-                        height={12}
-                        className="w-3 h-3"
-                      />
+                      SKU CODE
                     </TableHead>
                     <TableHead className="font-semibold text-black px-4 flex items-center gap-3">
-                      AVAILABLE
-                      <Image
-                        src="/icons/CaretDown.svg"
-                        alt=""
-                        width={12}
-                        height={12}
-                        className="w-3 h-3"
-                      />
+                      PRICE
                     </TableHead>
                     <TableHead className="font-semibold text-black px-4 flex items-center justify-center">
-                      <span className="bg-[#F6F8FA] p-4 rounded-lg">
-                        SHOW SALES
-                      </span>
+                      QUANTITY
                     </TableHead>
                     <TableHead className="font-semibold text-black px-4 flex items-center justify-center">
-                      <span className="bg-[#F6F8FA] p-4 rounded-lg">
-                        SHOW PROFIT
-                      </span>
+                      ACTION
                     </TableHead>
                     <TableHead className="font-semibold text-black text-xl px-4 flex items-center justify-center">
                       +
@@ -319,6 +316,20 @@ const Page = () => {
                 </TableBody>
               </Table>
             )}
+            <div className="bg-[#DEE5ED] p-2 absolute bottom-0 flex items-center gap-2">
+              <p className="text-gray-400 text-sm">
+                You have <span className="text-black">0</span> stock (Displaying{" "}
+                <span className="text-black">6</span>{" "}
+                <Image
+                  src="/icons/CaretDown.svg"
+                  alt=""
+                  width={12}
+                  height={12}
+                  className="w-3 h-3"
+                />{" "}
+                per page)
+              </p>
+            </div>
           </div>
         </div>
       </div>
