@@ -18,7 +18,7 @@ export default function SignIn() {
   };
 
   return (
-    <div className="flex flex-col h-dvh w-full bg-white md:bg-[url(/auth/bg-pattern.svg)] bg-contain bg-no-repeat bg-right px-4 md:px-6">
+    <div className="flex flex-col h-dvh w-full bg-white md:bg-[url(/auth/bg-pattern.svg)] bg-contain bg-no-repeat bg-right px-8 md:px-16">
       <div className="border-b border-[#F2F4F7] flex lg:hidden justify-center h-20">
         <Logo />
       </div>
