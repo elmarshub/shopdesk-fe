@@ -1,99 +1,99 @@
-'use client'
-import { useState } from 'react'
-import Image from 'next/image'
+"use client";
+import { useState } from "react";
+import Image from "next/image";
 import {
   FaChevronDown,
   FaSearch,
   FaMinus,
   FaPlus,
   FaTimes,
-} from 'react-icons/fa'
+} from "react-icons/fa";
 
 const currencies = [
   {
-    name: 'Nigerian Naira',
-    code: 'NGN',
-    symbol: '₦',
-    flag: '/modal-images/nigeria-flag.svg',
+    name: "Nigerian Naira",
+    code: "NGN",
+    symbol: "₦",
+    flag: "/modal-images/nigeria-flag.svg",
   },
   {
-    name: 'Egyptian Pound',
-    code: 'EGP',
-    symbol: 'ج.م',
-    flag: '/modal-images/egypt-flag.svg',
+    name: "Egyptian Pound",
+    code: "EGP",
+    symbol: "ج.م",
+    flag: "/modal-images/egypt-flag.svg",
   },
   {
-    name: 'Ethiopian Birr',
-    code: 'ETB',
-    symbol: 'Br',
-    flag: '/modal-images/ethiopia-flag.svg',
+    name: "Ethiopian Birr",
+    code: "ETB",
+    symbol: "Br",
+    flag: "/modal-images/ethiopia-flag.svg",
   },
   {
-    name: 'Ghanaian Cedi',
-    code: 'GHS',
-    symbol: '₵',
-    flag: '/modal-images/ghana-flag.svg',
+    name: "Ghanaian Cedi",
+    code: "GHS",
+    symbol: "₵",
+    flag: "/modal-images/ghana-flag.svg",
   },
   {
-    name: 'Indian Rupee',
-    code: 'INR',
-    symbol: '₹',
-    flag: '/modal-images/india-flag.svg',
+    name: "Indian Rupee",
+    code: "INR",
+    symbol: "₹",
+    flag: "/modal-images/india-flag.svg",
   },
   {
-    name: 'Kenyan Shilling',
-    code: 'KES',
-    symbol: 'KSh',
-    flag: '/modal-images/kenya-flag.svg',
+    name: "Kenyan Shilling",
+    code: "KES",
+    symbol: "KSh",
+    flag: "/modal-images/kenya-flag.svg",
   },
-]
+];
 
 interface ShopDeskModalProps {
-  isOpen: boolean
-  onClose: () => void
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
-  const [searchQuery, setSearchQuery] = useState('')
-  const [isCurrencyModalOpen, setCurrencyModalOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isCurrencyModalOpen, setCurrencyModalOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<
-    'cost' | 'selling' | null
-  >(null)
-  const [quantity, setQuantity] = useState(0)
+    "cost" | "selling" | null
+  >(null);
+  const [quantity, setQuantity] = useState(0);
   const [selectedCostCurrency, setSelectedCostCurrency] = useState(
-    currencies[0],
-  )
+    currencies[0]
+  );
   const [selectedSellingCurrency, setSelectedSellingCurrency] = useState(
-    currencies[0],
-  )
+    currencies[0]
+  );
 
-  const increment = () => setQuantity((prev) => prev + 1)
-  const decrement = () => setQuantity((prev) => (prev > 0 ? prev - 1 : 0))
+  const increment = () => setQuantity((prev) => prev + 1);
+  const decrement = () => setQuantity((prev) => (prev > 0 ? prev - 1 : 0));
 
   const filteredCurrencies = currencies.filter((currency) =>
-    currency.name.toLowerCase().includes(searchQuery.toLowerCase()),
-  )
+    currency.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  const toggleCurrencyModal = (dropdown: 'cost' | 'selling') => {
-    setActiveDropdown(dropdown)
-    setCurrencyModalOpen(!isCurrencyModalOpen)
-  }
+  const toggleCurrencyModal = (dropdown: "cost" | "selling") => {
+    setActiveDropdown(dropdown);
+    setCurrencyModalOpen(!isCurrencyModalOpen);
+  };
 
-  const handleCurrencySelect = (currency: typeof currencies[0]) => {
-    if (activeDropdown === 'cost') {
-      setSelectedCostCurrency(currency)
-    } else if (activeDropdown === 'selling') {
-      setSelectedSellingCurrency(currency)
+  const handleCurrencySelect = (currency: (typeof currencies)[0]) => {
+    if (activeDropdown === "cost") {
+      setSelectedCostCurrency(currency);
+    } else if (activeDropdown === "selling") {
+      setSelectedSellingCurrency(currency);
     }
-    setCurrencyModalOpen(false)
-  }
+    setCurrencyModalOpen(false);
+  };
 
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-[#24242433] bg-opacity-20 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-[720px] flex flex-col gap-[28px]">
-        <div className="flex gap-[10px]">
+    <div className="fixed inset-0 bg-[#24242433] bg-opacity-20 flex items-center justify-center p-4">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-[720px] flex flex-col gap-[28px]">
+        <div className="flex flex-col sm:flex-row gap-2.5">
           <div className="flex p-2">
             <div className="bg-[#CCEBDB] p-4 rounded-lg flex items-center justify-center">
               <Image
@@ -113,8 +113,10 @@ export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
               Always know the items you have available.
             </p>
           </div>
-          <div className="flex-shrink-0">
+          <div className="hidden sm:block flex-shrink-0">
             <button
+              type="button"
+              aria-label="Close"
               onClick={onClose}
               className="p-[9px] border border-[#1B1B1B] rounded-[9px] cursor-pointer hover:bg-[#D0D0D0]"
             >
@@ -132,11 +134,11 @@ export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
             required
           />
 
-          <div className="flex items-start">
-            <div className="flex border gap-[8px] rounded-[9px] m-1 relative">
+          <div className="grid sm:grid-cols-2 gap-2">
+            <div className="flex border gap-2 rounded-[9px] m-1 relative flex-1">
               <div
                 className="p-2 flex gap-[8px] items-center cursor-pointer"
-                onClick={() => toggleCurrencyModal('cost')}
+                onClick={() => toggleCurrencyModal("cost")}
               >
                 <Image
                   src={selectedCostCurrency.flag}
@@ -161,8 +163,8 @@ export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
                 />
               </div>
 
-              {isCurrencyModalOpen && activeDropdown === 'cost' && (
-                <div className="absolute top-full left-0 mt-2 w-[300px] bg-white rounded-lg backdrop-blur-sm border">
+              {isCurrencyModalOpen && activeDropdown === "cost" && (
+                <div className="absolute top-full left-0 mt-2 m-2 max-w-[300px] bg-white rounded-lg backdrop-blur-sm border">
                   <div className="relative w-full p-4">
                     <input
                       type="text"
@@ -190,7 +192,7 @@ export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
                         />
                         <div>
                           <p className="text-[14px] font-circular-normal">
-                            {currency.name} ({currency.code}){' '}
+                            {currency.name} ({currency.code}){" "}
                             <span className="ml-2">{currency.symbol}</span>
                           </p>
                         </div>
@@ -201,10 +203,10 @@ export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
               )}
             </div>
 
-            <div className="flex border gap-[8px] rounded-[9px] m-1 relative">
+            <div className="flex border gap-2 rounded-[9px] m-1 relative flex-1">
               <div
                 className="p-2 flex gap-[8px] items-center cursor-pointer"
-                onClick={() => toggleCurrencyModal('selling')}
+                onClick={() => toggleCurrencyModal("selling")}
               >
                 <Image
                   src={selectedSellingCurrency.flag}
@@ -229,7 +231,7 @@ export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
                 />
               </div>
 
-              {isCurrencyModalOpen && activeDropdown === 'selling' && (
+              {isCurrencyModalOpen && activeDropdown === "selling" && (
                 <div className="absolute top-full right-0 mt-2 w-[298px] bg-white rounded-lg backdrop-blur-sm border">
                   <div className="relative w-full p-4">
                     <input
@@ -258,7 +260,7 @@ export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
                         />
                         <div>
                           <p className="text-[14px] font-circular-normal">
-                            {currency.name} ({currency.code}){' '}
+                            {currency.name} ({currency.code}){" "}
                             <span className="ml-2">{currency.symbol}</span>
                           </p>
                         </div>
@@ -272,6 +274,8 @@ export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
 
           <div className="flex items-center gap-[8px]">
             <button
+              type="button"
+              aria-label="Decrease Quantity"
               className="p-5 border border-[#1B1B1B] rounded-[9px] cursor-pointer hover:bg-[#D0D0D0]"
               onClick={decrement}
             >
@@ -280,11 +284,13 @@ export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
 
             <div className="flex-grow text-center content-center border rounded-[10px] p-4">
               <span className="text-[20px] text-[#B8B8B8] font-circular-normal">
-                {quantity === 0 ? 'Quantity Available' : quantity}
+                {quantity === 0 ? "Quantity Available" : quantity}
               </span>
             </div>
 
             <button
+              type="button"
+              aria-label="Increase Quantity"
               className="p-5 border border-[#1B1B1B] rounded-[9px] cursor-pointer hover:bg-[#D0D0D0]"
               onClick={increment}
             >
@@ -310,5 +316,5 @@ export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
         </form>
       </div>
     </div>
-  )
+  );
 }
