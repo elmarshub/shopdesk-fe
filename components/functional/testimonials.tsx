@@ -1,13 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import Avatar1 from "@/public/testimonial-images/avatar1.png";
-import Avatar2 from "@/public/testimonial-images/avatar2.png";
-import Avatar3 from "@/public/testimonial-images/avatar3.png";
+import { useEffect, useState } from "react";
+import Avatar1 from "./../../public/testimonial-images/avatar1.png";
+import Avatar2 from "./../../public/testimonial-images/avatar2.png";
+import Avatar3 from "./../../public/testimonial-images/avatar3.png";
 
+import { AnimatePresence, motion } from "framer-motion";
 import { Star } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 
 const testimonialsData = [
   {
@@ -34,14 +34,6 @@ const testimonialsData = [
       "“We run multiple store locations, and ShopDesk keeps everything in sync. No more manual inventory checks—everything is automated!”",
     image: Avatar3,
   },
-  /* {
-    id: 4,
-    name: "Alice Johnson",
-    company: "Facebook",
-    review:
-      "“An intuitive interface and great customer support. Would definitely recommend!”",
-    image: Avatar2,
-  }, */
 ];
 
 const Testimonials = () => {
