@@ -9,6 +9,8 @@ import left from "../../public/coming-soon/_ui-arrow-narrow-left.svg";
 import right from "../../public/coming-soon/_ui-arrow-right.svg";
 import testimonial from "../../public/coming-soon/Container.png";
 import Image from "next/image";
+import vectorLeft from "../../public/coming-soon/Vector-left.svg";
+import vectorRight from "../../public/coming-soon/Vector-right.svg";
 import { Features } from "@/components/shared/features";
 
 const Page = () => {
@@ -55,6 +57,22 @@ const Page = () => {
           </button>
         </div>
       </header>
+
+      <div className="hidden md:grid grid-cols-2 absolute left-0 md:top-[7%] lg:top-[2%]">
+        <Image
+          src={vectorLeft}
+          alt="vector"
+          priority
+          className="aria-hidden"
+        />
+        <Image
+          src={vectorRight}
+          alt="vector"
+          priority
+          className="aria-hidden"
+        />
+      </div>
+
       <section className={`${sharedClass} gap-16 w-full mb-[61px]`}>
         <div className={`${sharedClass} gap-3`}>
           <h2 className="text-center p-5 backdrop-blur-[200px] text-black rounded-[500px] text-4xl sm:text-5xl md:text-6xl leading-[100%] font-[700] max-w-[27ch]">
