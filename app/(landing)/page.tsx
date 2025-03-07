@@ -5,6 +5,7 @@ import Play from "@/public/icons/play.png";
 import Desktopsm from "@/public/icons/desktopsm.png";
 import displayScreen from "@/public/home-images/displayscreen.svg";
 import displayScreenSm from "@/public/home-images/displayScreenSm.png";
+import displayScreen2 from "@/public/home-images/displayscreen2.svg";
 import patreon from "@/public/home-images/patreon.svg";
 import airbnb from "@/public/home-images/airbnb.svg";
 import fiberplane from "@/public/home-images/fiberplane.svg";
@@ -39,7 +40,7 @@ export default function Home() {
     bgColor,
   }) => (
     <div
-      className={`rounded-[20px] flex flex-1 min-w-[275px] max-w-[400px] flex-col justify-between gap-5 items-start p-4 ${bgColor}`}
+      className={`rounded-[20px] flex flex-1 min-w-[300px] max-w-[400px] flex-col justify-between gap-5 items-start p-4 ${bgColor}`}
     >
       <img src={iconSrc} alt={title} className="w-8 h-8 mb-4 mt-2.5" />
       <h3 className="text-2xl leading-6 font-medium text-gray-900">{title}</h3>
@@ -92,7 +93,7 @@ export default function Home() {
     const features = [
       {
         iconSrc: "/icons/stock.svg",
-        title: "Add and View Stock",
+        title: "Easy Stock Entry",
         description:
           "Retailers can add and view stock items with unique SKU codes, ensuring accurate tracking. Soft-deleted SKUs cannot be reused, and all added items appear in the stock list.",
         buttonText: "View Stock List",
@@ -100,7 +101,7 @@ export default function Home() {
       },
       {
         iconSrc: "/icons/note.svg",
-        title: "Edit and Update Stock",
+        title: "Quick Stock Updates",
         description:
           "Retailers can update stock names, prices, and quantities while keeping SKU codes locked for accuracy. This feature simplifies inventory management, reducing errors and improving stock tracking.",
         buttonText: "Manage Stock",
@@ -108,7 +109,7 @@ export default function Home() {
       },
       {
         iconSrc: "/icons/delete.svg",
-        title: "Soft Delete",
+        title: "Smart Stock Control",
         description:
           "Retailers can soft-delete stock items, removing them from the stock list without permanent deletion. Items are marked as “Is deleted” in the database for record-keeping and recovery.",
         buttonText: "Remove Stock",
@@ -118,15 +119,13 @@ export default function Home() {
 
     return (
       <section>
-        <div className=" flex flex-col items-center gap-6 pt-10 max-w-[915px] mx-auto px-5 min-[600px]:px-10">
-          <h1 className="text-[clamp(36px,_6vw,_69px)] leading-14 font-circular-bold md:leading-16 text-center">
-            <span className="text-[#19A45B]">Simplify</span> Inventory
-            Management for Your Business
+        <div className=" flex flex-col items-center gap-6 pt-10 max-w-[1000px] mx-auto px-5 min-[600px]:px-10">
+          <h1 className="text-[clamp(36px,_6vw,_60px)] max-w-[947px] leading-14 font-circular-bold md:leading-16 text-center">
+            <span className="text-[#19A45B]">Simplify</span> Inventory Management – No More Spreadsheets
           </h1>
 
           <p className="text-gray-600 text-base leading-6  md:text-3xl md:leading-9 font-circular-light text-center font-light min-[400px]:px-5">
-            Start with a stunning homepage. Stay motivated without hurting your
-            pocket.
+          Managing your stock shouldn’t be a hassle. With ShopDesk, you can securely track your inventory effortlessly all in one simple platform.
           </p>
 
           {/* <button className="btn-primary">Start Your Free Trial</button> */}
@@ -183,12 +182,12 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="mx-auto max-w-[1198px] px-6">
+        <div className="mx-auto max-w-[1198px] px-5 min-[600px]:px-10">
           <h2 className="text-center py-4 md:py-3 font-medium leading-6 text-[#009A49]">
             Key Features
           </h2>
 
-          <div className="flex flex-col md:flex-row items-center justify-between">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex flex-col gap-8 min-w-[300px]">
               <div className="gap-2">
                 <span className="text-sm leading-5 text-[#19A45B] mt-3 font-normal">
@@ -199,7 +198,7 @@ export default function Home() {
                   Inventory
                 </h1>
 
-                <p className="text-gray-600 text-base font-light leading-[22px] max-w-[512px]">
+                <p className="text-gray-600 text-base font-light max-w-[512px]">
                   Manage your inventory with confidence and precision. Our
                   intuitive stock inventory solution helps you track, organize,
                   and optimize your products all in real time.
@@ -228,22 +227,20 @@ export default function Home() {
               </ul>
             </div>
 
-            <figure className="max-w-[622px]">
-              <div className="w-full bg-[#FAFAFA] p-2 pt-5 pr-0 rounded-tl-[48px] hidden md:block">
-                <Image
-                  src={Desktop2}
-                  alt="Desktop"
-                  className="flex-1 overflow-hidden"
-                />
-              </div>
-            </figure>
+            <div className="w-full max-w-[622px] bg-[#FAFAFA] p-2 pt-5 pr-0 hidden md:block">
+              <Image
+                src={Desktop2}
+                alt="Desktop"
+                className="flex-1 overflow-hidden"
+              />
+            </div>
 
             <div className="w-full max-w-[450px] mt-4 flex flex-col items-center p-1 rounded-3xl md:hidden">
-              <div className="bg-[#FAFAFA] pt-1.5 px-1.5 pb-0 rounded-tl-3xl rounded-tr-3xl">
+              <div className="bg-[#FAFAFA] pt-1.5 px-1.5 pb-0 rounded-tl-3xl rounded-tr-3xl w-full">
                 <Image
                   src={Desktopsm}
                   alt="Desktop"
-                  className="overflow-hidden h-[201px] w-full"
+                  className="overflow-hidden h-[201px]"
                 />
               </div>
 
@@ -278,6 +275,7 @@ export default function Home() {
               <FeatureCard key={index} {...feature} />
             ))}
           </div>
+          
         </div>
 
         <Testimonials />
