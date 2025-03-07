@@ -22,6 +22,7 @@ export default function SignIn() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    console.log({ email, password });
 
     setTouched({ email: true, password: true });
 
@@ -35,6 +36,7 @@ export default function SignIn() {
 
     try {
       const data = await loginUser(email, password);
+      console.log({ email, password });
 
       if (!data || data.error) {
         throw new Error(data?.message || "Invalid email or password.");
