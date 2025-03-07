@@ -1,5 +1,5 @@
 "use client";
-
+import ShopDeskModal from '@/components/modal/add-item'
 import { useState } from "react";
 import {
   Table,
@@ -22,6 +22,11 @@ import Image from "next/image";
 import Logo from "@/components/functional/logo";
 
 const Page = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
+
   const [stockItems] = useState([]);
 
   return (
@@ -99,9 +104,10 @@ const Page = () => {
                     <p className="text-[#888888] text-sm">
                       You have 0 items in stock
                     </p>
-                    <button className="btn-outline hover:cursor-pointer">
+                    <button onClick={openModal} className="btn-outline hover:cursor-pointer">
                       + Add New Stock
                     </button>
+                    <ShopDeskModal isOpen={isOpen} onClose={closeModal} />
                   </div>
                 </div>
               </div>
