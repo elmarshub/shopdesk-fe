@@ -2,7 +2,10 @@
 
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import Avatar1 from "@/public/testimonial-images/avatar1.png";
 import Avatar2 from "@/public/testimonial-images/avatar2.png";
+import Avatar3 from "@/public/testimonial-images/avatar3.png";
+
 import { Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -12,15 +15,15 @@ const testimonialsData = [
     name: "Jerome Bell",
     company: "Google",
     review:
-      "“Before ShopDesk, I lost 10 hours a week manually tracking 500+ chairs across two warehouses. Now, with barcode scanning and real-time alerts, my team knows exactly what’s in stock. Last month, we cut stockout by 60%, and sales grew by 25%!”",
-    image: Avatar2,
+      "“ShopDesk completely transformed the way we track inventory. The real-time stock updates ensure we never run out of our best-sellers”",
+    image: Avatar1,
   },
   {
     id: 2,
     name: "Kristin Watson",
     company: "Netflix",
     review:
-      "“My accountant hated me for messy sales reports. ShopDesk’s profit dashboard changed everything – we spotted low-margin items and boosted profits by 35% in 3 months. Even my accountant is impressed!”",
+      "“We operate three stores, and ShopDesk keeps all our stock levels in sync. Now we always know what we have, without messy spreadsheets.”",
     image: Avatar2,
   },
   {
@@ -28,17 +31,17 @@ const testimonialsData = [
     name: "Annette Black",
     company: "WhatsApp",
     review:
-      "“I used to panic every holiday season – our fabric rolls would sell out in days, and suppliers took weeks to restock. ShopDesk’s auto-reorder feature saved us. This Diwali, we had zero stockouts and doubled our revenue!”",
-    image: Avatar2,
+      "“We run multiple store locations, and ShopDesk keeps everything in sync. No more manual inventory checks—everything is automated!”",
+    image: Avatar3,
   },
-  {
+  /* {
     id: 4,
     name: "Alice Johnson",
     company: "Facebook",
     review:
       "“An intuitive interface and great customer support. Would definitely recommend!”",
     image: Avatar2,
-  },
+  }, */
 ];
 
 const Testimonials = () => {
@@ -68,9 +71,9 @@ const Testimonials = () => {
   };
 
   return (
-    <div className="flex py-6 md:py-8 flex-col items-center justify-center gap-6 mb-12 bg-[#19A45B]">
+    <div className="flex py-6 md:py-8 px-5 min-[600px]:px-10 flex-col items-center justify-center gap-6 mb-12 bg-[#19A45B]">
       {/* Navigation */}
-      <div className="flex items-center justify-between w-full max-w-[343px] sm:max-w-[1200px] px-4 md:px-8 lg:px-12">
+      <div className="flex items-center justify-between w-full max-w-[343px] sm:max-w-[1200px]">
         <button
           onClick={prevSlide}
           className="p-3 md:p-4 bg-white border border-[#C7D3E1] rounded-xl cursor-pointer"
@@ -117,7 +120,7 @@ const Testimonials = () => {
       </div>
 
       {/* Testimonials Container */}
-      <div className="relative flex justify-center items-center md:items-start w-full max-w-[343px] sm:max-w-[1200px] overflow-hidden md:gap-6">
+      <div className="relative flex justify-center items-stretch w-full max-w-[343px] sm:max-w-[1200px] overflow-hidden md:gap-6">
         <AnimatePresence>
           {testimonialsData
             .slice(index, index + visibleCards)
