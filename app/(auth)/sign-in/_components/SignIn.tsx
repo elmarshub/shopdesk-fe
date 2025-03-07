@@ -151,10 +151,14 @@ export default function SignIn() {
 
               <button
                 type="submit"
-                className="w-full bg-[#2A2A2A] text-white p-3 rounded-lg font-medium hover:bg-black transition duration-200"
+                className="w-full bg-[#2A2A2A] text-white p-3 rounded-lg font-medium hover:bg-black transition duration-200 flex justify-center items-center gap-2"
                 disabled={loading}
               >
-                {loading ? "Signing in..." : "Sign in"}
+                {loading ? (
+                  <span className="size-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                ) : (
+                  "Sign in"
+                )}
               </button>
             </form>
           </div>
