@@ -5,12 +5,12 @@ import facebook from "@/public/icons/facebook.svg";
 import instagram from "@/public/icons/instagram.svg";
 import logo from "@/public/icons/logo.svg";
 import play from "@/public/coming-soon/Icon.svg";
-import left from "../../public/coming-soon/_ui-arrow-narrow-left.svg";
-import right from "../../public/coming-soon/_ui-arrow-right.svg";
-import testimonial from "../../public/coming-soon/Container.png";
+import left from "@/public/coming-soon/_ui-arrow-narrow-left.svg";
+import right from "@/public/coming-soon/_ui-arrow-right.svg";
+import testimonial from "@/public/coming-soon/Container.png";
 import Image from "next/image";
-import vectorLeft from "../../public/coming-soon/Vector-left.svg";
-import vectorRight from "../../public/coming-soon/Vector-right.svg";
+import vectorLeft from "@/public/coming-soon/Vector-left.svg";
+import vectorRight from "@/public/coming-soon/Vector-right.svg";
 import { Features } from "@/components/shared/features";
 
 const Page = () => {
