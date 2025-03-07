@@ -1,18 +1,5 @@
 "use client";
-<<<<<<< HEAD
-=======
 import ShopDeskModal from '@/components/modal/add-item'
-import { useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Search } from "lucide-react";
-import { ChevronDown } from "lucide-react";
->>>>>>> upstream/main
 
 import {
   DropdownMenu,
@@ -91,43 +78,6 @@ const Page = () => {
           </div>
         </div>
         <div className="space-y-1.5 w-full">
-<<<<<<< HEAD
-          <div className="flex flex-col lg:flex-row lg:not-first:items-center gap-2 lg:gap-0 lg:justify-between">
-            <div className="relative lg:hidden">
-              <Search
-                color="gray"
-                size={18}
-                className="absolute left-2 top-2"
-              />
-              <input
-                type="text"
-                placeholder="Search by item name"
-                className="text-black placeholder:text-gray-400 text-sm rounded-md border outline-none focus:ring-gray-400 focus:border-2 w-80 h-9 indent-8"
-              />
-            </div>
-            <div className="flex items-center gap-2 border shadow-md p-2 rounded-tr-lg rounded-tl-lg">
-              Stock
-              <Image
-                src={stock}
-                alt=""
-                width={20}
-                height={20}
-                className="w-5 h-5"
-              />
-            </div>
-            <div className="relative hidden lg:block">
-              <Search
-                color="gray"
-                size={18}
-                className="absolute left-2 top-2"
-              />
-              <input
-                type="text"
-                placeholder="Search by item name"
-                className="text-black placeholder:text-gray-400 text-sm rounded-md border outline-none focus:ring-gray-400 focus:border-2 w-80 h-9 indent-8"
-              />
-            </div>
-=======
           <div className="flex items-center gap-2 border shadow-md p-2 rounded-tr-lg rounded-tl-lg">
             Stock
             <Image
@@ -137,7 +87,6 @@ const Page = () => {
               height={20}
               className="w-full lg:w-5 h-5"
             />
->>>>>>> upstream/main
           </div>
           <div className="border shadow-md rounded-b-lg rounded-bl-lg relative">
             {stockItems.length === 0 ? (
@@ -163,30 +112,6 @@ const Page = () => {
                   </li>
                 </ul>
                 <span className="w-full h-px bg-[#DEDEDE] block"></span>
-<<<<<<< HEAD
-                <Dialog>
-                  <div className="h-[80vh] w-full flex items-center justify-center">
-                    <div className="space-y-4 flex flex-col text-center justify-center">
-                      <Image
-                        src={notepad}
-                        alt=""
-                        width={56}
-                        height={56}
-                        className="mx-auto"
-                      />
-                      <p className="text-[#888888] text-sm">
-                        You have 0 items in stock
-                      </p>
-                      <DialogTrigger asChild>
-                        <button className="btn-outline hover:cursor-pointer rounded border-neutral-300 flex gap-2">
-                          <span>
-                            <Image src={add} alt="" width={24} height={24} />
-                          </span>{" "}
-                          Add New Stock
-                        </button>
-                      </DialogTrigger>
-                    </div>
-=======
                 <div className="relative h-[80vh] w-full">
                   <div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
                     <Image
@@ -203,7 +128,6 @@ const Page = () => {
                       + Add New Stock
                     </button>
                     <ShopDeskModal isOpen={isOpen} onClose={closeModal} />
->>>>>>> upstream/main
                   </div>
 
                   <DialogContent>
