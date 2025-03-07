@@ -41,7 +41,7 @@ const Page = () => {
             </small>
           </div>
           <div className="hidden lg:block">
-            <DropdownMenu>
+            <DropdownMenu modal>
               <DropdownMenuTrigger className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white">
                 <span className="py-2 px-4 rounded-lg bg-white text-black">
                   ES
@@ -49,7 +49,7 @@ const Page = () => {
                 Emeka & Sons <ChevronDown strokeWidth={1.5} color="white" />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem>Item name</DropdownMenuItem>
+                <DropdownMenuItem>Log out</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -69,24 +69,36 @@ const Page = () => {
             {stockItems.length === 0 ? (
               <div className="relative">
                 <div className="w-full overflow-x-auto">
-                  <ul className="flex items-center justify-between p-4 w-full">
-                    <li className="font-semibold text-black text-sm border-r border-[#DEDEDE] hover:cursor-pointer">
-                      ITEM NAME
+                  <ul className="flex items-center justify-between w-full">
+                    <li className="w-1/3 lg:w-1/6 border-r-2 border-[#DEDEDE] text-center py-4 hover:cursor-pointer">
+                      <span className="font-semibold text-black text-sm">
+                        ITEM NAME
+                      </span>
                     </li>
-                    <li className="font-semibold text-black text-sm hover:cursor-pointer">
-                      SKU PRICE
+                    <li className="w-1/3 lg:w-1/6 border-r-2 border-[#DEDEDE] text-center py-4 hover:cursor-pointer">
+                      <span className="font-semibold text-black text-sm">
+                        SKU CODE
+                      </span>
                     </li>
-                    <li className="font-semibold text-black text-sm hover:cursor-pointer">
-                      PRICE
+                    <li className="w-1/3 lg:w-1/6 lg:border-r-2 border-[#DEDEDE] text-center py-4 hover:cursor-pointer">
+                      <span className="font-semibold text-black text-sm">
+                        PRICE
+                      </span>
                     </li>
-                    <li className="font-semibold text-black text-sm hover:cursor-pointer hidden lg:flex">
-                      QUANTITY
+                    <li className="w-1/3 lg:w-1/6 border-r-2 border-[#DEDEDE] text-center py-4 hidden lg:flex justify-center hover:cursor-pointer">
+                      <span className="font-semibold text-black text-sm">
+                        QUANTITY
+                      </span>
                     </li>
-                    <li className="font-semibold text-black text-sm hover:cursor-pointer hidden lg:flex">
-                      ACTION
+                    <li className="w-1/3 lg:w-1/6 border-r-2 border-[#DEDEDE] text-center py-4 hidden lg:flex justify-center hover:cursor-pointer">
+                      <span className="font-semibold text-black text-sm">
+                        ACTION
+                      </span>
                     </li>
-                    <li className="font-semibold text-black text-xl hover:cursor-pointer hidden lg:flex">
-                      +
+                    <li className="w-1/3 lg:w-1/6 text-center py-2 hidden lg:flex justify-center hover:cursor-pointer">
+                      <span className="font-semibold text-black text-xl">
+                        +
+                      </span>
                     </li>
                   </ul>
                   <span className="w-full h-px bg-[#DEDEDE] block"></span>
