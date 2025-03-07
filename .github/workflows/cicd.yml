@@ -11,10 +11,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install SSHpass
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y sshpass
+      
 
       - name: SSH into server and run commands
         env:
