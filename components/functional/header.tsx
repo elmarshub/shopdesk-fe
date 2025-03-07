@@ -64,7 +64,7 @@ const Header = () => {
           <button
             type="button"
             onClick={() => router.push("/sign-in")}
-            className="btn-primary hover:bg-gray-100 transition"
+            className="btn-primary"
           >
             Sign In
           </button>
