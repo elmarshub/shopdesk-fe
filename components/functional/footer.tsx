@@ -12,7 +12,7 @@ import Logo from "./logo";
 const Footer = () => {
   return (
     <footer className="px-[clamp(16px,_4vw,_120px)]">
-      <div className="w-full bg-[#E5F5ED] rounded-2xl flex flex-col items-center justify-center p-[clamp(16px,_4vw,_48px)]">
+      <div className="w-full bg-[#E5F5ED] rounded-2xl flex flex-col items-center justify-center p-[clamp(16px,_4vw,_48px)]" hidden>
         <p className="text-center text-[clamp(30px,_5vw,_48px)] font-circular-bold">
           Still thinking about it?
         </p>
