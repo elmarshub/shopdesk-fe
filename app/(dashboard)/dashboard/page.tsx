@@ -1,5 +1,5 @@
 "use client";
-import ShopDeskModal from '@/components/modal/add-item'
+import ShopDeskModal from '@/components/modal/add-item';
 
 import {
   DropdownMenu,
@@ -18,15 +18,12 @@ import {
 import {
   Dialog,
   DialogClose,
-  DialogOverlay,
-  DialogTrigger,
+  DialogOverlay
 } from "@/components/ui/dialog";
 
-import { ChevronDown, Search } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useState } from "react";
-import add from "../../../public/icons/add.svg";
 import close from "../../../public/icons/close.svg";
-import notepad from "../../../public/icons/note-pad.svg";
 import stock from "../../../public/icons/stock.svg";
 
 import Logo from "@/components/functional/logo";
@@ -112,8 +109,10 @@ const Page = () => {
                   </li>
                 </ul>
                 <span className="w-full h-px bg-[#DEDEDE] block"></span>
+             
                 <div className="relative h-[80vh] w-full">
-                  <div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
+                
+              <div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
                     <Image
                       src="/icons/empty-note-pad.svg"
                       alt=""
@@ -129,7 +128,7 @@ const Page = () => {
                     </button>
                     <ShopDeskModal isOpen={isOpen} onClose={closeModal} />
                   </div>
-
+                      <Dialog>
                   <DialogContent>
                     <DialogOverlay className="fixed inset-0 data-[state=open]:animate-overlayShow bg-black/30 -z-[50]" />
                     <DialogContent className="fixed left-1/2 top-1/2 max-h-[85vh] w-[720px]  -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-[25px] shadow-[var(--shadow-6)] focus:outline-none data-[state=open]:animate-contentShow ">
@@ -209,8 +208,10 @@ const Page = () => {
                       </DialogClose>
                     </DialogContent>
                   </DialogContent>
+                  
                 </Dialog>
               </div>
+              
             ) : (
               <Table>
                 <TableHeader className="w-full overflow-x-auto">
