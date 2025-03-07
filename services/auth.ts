@@ -3,10 +3,11 @@ export async function loginUser(email: string, password: string) {
     try {
         const response = await fetch("/api/auth/login", { 
             method: "POST",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-            },
+            // headers: {
+            //     "Accept": "application/json",
+            //     "Content-Type": "application/json",
+            // },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
         });
 
