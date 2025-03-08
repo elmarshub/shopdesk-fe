@@ -3,17 +3,17 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const LogoutButton = () => {
+const LogoutButton = ({ className }: { className?: string }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const handleLogout = async () => {
     setLoading(true);
 
-    const refreshToken = sessionStorage.getItem("refresh_token"); // Correct key
+    const refreshToken = sessionStorage.getItem("refresh_token");
 
     if (!refreshToken) {
-      clearSession(); // Ensure all session data is cleared
+      clearSession();
       router.push("/sign-in");
       return;
     }
@@ -25,17 +25,14 @@ const LogoutButton = () => {
         body: JSON.stringify({ refresh_token: refreshToken }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
+        const data = await response.json();
         throw new Error(data.message || "Logout failed");
       }
-
-      console.log(data.message);
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
-      clearSession(); // Remove all stored data
+      clearSession();
       router.push("/sign-in");
       setLoading(false);
     }
@@ -44,13 +41,13 @@ const LogoutButton = () => {
   const clearSession = () => {
     sessionStorage.removeItem("access_token");
     sessionStorage.removeItem("refresh_token");
-    sessionStorage.removeItem("user"); // Ensure user info is also removed
+    sessionStorage.removeItem("user");
   };
 
   return (
     <button
       onClick={handleLogout}
-      className="px-4 py-2 rounded disabled:opacity-50"
+       className="flex-1 py-6 lg:py-0  rounded-md bg-red-500 hover:bg-red-600"
       disabled={loading}
     >
       {loading ? "Logging out..." : "Logout"}
