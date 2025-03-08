@@ -1,57 +1,76 @@
-"use client";
-import ShopDeskModal from "@/components/modal/add-item";
-import { useEffect, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { ChevronDown } from "lucide-react";
-import { useRouter } from "next/navigation";
+'use client'
+import ShopDeskModal from '@/components/modal/add-item'
+import { useEffect, useState } from 'react'
+import { ChevronDown, MoreVertical } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import EditItemModal from '@/components/modals/edit-stock'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu'
 import LogoutConfirmModal from '@/components/modal/logoutConfirmationModal'
-import Image from "next/image";
-import Logo from "@/components/functional/logo";
-import LoadingAnimation from "@/components/functional/loading";
+import Image from 'next/image'
+import Logo from '@/components/functional/logo'
+import LoadingAnimation from '@/components/functional/loading'
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from '@/components/ui/table'
 
 const Page = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
+  const [isOpen, setIsOpen] = useState(false)
+  const [openEdit, setOpenEdit] = useState(false)
+  //const [selectedItem, setSelectedItem] = useState(null);
+  const [user, setUser] = useState<any>(null)
+  const openModal = () => setIsOpen(true)
+  const closeModal = () => setIsOpen(false)
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
-  const [stockItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-const router = useRouter();
+  const [stockItems, setStockItems] = useState([
+    { id: 1, name: 'Solace Recliner', price: 50, quantity: 40 },
+  ])
+  const [isLoading, setIsLoading] = useState(true)
+  const router = useRouter()
 
-useEffect(() => {
-  const token = sessionStorage.getItem("refresh_token");
-  if (!token) {
-    router.replace("/sign-in"); 
-  } else {
-    setIsLoading(false);
+  useEffect(() => {
+    const token = sessionStorage.getItem('refresh_token')
+    if (!token) {
+      router.replace('/sign-in')
+    } else {
+      setIsLoading(false)
+    }
+  }, [router])
+
+  const handleEditClick = () => {
+    // setSelectedItem(item);
+    setOpenEdit(true)
   }
-}, [router]);
 
-if (isLoading) {
-  return <div className="flex h-screen items-center justify-center"><LoadingAnimation /></div>;
-}
+  const closeEditModal = () => {
+    setOpenEdit(false)
+    //setSelectedItem(null);
+  }
 
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <LoadingAnimation />
+      </div>
+    )
+  }
 
   return (
-    <main className="px-6 py-4 w-full">
+    <main className="px-6 py-4 w-full max-w-7xl mx-auto">
       <div className="space-y-8 w-full">
-      <LogoutConfirmModal
-        open={isLogoutModalOpen}
-        onOpenChange={setIsLogoutModalOpen}
-        onCancel={() => setIsLogoutModalOpen(false)}
+        <LogoutConfirmModal
+          open={isLogoutModalOpen}
+          onOpenChange={setIsLogoutModalOpen}
+          onCancel={() => setIsLogoutModalOpen(false)}
         />
         <div className="lg:border px-4 py-2 lg:shadow-md rounded-lg lg:flex items-center justify-between mx-auto">
           <div className="flex items-center gap-6">
@@ -71,16 +90,18 @@ if (isLoading) {
                 Mark M <ChevronDown strokeWidth={1.5} color="white" />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem className="w-full px-[5rem]" onClick={() => setIsLogoutModalOpen(true)}> 
-              Log out
+                <DropdownMenuItem
+                  className="w-full px-[5rem]"
+                  onClick={() => setIsLogoutModalOpen(true)}
+                >
+                  Log out
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </div>
         <div className="space-y-0 w-full ">
-        <div className="flex items-center justify-center gap-2 border border-b-white py-2 rounded-tr-lg rounded-tl-lg w-full lg:w-44 font-semibold px-9 shadow-inner">
-
+          <div className="flex items-center justify-center gap-2 border border-b-white py-2 rounded-tr-lg rounded-tl-lg w-full lg:w-44 font-semibold px-9 shadow-inner">
             Stock
             <Image
               src="/icons/ui-box.svg"
@@ -100,11 +121,6 @@ if (isLoading) {
                         ITEM NAME
                       </span>
                     </li>
-                    {/* <li className="w-1/3 lg:w-1/6 border-r-2 border-[#DEDEDE] text-center py-4 hover:cursor-pointer">
-                      <span className="font-semibold text-black text-sm">
-                        SKU CODE
-                      </span>
-                    </li> */}
                     <li className="w-1/3 lg:w-1/6 lg:border-r-2 border-[#DEDEDE] text-center py-4 hover:cursor-pointer">
                       <span className="font-semibold text-black text-sm">
                         PRICE
@@ -120,11 +136,6 @@ if (isLoading) {
                         ACTION
                       </span>
                     </li>
-                    {/* <li className="w-1/3 lg:w-1/6 text-center py-2 hidden lg:flex justify-center hover:cursor-pointer">
-                      <span className="font-semibold text-black text-xl">
-                        +
-                      </span>
-                    </li> */}
                   </ul>
                   <span className="w-full h-px bg-[#DEDEDE] block"></span>
                   <div className="relative h-[80vh] w-full">
@@ -152,56 +163,84 @@ if (isLoading) {
                 <div className="bg-[#DEE5ED] p-2 absolute bottom-0 w-full lg:hidden">
                   <p className="text-gray-400 text-sm flex items-center gap-1 justify-center text-center">
                     You have <span className="text-black">0</span> stock
-                    (Displaying <span className="text-black">6</span>{" "}
+                    (Displaying <span className="text-black">6</span>{' '}
                     <Image
                       src="/icons/ArrowDropDown.svg"
                       alt=""
                       width={12}
                       height={12}
                       className="w-3 h-3"
-                    />{" "}
+                    />{' '}
                     per page)
                   </p>
                 </div>
               </div>
             ) : (
-              <Table>
-                <TableHeader className="w-full overflow-x-auto">
-                  <TableRow className="flex lg:grid lg:grid-cols-6 overflow-x-auto place-items-center place-content-center py-4 w-full">
-                    <TableHead className="font-semibold text-black px-4 flex items-center gap-3">
+              <Table className="border-collapse  overflow-y-auto">
+                <TableHeader>
+                  <TableRow className="h-[50px]">
+                    <TableHead className="px-4 py-2 text-left border-b border-r">
                       ITEM NAME
                     </TableHead>
-                    {/* <TableHead className="font-semibold text-black px-4 flex items-center gap-3">
-                      SKU CODE
-                    </TableHead> */}
-                    <TableHead className="font-semibold text-black px-4 flex items-center gap-3">
+                    <TableHead className="px-4 py-2 text-center border-b border-r">
                       PRICE
                     </TableHead>
-                    <TableHead className="font-semibold text-black px-4 flex items-center justify-center">
+                    <TableHead className="px-4 py-2 text-center border-b border-r hidden sm:table-cell">
                       QUANTITY
                     </TableHead>
-                    <TableHead className="font-semibold text-black px-4 flex items-center justify-center">
+                    <TableHead className="px-4 py-2 text-center border-b hidden sm:table-cell">
                       ACTION
                     </TableHead>
-                    {/* <TableHead className="font-semibold text-black text-xl px-4 flex items-center justify-center">
-                      +
-                    </TableHead> */}
                   </TableRow>
                 </TableHeader>
-                <TableBody className="relative h-[80vh] w-full">
-                  <TableRow></TableRow>
+                <TableBody>
+                  {Array.from({ length: 10 }).map((_, index) => {
+                    const item = stockItems[index] || null
+                    return (
+                      <TableRow key={index} className="h-[50px]">
+                        <TableCell className="px-4 py-3 text-left border-r">
+                          {item ? item.name : ''}
+                        </TableCell>
+                        <TableCell className="px-4 py-3 text-center border-r">
+                          {item ? `$${item.price}` : ''}
+                        </TableCell>
+                        <TableCell className="px-4 py-3 text-center border-r hidden sm:table-cell">
+                          {item ? item.quantity : ''}
+                        </TableCell>
+                        <TableCell className="px-4 py-3 text-center hidden sm:table-cell">
+                          {item ? (
+                            <DropdownMenu>
+                              <DropdownMenuTrigger>
+                                <MoreVertical className="cursor-pointer" />
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent>
+                                <DropdownMenuItem onClick={handleEditClick}>
+                                  Edit
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>Delete</DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          ) : (
+                            ''
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    )
+                  })}
                 </TableBody>
               </Table>
             )}
           </div>
         </div>
       </div>
-      
+
+      <EditItemModal isOpen={openEdit} onClose={closeEditModal} />
+
       <p className="text-center mt-4">
         © {new Date().getFullYear()}, Powered by Timbu Business
       </p>
     </main>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page
