@@ -16,10 +16,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
+import LogoutConfirmModal from '@/components/modal/logoutConfirmationModal'
 import Image from "next/image";
 import Logo from "@/components/functional/logo";
-import LogoutButton from "@/app/(auth)/sign-in/_components/logout";
 import LoadingAnimation from "@/components/functional/loading";
 
 const Page = () => {
@@ -27,7 +26,7 @@ const Page = () => {
   const [user, setUser] = useState<any>(null);
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
-
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
   const [stockItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 const router = useRouter();
@@ -49,6 +48,11 @@ if (isLoading) {
   return (
     <main className="px-6 py-4 w-full">
       <div className="space-y-8 w-full">
+      <LogoutConfirmModal
+        open={isLogoutModalOpen}
+        onOpenChange={setIsLogoutModalOpen}
+        onCancel={() => setIsLogoutModalOpen(false)}
+        />
         <div className="lg:border px-4 py-2 lg:shadow-md rounded-lg lg:flex items-center justify-between mx-auto">
           <div className="flex items-center gap-6">
             <div className="flex justify-center lg:justify-start w-full lg:w-auto">
@@ -67,8 +71,8 @@ if (isLoading) {
                 Mark M <ChevronDown strokeWidth={1.5} color="white" />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem> 
-                <LogoutButton />
+                <DropdownMenuItem className="w-full px-[5rem]" onClick={() => setIsLogoutModalOpen(true)}> 
+              Log out
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -192,6 +196,7 @@ if (isLoading) {
           </div>
         </div>
       </div>
+      
       <p className="text-center mt-4">
         © {new Date().getFullYear()}, Powered by Timbu Business
       </p>
