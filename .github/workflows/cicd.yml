@@ -5,14 +5,11 @@ on:
 
 jobs:
   ssh-deploy:
-    runs-on: ubuntu-latest
-
+    runs-on: [self-hosted, shopdesk]
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      
 
       - name: SSH into server and run commands
         env:
@@ -24,19 +21,18 @@ jobs:
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USERNAME@$SSH_IP" "
             if [ -d 'shopdesk-fe' ]; then
               cd shopdesk-fe &&
-              # Kill any process running on port 7777
-              echo 'Killing any process running on port 7777...' &&
-              echo '$SSH_PASSWORD' | sudo -S fuser -k 7777/tcp || echo 'No process found on port 7777' &&
               echo 'Pulling latest changes...' &&
               git reset --hard HEAD &&  # Discard local changes
-              git pull origin main
+              git pull origin main || { echo 'Git pull failed'; git status; exit 1; }
             else
-              git clone $REPO_URL &&
-              cd $(basename $REPO_URL .git)
-            fi &&
-            echo 'Installing dependencies...' &&
-            bun install &&
-            bun run build &&
-            bun start
+              git clone $REPO_URL || { echo 'Git clone failed'; exit 1; } &&
+              cd $(basename $REPO_URL .git) &&
+              echo 'Running bun install.....' &&
+              bun install || { echo 'bun install failed'; exit 1; } &&
+              echo 'Running bun run build.....' &&
+              bun run build || { echo 'bun run build failed'; exit 1; } &&
+              echo 'Running bun start.....' &&
+              pm2 start "bun start" --name "shopdesk" --watch --ignore-watch "node_modules logs"
+            fi
           "
             
