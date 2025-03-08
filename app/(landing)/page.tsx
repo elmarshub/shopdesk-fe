@@ -136,7 +136,7 @@ export default function Home() {
           />
 
           <div 
-            className="bg-[#19A45B] w-full px-[clamp(18px,_3vw,_80px)] p-6 flex items-center gap-[clamp(16px,_3vw,_48px)] justify-center flex-wrap"
+            className="bg-[#19A45B] w-full px-[clamp(18px,_3vw,_80px)] p-6 flex items-center gap-[clamp(16px,_3vw,_48px)] justify-center flex-wrap h-[101px]"
             data-aos="fade-up"
             data-aos-once="false" // Allow this element to re-animate
           >
@@ -145,7 +145,7 @@ export default function Home() {
                 key={index}
                 src={logo}
                 alt="Logo"
-                className="w-[clamp(70px,_11vw,_140px)]"
+                className="w-[clamp(70px,_11vw,_140px)] hidden"
                 data-aos="fade-up"
                 data-aos-delay={`${(index + 1) * 100}`}
                 data-aos-once="false" // Allow this element to re-animate

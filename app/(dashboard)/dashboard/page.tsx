@@ -91,7 +91,7 @@ if (isLoading) {
               <div className="relative">
                 <div className="w-full overflow-x-auto">
                   <ul className="flex items-center justify-between w-full rounded-tr-lg">
-                    <li className="w-1/3 lg:w-1/2 border-r-2 border-[#DEDEDE] text-left py-4 hover:cursor-pointer pl-4">
+                    <li className="w-2/3 lg:w-1/2 border-r-2 border-[#DEDEDE] text-left py-4 hover:cursor-pointer pl-4">
                       <span className="font-semibold text-black text-sm ">
                         ITEM NAME
                       </span>

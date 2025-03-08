@@ -126,21 +126,21 @@ export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
             </div>
           </div>
           <form className="flex flex-col gap-[20px]">
-          <div className="flex flex-col gap-2">
-            <label 
-              htmlFor="item-name" 
-              className="block text-left font-medium text-[#717171] text-[14px]" 
-            >
-              Product Name <span className="text-red-600">*</span>
-            </label>
-            <input
-              type="text"
-              name="item-name"
-              className="w-full rounded-[9px] p-[16px] outline-none border border-[#DEDEDE] focus:ring-2 focus:ring-[#CCEBDB] focus:border-[#CCEBDB] hover:ring-2 hover:ring-[#CCEBDB] transition-all placeholder:text-[#B8B8B8] text-[20px] font-circular-normal"
-              placeholder="Item Name"
-              required
-            />
-          </div>
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="item-name"
+                className="block text-left font-medium text-[#717171] text-[14px]"
+              >
+                Product Name <span className="text-red-600">*</span>
+              </label>
+              <input
+                type="text"
+                name="item-name"
+                className="w-full rounded-[9px] p-[16px] outline-none border border-[#DEDEDE] focus:ring-2 focus:ring-[#CCEBDB] focus:border-[#CCEBDB] hover:ring-2 hover:ring-[#CCEBDB] transition-all placeholder:text-[#B8B8B8] text-[20px] font-circular-normal placeholder:text-[16px]  placeholder:lg:text-[20px]"
+                placeholder="Item Name"
+                required
+              />
+            </div>
             <div>
               {/* <div className="flex border gap-2 rounded-[9px] m-1 relative flex-1">
                 <div
@@ -207,7 +207,9 @@ export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
                   </div>
                 )}
               </div> */}
-                <p className="text-left pb-1 text-[#717171] text-[14px]">Selling Price <span className="text-red-600">*</span></p>
+              <p className="text-left pb-1 text-[#717171] text-[14px]">
+                Selling Price <span className="text-red-600">*</span>
+              </p>
               <div className="flex border gap-2 rounded-[9px] m-1 relative flex-1">
                 <div
                   className="p-2 flex gap-[8px] items-center cursor-pointer"
@@ -230,7 +232,7 @@ export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
                   <input
                     type="text"
                     name="selling-price"
-                    className="p-[16px] outline-none placeholder:text-[#B8B8B8] text-[20px] font-circular-normal"
+                    className="p-[16px] outline-none placeholder:text-[#B8B8B8] text-[20px] font-circular-normal placeholder:text-[16px]  placeholder:lg:text-[20px]"
                     placeholder="Selling price / unit"
                     required
                   />
@@ -276,7 +278,10 @@ export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
             </div>
 
             <div>
-              <p className="text-left pb-1 text-[#717171] text-[14px]"> Quantity<span className="text-red-600">*</span></p>
+              <p className="text-left pb-1 text-[#717171] text-[14px]">
+                {" "}
+                Quantity<span className="text-red-600">*</span>
+              </p>
               <div className="flex items-center gap-[8px]">
                 <button
                   type="button"
@@ -287,8 +292,8 @@ export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
                   <FaMinus className="flex items-center justify-center rounded-lg cursor-pointer" />
                 </button>
                 <div className="flex-grow text-center content-center border rounded-[10px] p-4">
-                  <span className="text-[20px] text-[#B8B8B8] font-circular-normal">
-                    {quantity === 0 ? "Quantity Available" : quantity + " Quantity Available" }
+                  <span className="text-[#B8B8B8] font-circular-normal text-[16px]  lg:text-[20px]">
+                    {quantity === 0 ? "Quantity" : quantity + " Quantity"}
                   </span>
                 </div>
                 <button
@@ -303,24 +308,24 @@ export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
             </div>
           </form>
         </div>
-          <div className="border-[#DEE5ED] border-t bg-[#F6F8FA] p-6 rounded-bl-lg rounded-br-lg">
-            <div className="flex justify-end gap-4">
-              <button
-                type="button"
-                onClick={onClose}
-                className="bg-white border border-[#1B1B1B] text-black px-[24px] py-[12px] rounded-[12px] hover:bg-[#D0D0D0]"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="bg-[#D0D0D0] border border-#B8B8B8 text-white px-[24px] py-[12px] rounded-[12px]"
-              >
-                Add Stock
-              </button>
-            </div>
+        <div className="border-[#DEE5ED] border-t bg-[#F6F8FA] p-6 rounded-bl-lg rounded-br-lg">
+          <div className="flex justify-end gap-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="bg-white border border-[#1B1B1B] text-black px-[24px] py-[12px] rounded-[12px] hover:bg-[#D0D0D0]"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="bg-[#D0D0D0] border border-#B8B8B8 text-white px-[24px] py-[12px] rounded-[12px]"
+            >
+              Add Stock
+            </button>
           </div>
+        </div>
       </div>
     </div>
   );
-} 
+}
