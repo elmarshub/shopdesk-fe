@@ -3,7 +3,8 @@ import ShopDeskModal from '@/components/modal/add-item'
 import { useEffect, useState } from 'react'
 import { ChevronDown, MoreVertical } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import EditItemModal from '@/components/modals/edit-stock'
+import EditItemModal from '@/components/modal/edit-stock'
+import AddItemModal from '@/components/modal/add-item'
 import DeleteItem from "@/components/modal/delete-item";
 import {
   DropdownMenu,
@@ -27,6 +28,8 @@ import {
 const Page = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [openEdit, setOpenEdit] = useState(false)
+  const [openAdd, setOpenAdd] = useState(false)
+
   //const [selectedItem, setSelectedItem] = useState(null);
   const [user, setUser] = useState<any>(null)
   const openModal = () => setIsOpen(true)
@@ -53,6 +56,11 @@ const Page = () => {
     setOpenEdit(true)
   }
 
+  const handleAddClick = () => {
+    // setSelectedItem(item);
+    setOpenAdd(true)
+  }
+
   const handleDeleteClick = () => {
     // setSelectedItem(item);
     setIsDeleteModalOpen(true)
@@ -60,6 +68,11 @@ const Page = () => {
 
   const closeEditModal = () => {
     setOpenEdit(false)
+    //setSelectedItem(null);
+  }
+
+  const closeAddModal = () => {
+    setOpenAdd(false)
     //setSelectedItem(null);
   }
 
@@ -111,9 +124,12 @@ const Page = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-        </div>
+        </div>     
+           
         <div className="space-y-0 w-full ">
-          <div className="flex items-center justify-center gap-2 border border-b-white py-2 rounded-tr-lg rounded-tl-lg w-full lg:w-44 font-semibold px-9 shadow-inner">
+
+        <div className='w-full flex justify-between max-[640px]:flex-col-reverse'>
+          <div className="flex items-center justify-center gap-2 border border-b-white py-2 rounded-tr-lg rounded-tl-lg w-44 max-[640px]:w-full font-semibold px-9 shadow-inner">
             Stock
             <Image
               src="/icons/ui-box.svg"
@@ -123,6 +139,13 @@ const Page = () => {
               className="w-5 h-5"
             />
           </div>
+
+          <button onClick={handleAddClick} className='btn-primary max-[400px]:text-sm mb-2 max-[640px]:mb-4 text-nowrap self-end'>
+            + Add New Stock
+          </button>
+
+
+        </div>
           <div className="border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg">
             {stockItems.length === 0 ? (
               <div className="relative">
@@ -249,6 +272,7 @@ const Page = () => {
       </div>
 
       <EditItemModal isOpen={openEdit} onClose={closeEditModal} />
+      <AddItemModal isOpen={openAdd} onClose={closeAddModal} />
 
       <p className="text-center mt-4">
         © {new Date().getFullYear()}, Powered by Timbu Business
