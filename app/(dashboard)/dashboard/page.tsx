@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { ChevronDown, MoreVertical } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import EditItemModal from '@/components/modals/edit-stock'
+import DeleteItem from "@/components/modal/delete-item";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,6 +32,7 @@ const Page = () => {
   const openModal = () => setIsOpen(true)
   const closeModal = () => setIsOpen(false)
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [stockItems, setStockItems] = useState([
     { id: 1, name: 'Solace Recliner', price: 50, quantity: 40 },
   ])
@@ -49,6 +51,11 @@ const Page = () => {
   const handleEditClick = () => {
     // setSelectedItem(item);
     setOpenEdit(true)
+  }
+
+  const handleDeleteClick = () => {
+    // setSelectedItem(item);
+    setIsDeleteModalOpen(true)
   }
 
   const closeEditModal = () => {
@@ -71,6 +78,11 @@ const Page = () => {
           open={isLogoutModalOpen}
           onOpenChange={setIsLogoutModalOpen}
           onCancel={() => setIsLogoutModalOpen(false)}
+        />     
+        <DeleteItem
+          open={isDeleteModalOpen}
+          onOpenChange={setIsDeleteModalOpen}
+          onCancel={() => setIsDeleteModalOpen(false)}
         />
         <div className="lg:border px-4 py-2 lg:shadow-md rounded-lg lg:flex items-center justify-between mx-auto">
           <div className="flex items-center gap-6">
@@ -217,7 +229,9 @@ const Page = () => {
                                 <DropdownMenuItem onClick={handleEditClick}>
                                   Edit
                                 </DropdownMenuItem>
-                                <DropdownMenuItem>Delete</DropdownMenuItem>
+                                <DropdownMenuItem onClick={handleDeleteClick}>
+                                  Delete
+                                </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>
                           ) : (
