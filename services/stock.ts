@@ -1,6 +1,7 @@
 import { getAccessToken } from "@/app/api/token";
 
 type Stock = {
+    id:string;
   name: string;
   quantity: number;
   buying_price: number;
@@ -9,6 +10,7 @@ type Stock = {
   organization_id: string;
   date_created: string;
   selectedSellingCurrency: { code: string; name: string };
+  items: [];
 };
 
 export async function AddStock(
@@ -55,3 +57,53 @@ export async function AddStock(
     throw error;
   }
 }
+
+export async function GetStock(): Promise<Stock[]> {
+  try {
+    const token = getAccessToken();
+
+    const response = await fetch(`/api/stocks/get`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to fetch stock");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching stock:", error);
+    throw error;
+  }
+}
+
+
+export async function deleteStock(stockId: string): Promise<void> {
+      try {
+      const token = getAccessToken();
+  
+      const response = await fetch(`/api/stocks/delete`, {
+        method: "DELETE",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ stock_id: stockId }), // Pass the ID in the request body
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to delete stock");
+      }
+    } catch (error) {
+      console.error("Error deleting stock:", error);
+      throw error;
+    }
+  }
