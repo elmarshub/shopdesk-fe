@@ -1,21 +1,21 @@
-'use client'
-import ShopDeskModal from '@/components/modal/add-item'
-import { useEffect, useState } from 'react'
-import { ChevronDown, MoreVertical } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import EditItemModal from '@/components/modal/edit-stock'
-import AddItemModal from '@/components/modal/add-item'
+"use client";
+
+import { useEffect, useState } from "react";
+import { ChevronDown, MoreVertical } from "lucide-react";
+import { useRouter } from "next/navigation";
+import EditItemModal from "@/components/modal/edit-stock";
+import AddStockModal from "@/components/modal/add-item";
 import DeleteItem from "@/components/modal/delete-item";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import LogoutConfirmModal from '@/components/modal/logoutConfirmationModal'
-import Image from 'next/image'
-import Logo from '@/components/functional/logo'
-import LoadingAnimation from '@/components/functional/loading'
+} from "@/components/ui/dropdown-menu";
+import LogoutConfirmModal from "@/components/modal/logoutConfirmationModal";
+import Image from "next/image";
+import Logo from "@/components/functional/logo";
+import LoadingAnimation from "@/components/functional/loading";
 import {
   Table,
   TableHeader,
@@ -23,65 +23,65 @@ import {
   TableRow,
   TableHead,
   TableCell,
-} from '@/components/ui/table'
+} from "@/components/ui/table";
 
 const Page = () => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [openEdit, setOpenEdit] = useState(false)
-  const [openAdd, setOpenAdd] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [openAdd, setOpenAdd] = useState(false);
 
   //const [selectedItem, setSelectedItem] = useState(null);
-  const [user, setUser] = useState<any>(null)
-  const openModal = () => setIsOpen(true)
-  const closeModal = () => setIsOpen(false)
-  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [user, setUser] = useState<any>(null);
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [stockItems, setStockItems] = useState([
-    { id: 1, name: 'Solace Recliner', price: 50, quantity: 40 },
-  ])
-  const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
+    { id: 1, name: "Solace Recliner", price: 50, quantity: 40 },
+  ]);
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    const token = sessionStorage.getItem('refresh_token')
+    const token = sessionStorage.getItem("refresh_token");
     if (!token) {
-      router.replace('/sign-in')
+      router.replace("/sign-in");
     } else {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [router])
+  }, [router]);
 
   const handleEditClick = () => {
     // setSelectedItem(item);
-    setOpenEdit(true)
-  }
+    setOpenEdit(true);
+  };
 
   const handleAddClick = () => {
     // setSelectedItem(item);
-    setOpenAdd(true)
-  }
+    setOpenAdd(true);
+  };
 
   const handleDeleteClick = () => {
     // setSelectedItem(item);
-    setIsDeleteModalOpen(true)
-  }
+    setIsDeleteModalOpen(true);
+  };
 
   const closeEditModal = () => {
-    setOpenEdit(false)
+    setOpenEdit(false);
     //setSelectedItem(null);
-  }
+  };
 
   const closeAddModal = () => {
-    setOpenAdd(false)
+    setOpenAdd(false);
     //setSelectedItem(null);
-  }
+  };
 
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
         <LoadingAnimation />
       </div>
-    )
+    );
   }
 
   return (
@@ -91,7 +91,7 @@ const Page = () => {
           open={isLogoutModalOpen}
           onOpenChange={setIsLogoutModalOpen}
           onCancel={() => setIsLogoutModalOpen(false)}
-        />     
+        />
         <DeleteItem
           open={isDeleteModalOpen}
           onOpenChange={setIsDeleteModalOpen}
@@ -124,28 +124,28 @@ const Page = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-        </div>     
-           
-        <div className="space-y-0 w-full ">
-
-        <div className='w-full flex justify-between max-[640px]:flex-col-reverse'>
-          <div className="flex items-center justify-center gap-2 border border-b-white py-2 rounded-tr-lg rounded-tl-lg w-44 max-[640px]:w-full font-semibold px-9 shadow-inner">
-            Stock
-            <Image
-              src="/icons/ui-box.svg"
-              alt=""
-              width={20}
-              height={20}
-              className="w-5 h-5"
-            />
-          </div>
-
-          <button onClick={handleAddClick} className='btn-primary max-[400px]:text-sm mb-2 max-[640px]:mb-4 text-nowrap self-end'>
-            + Add New Stock
-          </button>
-
-
         </div>
+
+        <div className="space-y-0 w-full ">
+          <div className="w-full flex justify-between max-[640px]:flex-col-reverse">
+            <div className="flex items-center justify-center gap-2 border border-b-white py-2 rounded-tr-lg rounded-tl-lg w-44 max-[640px]:w-full font-semibold px-9 shadow-inner">
+              Stock
+              <Image
+                src="/icons/ui-box.svg"
+                alt=""
+                width={20}
+                height={20}
+                className="w-5 h-5"
+              />
+            </div>
+
+            <button
+              onClick={handleAddClick}
+              className="btn-primary max-[400px]:text-sm mb-2 max-[640px]:mb-4 text-nowrap self-end"
+            >
+              + Add New Stock
+            </button>
+          </div>
           <div className="border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg">
             {stockItems.length === 0 ? (
               <div className="relative">
@@ -191,21 +191,22 @@ const Page = () => {
                       >
                         + Add New Stock
                       </button>
-                      <ShopDeskModal isOpen={isOpen} onClose={closeModal} />
+                      {/* <AddStockModal isOpen={isOpen} onClose={closeModal} /> */}
+                      <AddStockModal isOpen={openAdd} onClose={closeAddModal} />
                     </div>
                   </div>
                 </div>
                 <div className="bg-[#DEE5ED] p-2 absolute bottom-0 w-full lg:hidden">
                   <p className="text-gray-400 text-sm flex items-center gap-1 justify-center text-center">
                     You have <span className="text-black">0</span> stock
-                    (Displaying <span className="text-black">6</span>{' '}
+                    (Displaying <span className="text-black">6</span>{" "}
                     <Image
                       src="/icons/ArrowDropDown.svg"
                       alt=""
                       width={12}
                       height={12}
                       className="w-3 h-3"
-                    />{' '}
+                    />{" "}
                     per page)
                   </p>
                 </div>
@@ -230,17 +231,17 @@ const Page = () => {
                 </TableHeader>
                 <TableBody>
                   {Array.from({ length: 10 }).map((_, index) => {
-                    const item = stockItems[index] || null
+                    const item = stockItems[index] || null;
                     return (
                       <TableRow key={index} className="h-[50px]">
                         <TableCell className="px-4 py-3 text-left border-r">
-                          {item ? item.name : ''}
+                          {item ? item.name : ""}
                         </TableCell>
                         <TableCell className="px-4 py-3 text-center border-r">
-                          {item ? `$${item.price}` : ''}
+                          {item ? `$${item.price}` : ""}
                         </TableCell>
                         <TableCell className="px-4 py-3 text-center border-r hidden sm:table-cell">
-                          {item ? item.quantity : ''}
+                          {item ? item.quantity : ""}
                         </TableCell>
                         <TableCell className="px-4 py-3 text-center hidden sm:table-cell">
                           {item ? (
@@ -258,11 +259,11 @@ const Page = () => {
                               </DropdownMenuContent>
                             </DropdownMenu>
                           ) : (
-                            ''
+                            ""
                           )}
                         </TableCell>
                       </TableRow>
-                    )
+                    );
                   })}
                 </TableBody>
               </Table>
@@ -272,13 +273,13 @@ const Page = () => {
       </div>
 
       <EditItemModal isOpen={openEdit} onClose={closeEditModal} />
-      <AddItemModal isOpen={openAdd} onClose={closeAddModal} />
+      <AddStockModal isOpen={openAdd} onClose={closeAddModal} />
 
       <p className="text-center mt-4">
         © {new Date().getFullYear()}, Powered by Timbu Business
       </p>
     </main>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;
