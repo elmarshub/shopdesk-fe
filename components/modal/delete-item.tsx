@@ -49,6 +49,9 @@ const DeleteItem: React.FC<LogoutModalProps> = ({
     onCancel?.()
   }
 
+
+
+
   React.useEffect(() => {
     if (open !== undefined) {
       setDialogOpen(open)

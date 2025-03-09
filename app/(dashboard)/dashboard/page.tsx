@@ -1,21 +1,21 @@
-'use client'
-import ShopDeskModal from '@/components/modal/add-item'
-import { useEffect, useState, useRef } from 'react'
-import { ChevronDown, MoreVertical } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import EditItemModal from '@/components/modal/edit-stock'
-import AddItemModal from '@/components/modal/add-item'
+"use client";
+import ShopDeskModal from "@/components/modal/add-item";
+import { useEffect, useState, useRef } from "react";
+import { ChevronDown, MoreVertical } from "lucide-react";
+import { useRouter } from "next/navigation";
+import EditItemModal from "@/components/modal/edit-stock";
+import AddItemModal from "@/components/modal/add-item";
 import DeleteItem from "@/components/modal/delete-item";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import LogoutConfirmModal from '@/components/modal/logoutConfirmationModal'
-import Image from 'next/image'
-import Logo from '@/components/functional/logo'
-import LoadingAnimation from '@/components/functional/loading'
+} from "@/components/ui/dropdown-menu";
+import LogoutConfirmModal from "@/components/modal/logoutConfirmationModal";
+import Image from "next/image";
+import Logo from "@/components/functional/logo";
+import LoadingAnimation from "@/components/functional/loading";
 import {
   Table,
   TableHeader,
@@ -23,12 +23,10 @@ import {
   TableRow,
   TableHead,
   TableCell,
-} from '@/components/ui/table'
-import useTableAreaHeight from './hooks/useTableAreaHeight'
-
+} from "@/components/ui/table";
+import useTableAreaHeight from "./hooks/useTableAreaHeight";
 
 const Page = () => {
-
   type StockItem = {
     id: number;
     name: string;
@@ -37,70 +35,102 @@ const Page = () => {
   };
 
   const { tableAreaRef, tableAreaHeight } = useTableAreaHeight();
-  const rowsPerPage = Math.round((tableAreaHeight ) / 55) - 3;
+  const rowsPerPage = Math.round(tableAreaHeight / 55) - 3;
 
-  const [isOpen, setIsOpen] = useState(false)
-  const [openEdit, setOpenEdit] = useState(false)
-  const [openAdd, setOpenAdd] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [openAdd, setOpenAdd] = useState(false);
 
-  //const [selectedItem, setSelectedItem] = useState(null);
-  const [user, setUser] = useState<any>(null)
-  const openModal = () => setIsOpen(true)
-  const closeModal = () => setIsOpen(false)
-  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false)
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [selectedItem, setSelectedItem] = useState<{
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+  } | null>(null);
+  const [user, setUser] = useState<any>(null);
+  const openModal = () => setIsOpen(true);
+  const closeModal = () => setIsOpen(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [stockItems, setStockItems] = useState<StockItem[]>([
-    { id: 1, name: 'Solace Recliner', price: 50, quantity: 40 },
-  ])
-  
-  const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
+    { id: 1, name: "Solace Recliner", price: 50, quantity: 40 },
+  ]);
+
+  const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
-    const token = sessionStorage.getItem('refresh_token')
+    const token = sessionStorage.getItem("refresh_token");
     if (!token) {
-      router.replace('/sign-in')
+      router.replace("/sign-in");
     } else {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [router])
+  }, [router]);
 
-  const handleEditClick = () => {
-    // setSelectedItem(item);
-    setOpenEdit(true)
-  }
+  const handleEditClick = (item: {
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+  }) => {
+    setSelectedItem(item); // Set the selected item
+    setOpenEdit(true); // Open the edit modal
+  };
+
+  const handleSaveEdit = (updatedItem: {
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+  }) => {
+    setStockItems((prev) =>
+      prev.map((item) => (item.id === updatedItem.id ? updatedItem : item))
+    );
+
+    setOpenEdit(false); // Close the edit modal
+  };
 
   const handleAddClick = () => {
     // setSelectedItem(item);
-    setOpenAdd(true)
-  }
+    setOpenAdd(true);
+  };
 
-  const handleDeleteClick = () => {
-    // setSelectedItem(item);
-    setIsDeleteModalOpen(true)
-  }
+  const handleDeleteClick = (item: {
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+  }) => {
+    setSelectedItem(item);
+
+    setIsDeleteModalOpen(true);
+  };
 
   const closeEditModal = () => {
-    setOpenEdit(false)
+    setOpenEdit(false);
     //setSelectedItem(null);
-  }
+  };
 
   const closeAddModal = () => {
-    setOpenAdd(false)
+    setOpenAdd(false);
     //setSelectedItem(null);
-  }
+  };
 
   const handleDeleteItem = () => {
-    setIsDeleteModalOpen(false)
-  }
+    setIsDeleteModalOpen(false);
+    setStockItems((prev) =>
+      prev.filter((item) => item.id !== selectedItem?.id)
+    );
+  };
 
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
         <LoadingAnimation />
       </div>
-    )
+    );
   }
 
   return (
@@ -110,7 +140,7 @@ const Page = () => {
           open={isLogoutModalOpen}
           onOpenChange={setIsLogoutModalOpen}
           onCancel={() => setIsLogoutModalOpen(false)}
-        />     
+        />
         <DeleteItem
           open={isDeleteModalOpen}
           onOpenChange={setIsDeleteModalOpen}
@@ -144,30 +174,30 @@ const Page = () => {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-        </div>     
-           
-        <div className="space-y-0 w-full ">
-
-        <div className='w-full flex justify-between max-[640px]:flex-col-reverse'>
-          <div className="flex items-center justify-center gap-2 border border-b-white py-2 rounded-tr-lg rounded-tl-lg w-44 max-[640px]:w-full font-semibold px-9 shadow-inner">
-            Stock
-            <Image
-              src="/icons/ui-box.svg"
-              alt=""
-              width={20}
-              height={20}
-              className="w-5 h-5"
-            />
-          </div>
-
-          {stockItems.length > 0 && (
-          <button onClick={handleAddClick} className='btn-primary max-[400px]:text-sm mb-2 max-[640px]:mb-4 text-nowrap self-end'>
-            + Add New Stock
-          </button>
-          )}
-
-
         </div>
+
+        <div className="space-y-0 w-full ">
+          <div className="w-full flex justify-between max-[640px]:flex-col-reverse">
+            <div className="flex items-center justify-center gap-2 border border-b-white py-2 rounded-tr-lg rounded-tl-lg w-44 max-[640px]:w-full font-semibold px-9 shadow-inner">
+              Stock
+              <Image
+                src="/icons/ui-box.svg"
+                alt=""
+                width={20}
+                height={20}
+                className="w-5 h-5"
+              />
+            </div>
+
+            {stockItems.length > 0 && (
+              <button
+                onClick={handleAddClick}
+                className="btn-primary max-[400px]:text-sm mb-2 max-[640px]:mb-4 text-nowrap self-end"
+              >
+                + Add New Stock
+              </button>
+            )}
+          </div>
           <div className="border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg flex-1">
             {stockItems.length === 0 ? (
               <div className="relative">
@@ -213,21 +243,29 @@ const Page = () => {
                       >
                         + Add New Stock
                       </button>
-                      <ShopDeskModal isOpen={isOpen} onClose={closeModal} />
+                      <ShopDeskModal
+                        isOpen={isOpen}
+                        onClose={closeModal}
+                        onSave={(newItem) => {
+                          setStockItems((prev) => [...prev, newItem]);
+
+                          closeModal();
+                        }}
+                      />
                     </div>
                   </div>
                 </div>
                 <div className="bg-[#DEE5ED] p-2 absolute bottom-0 w-full lg:hidden">
                   <p className="text-gray-400 text-sm flex items-center gap-1 justify-center text-center">
                     You have <span className="text-black">0</span> stock
-                    (Displaying <span className="text-black">6</span>{' '}
+                    (Displaying <span className="text-black">6</span>{" "}
                     <Image
                       src="/icons/ArrowDropDown.svg"
                       alt=""
                       width={12}
                       height={12}
                       className="w-3 h-3"
-                    />{' '}
+                    />{" "}
                     per page)
                   </p>
                 </div>
@@ -252,17 +290,17 @@ const Page = () => {
                 </TableHeader>
                 <TableBody>
                   {Array.from({ length: rowsPerPage }).map((_, index) => {
-                    const item = stockItems[index] || null
+                    const item = stockItems[index] || null;
                     return (
                       <TableRow key={index} className="h-[50px]">
                         <TableCell className="px-4 py-3 text-left border-r">
-                          {item ? item.name : ''}
+                          {item ? item.name : ""}
                         </TableCell>
                         <TableCell className="px-4 py-3 text-center border-r">
-                          {item ? `$${item.price}` : ''}
+                          {item ? `$${item.price}` : ""}
                         </TableCell>
                         <TableCell className="px-4 py-3 text-center border-r hidden sm:table-cell">
-                          {item ? item.quantity : ''}
+                          {item ? item.quantity : ""}
                         </TableCell>
                         <TableCell className="px-4 py-3 text-center hidden sm:table-cell">
                           {item ? (
@@ -271,20 +309,24 @@ const Page = () => {
                                 <MoreVertical className="cursor-pointer" />
                               </DropdownMenuTrigger>
                               <DropdownMenuContent>
-                                <DropdownMenuItem onClick={handleEditClick}>
+                                <DropdownMenuItem
+                                  onClick={() => handleEditClick(item)}
+                                >
                                   Edit
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={handleDeleteClick}>
+                                <DropdownMenuItem
+                                  onClick={() => handleDeleteClick(item)}
+                                >
                                   Delete
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
                             </DropdownMenu>
                           ) : (
-                            ''
+                            ""
                           )}
                         </TableCell>
                       </TableRow>
-                    )
+                    );
                   })}
                 </TableBody>
               </Table>
@@ -293,14 +335,28 @@ const Page = () => {
         </div>
       </div>
 
-      <EditItemModal isOpen={openEdit} onClose={closeEditModal} />
-      <AddItemModal isOpen={openAdd} onClose={closeAddModal} />
+      <EditItemModal
+        isOpen={openEdit}
+        onClose={closeEditModal}
+        item={selectedItem!}
+        onSave={handleSaveEdit}
+      />
+
+      <AddItemModal
+        isOpen={openAdd}
+        onClose={closeAddModal}
+        onSave={(newItem) => {
+          setStockItems((prev) => [...prev, newItem]);
+
+          closeModal();
+        }}
+      />
 
       <p className="text-center mt-4">
         © {new Date().getFullYear()}, Powered by Timbu Business
       </p>
     </main>
-  )
-}
+  );
+};
 
-export default Page
+export default Page;
