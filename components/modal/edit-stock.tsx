@@ -48,9 +48,11 @@ const currencies = [
   },
 ];
 
-interface ShopDeskModalProps {
+interface EditItemModal {
   isOpen: boolean;
   onClose: () => void;
+  item: { id: number; name: string; price: number; quantity: number };
+
   onSave: (item: {
     id: number;
     name: string;
@@ -59,19 +61,25 @@ interface ShopDeskModalProps {
   }) => void;
 }
 
-export default function ShopDeskModal({
+export default function EditItemModal({
   isOpen,
   onClose,
+  item,
   onSave,
-}: ShopDeskModalProps) {
+}: EditItemModal) {
+  if (!isOpen || !item) return null; // Don't render if modal is closed or item is null
+
   const [searchQuery, setSearchQuery] = useState("");
   const [isCurrencyModalOpen, setCurrencyModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const sellingPriceDivRef = useRef<HTMLDivElement>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [productName, setProductName] = useState("");
-  const [sellingPrice, setSellingPrice] = useState("");
-  const [quantity, setQuantity] = useState(0);
+
+  const [productName, setProductName] = useState(item.name);
+
+  const [sellingPrice, setSellingPrice] = useState(item.price.toString());
+
+  const [quantity, setQuantity] = useState(item.quantity);
   const [selectedSellingCurrency, setSelectedSellingCurrency] = useState(
     currencies[0]
   );
@@ -107,14 +115,18 @@ export default function ShopDeskModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      //submit logic
       onSave({
-        id: Date.now(),
+        id: item.id, // Use the existing item ID
+
         name: productName,
+
         price: parseFloat(sellingPrice),
+
         quantity: quantity,
       });
+
       onClose();
+      //submit logic
     }
   };
   const toggleCurrencyModal = () => {
@@ -173,11 +185,8 @@ export default function ShopDeskModal({
             </div>
             <div className="flex-grow h-full p-2">
               <h1 className="font-circular-medium text-[24px] text-left">
-                Add New Stock
+                Edit Stock
               </h1>
-              <p className="font-circular-normal text-[14px] text-[#717171] text-left hidden md:block">
-                Always know the items you have available.
-              </p>
             </div>
             <div className=" flex-shrink-0">
               <button
@@ -205,7 +214,13 @@ export default function ShopDeskModal({
                 placeholder="Item Name"
                 onChange={(e) => setProductName(e.target.value)}
                 required
+                value={productName}
               />
+              {errors.productName && (
+                <p className="text-[#FF1925] text-sm font-circular-normal">
+                  {errors.productName}
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-[8px] flex-1">
               <label className="font-circular-normal text-[14px] text-[#717171] text-left">
@@ -287,9 +302,10 @@ export default function ShopDeskModal({
                 )}
               </div>
               {errors.sellingPrice && (
-                  <p className="text-[#FF1925] text-sm font-circular-normal">
-                    {errors.sellingPrice}
-                  </p>)}
+                <p className="text-[#FF1925] text-sm font-circular-normal">
+                  {errors.sellingPrice}
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-[8px]">
               <label className="font-circular-normal text-[14px] text-[#1B1B1B] text-left">
@@ -297,6 +313,7 @@ export default function ShopDeskModal({
               </label>
               <div className="flex items-center gap-[8px]">
                 <button
+                  type="button"
                   className="h-[48px] md:h-[62px] w-[48px] md:w-[62px] flex items-center justify-center border border-[#1B1B1B] rounded-[9px] cursor-pointer hover:bg-[#D0D0D0]"
                   onClick={decrement}
                 >
@@ -329,7 +346,7 @@ export default function ShopDeskModal({
 
                 <button
                   className="h-[48px] md:h-[62px] w-[48px] md:w-[62px] flex items-center justify-center border border-[#1B1B1B] rounded-[9px] cursor-pointer hover:bg-[#D0D0D0]"
-                  onClick={increment} type="button"
+                  onClick={increment}
                 >
                   <FaPlus className="w-4 h-4 md:w-5 md:h-5" />
                 </button>
@@ -340,31 +357,32 @@ export default function ShopDeskModal({
                 </p>
               )}
             </div>
-                <div className="md:bg-[#F6F8FA] md:border md:border-[#DEE5ED] rounded-bl-[12px] rounded-br-[12px] w-full p-4">
-          <div className="flex flex-col-reverse md:flex-row justify-end gap-4 w-full">
-            <button
-              type="button"
-              onClick={onClose}
-              className="w-full md:w-auto bg-white border md:border-[#1B1B1B] border-[#E50000] md:text-black text-[#FF000D] px-[24px] py-[12px] rounded-[12px] hover:bg-[#D0D0D0]"
-            >
-              Cancel
-            </button>
-            <button
-              //submit button (should be inside form ,will change after design changes)
-              type="submit"
-              className={`w-full md:w-auto px-[24px] py-[12px] rounded-[12px] border ${
-                isFormValid()
-                  ? "bg-black text-white border-black"
-                  : "bg-[#D0D0D0] text-[#F1F1F1] border-[#B8B8B8]"
-              }`}
-              disabled={!isFormValid()}
-            >
-              <span className="md:hidden">Save</span>
 
-              <span className="hidden md:inline">Add Stock</span>
-            </button>
-          </div>
-        </div>
+            <div className="md:bg-[#F6F8FA] md:border md:border-[#DEE5ED] rounded-bl-[12px] rounded-br-[12px] w-full p-4">
+              <div className="flex flex-col-reverse md:flex-row justify-end gap-4 w-full">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="w-full md:w-auto bg-white border md:border-[#1B1B1B] border-[#E50000] md:text-black text-[#FF000D] px-[24px] py-[12px] rounded-[12px] hover:bg-[#D0D0D0]"
+                >
+                  Cancel
+                </button>
+
+                <button
+                  //submit button (should be inside form ,will change after design changes)
+
+                  type="submit"
+                  className={`w-full md:w-auto px-[24px] py-[12px] rounded-[12px] border ${
+                    isFormValid()
+                      ? "bg-black text-white border-black"
+                      : "bg-[#D0D0D0] text-[#F1F1F1] border-[#B8B8B8]"
+                  }`}
+                  disabled={!isFormValid()}
+                >
+                  Save
+                </button>
+              </div>
+            </div>
           </form>
         </div>
       </div>
