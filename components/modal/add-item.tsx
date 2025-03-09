@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import {
   FaChevronDown,
@@ -51,29 +51,47 @@ const currencies = [
 interface ShopDeskModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSave: (item: {
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+  }) => void;
 }
 
-export default function ShopDeskModal({ isOpen, onClose }: ShopDeskModalProps) {
+export default function ShopDeskModal({
+  isOpen,
+  onClose,
+  onSave,
+}: ShopDeskModalProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isCurrencyModalOpen, setCurrencyModalOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null)
-  const sellingPriceDivRef = useRef<HTMLDivElement>(null)
-  const [errors, setErrors] = useState<{ [key: string]: string }>({})
-  const [productName, setProductName] = useState('')
-  const [sellingPrice, setSellingPrice] = useState('')
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const sellingPriceDivRef = useRef<HTMLDivElement>(null);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [productName, setProductName] = useState("");
+  const [sellingPrice, setSellingPrice] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [selectedSellingCurrency, setSelectedSellingCurrency] = useState(
     currencies[0]
   );
-//this is a validation for testing display of errors
-const validateForm = () => {
-  const newErrors: { [key: string]: string } = {}
-  if (!productName) newErrors.productName = 'Product Name is required.' 
-  if (!sellingPrice) newErrors.sellingPrice = 'Selling Price is required.'
-  if (quantity === 0) newErrors.quantity = 'Quantity must be greater than 0.'
-  setErrors(newErrors)
-  return Object.keys(newErrors).length === 0
-}
+  //this is a validation for testing display of errors
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!productName.trim())
+      newErrors.productName = "Product Name is required.";
+
+    if (!sellingPrice) newErrors.sellingPrice = "Selling Price is required.";
+    else if (isNaN(Number(sellingPrice)))
+      newErrors.sellingPrice = "Selling Price must be a number.";
+
+    if (quantity === 0) newErrors.quantity = "Quantity must be greater than 0.";
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
 
   const increment = () => setQuantity((prev) => prev + 1);
   const decrement = () => setQuantity((prev) => (prev > 0 ? prev - 1 : 0));
@@ -83,39 +101,46 @@ const validateForm = () => {
   );
 
   const isFormValid = () => {
-    return productName && sellingPrice && quantity > 0
-  }
+    return productName && sellingPrice && quantity > 0;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (validateForm()) {
       //submit logic
+      onSave({
+        id: Date.now(),
+        name: productName,
+        price: parseFloat(sellingPrice),
+        quantity: quantity,
+      });
+      onClose();
     }
-  }
+  };
   const toggleCurrencyModal = () => {
-    setCurrencyModalOpen((prev) => !prev)
-  }
+    setCurrencyModalOpen((prev) => !prev);
+  };
 
-  const handleCurrencySelect = (currency: typeof currencies[0]) => {
-    setSelectedSellingCurrency(currency)
-    setCurrencyModalOpen(false)
-  }
-//close modal when outside of div is clicked
-useEffect(() => {
-  const handleClickOutside = (event: MouseEvent) => {
-    if (
-      dropdownRef.current &&
-      !dropdownRef.current.contains(event.target as Node) &&
-      sellingPriceDivRef.current &&
-      !sellingPriceDivRef.current.contains(event.target as Node)
-    ) {
-      setCurrencyModalOpen(false)
-    }
-  }
+  const handleCurrencySelect = (currency: (typeof currencies)[0]) => {
+    setSelectedSellingCurrency(currency);
+    setCurrencyModalOpen(false);
+  };
+  //close modal when outside of div is clicked
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node) &&
+        sellingPriceDivRef.current &&
+        !sellingPriceDivRef.current.contains(event.target as Node)
+      ) {
+        setCurrencyModalOpen(false);
+      }
+    };
 
-  document.addEventListener('mousedown', handleClickOutside)
-  return () => document.removeEventListener('mousedown', handleClickOutside)
-}, [])
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   if (!isOpen) return null;
 
   return (
@@ -125,7 +150,7 @@ useEffect(() => {
           <div className="flex gap-2.5">
             <div className="flex p-2 ">
               <div className="bg-[#CCEBDB] p-4 rounded-lg flex items-center justify-center">
-              <picture>
+                <picture>
                   <source
                     srcSet="/modal-images/icon.svg"
                     media="(max-width: 639px)"
@@ -183,91 +208,90 @@ useEffect(() => {
               />
             </div>
             <div className="flex flex-col gap-[8px] flex-1">
-                <label className="font-circular-normal text-[14px] text-[#717171] text-left">
-                  Selling Price <span className="text-[#FF1925]">*</span>
-                </label>
+              <label className="font-circular-normal text-[14px] text-[#717171] text-left">
+                Selling Price <span className="text-[#FF1925]">*</span>
+              </label>
+              <div
+                ref={sellingPriceDivRef}
+                className="flex border gap-[8px] rounded-[9px] m-1 relative h-[48px] md:h-[62px]"
+              >
                 <div
-                  ref={sellingPriceDivRef}
-                  className="flex border gap-[8px] rounded-[9px] m-1 relative h-[48px] md:h-[62px]"
+                  className="p-2 flex gap-[8px] items-center cursor-pointer"
+                  onClick={toggleCurrencyModal}
                 >
-                  <div
-                    className="p-2 flex gap-[8px] items-center cursor-pointer"
-                    onClick={toggleCurrencyModal}
-                  >
-                    <Image
-                      src={selectedSellingCurrency.flag}
-                      alt={`${selectedSellingCurrency.name} Flag`}
-                      className="w-5 h-5 md:w-6 md:h-6"
-                      width={20}
-                      height={20}
-                    />
-                    <span className="text-[20px] text-center text-[#595959]">
-                      {selectedSellingCurrency.symbol}
-                    </span>
-                    <FaChevronDown className="w-[10px] h-[10px] text-[#888888]" />
-                  </div>
-                  <div className="h-8 border border-gray self-center"></div>
-                  <div>
-                    <input
-                      type="text"
-                      name="selling-price"
-                      className="w-full h-full p-[12px] outline-none  placeholder:text-[#B8B8B8] text-[#2A2A2A] text-[16px] font-circular-normal"
-                      placeholder="Amount"
-                      value={sellingPrice}
-                      onChange={(e) => setSellingPrice(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  {isCurrencyModalOpen && (
-                    <div
-                      ref={dropdownRef}
-                      className="absolute top-[calc(100%-10px)] right-3 w-[298px] bg-white rounded-lg backdrop-blur-sm border shadow-lg z-10"
-                    >
-                      <div className="relative w-full p-4">
-                        <input
-                          type="text"
-                          name="item-name"
-                          className="w-full rounded-[10px] p-2 pl-[48px] outline-none placeholder:text-[#B8B8B8] text-[16px] border bg-white"
-                          placeholder="Search"
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)}
-                          required
-                        />
-                        <FaSearch className="absolute left-[32px] top-1/2 transform -translate-y-1/2 text-[#B8B8B8] w-[20px] h-[20px]" />
-                      </div>
-
-                      <div className="h-[200px] overflow-y-auto custom-scrollbar px-[20px] py-3 ">
-                        {filteredCurrencies.map((currency) => (
-                          <div
-                            key={currency.code}
-                            className="flex items-center p-2 hover:bg-gray-100 w-full cursor-pointer"
-                            onClick={() => handleCurrencySelect(currency)}
-                          >
-                            <img
-                              src={currency.flag}
-                              alt={`${currency.name} Flag`}
-                              className="w-8 h-8 rounded-full object-cover mr-3"
-                            />
-                            <div>
-                              <p className="text-[14px] font-circular-normal">
-                                {currency.name} ({currency.code}){' '}
-                                <span className="ml-2">{currency.symbol}</span>
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  <Image
+                    src={selectedSellingCurrency.flag}
+                    alt={`${selectedSellingCurrency.name} Flag`}
+                    className="w-5 h-5 md:w-6 md:h-6"
+                    width={20}
+                    height={20}
+                  />
+                  <span className="text-[20px] text-center text-[#595959]">
+                    {selectedSellingCurrency.symbol}
+                  </span>
+                  <FaChevronDown className="w-[10px] h-[10px] text-[#888888]" />
                 </div>
-                {/* {errors.sellingPrice && (
+                <div className="h-8 border border-gray self-center"></div>
+                <div>
+                  <input
+                    type="text"
+                    name="selling-price"
+                    className="w-full h-full p-[12px] outline-none  placeholder:text-[#B8B8B8] text-[#2A2A2A] text-[16px] font-circular-normal"
+                    placeholder="Amount"
+                    value={sellingPrice}
+                    onChange={(e) => setSellingPrice(e.target.value)}
+                    required
+                  />
+                </div>
+
+                {isCurrencyModalOpen && (
+                  <div
+                    ref={dropdownRef}
+                    className="absolute top-[calc(100%-10px)] right-3 w-[298px] bg-white rounded-lg backdrop-blur-sm border shadow-lg z-10"
+                  >
+                    <div className="relative w-full p-4">
+                      <input
+                        type="text"
+                        name="item-name"
+                        className="w-full rounded-[10px] p-2 pl-[48px] outline-none placeholder:text-[#B8B8B8] text-[16px] border bg-white"
+                        placeholder="Search"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        required
+                      />
+                      <FaSearch className="absolute left-[32px] top-1/2 transform -translate-y-1/2 text-[#B8B8B8] w-[20px] h-[20px]" />
+                    </div>
+
+                    <div className="h-[200px] overflow-y-auto custom-scrollbar px-[20px] py-3 ">
+                      {filteredCurrencies.map((currency) => (
+                        <div
+                          key={currency.code}
+                          className="flex items-center p-2 hover:bg-gray-100 w-full cursor-pointer"
+                          onClick={() => handleCurrencySelect(currency)}
+                        >
+                          <img
+                            src={currency.flag}
+                            alt={`${currency.name} Flag`}
+                            className="w-8 h-8 rounded-full object-cover mr-3"
+                          />
+                          <div>
+                            <p className="text-[14px] font-circular-normal">
+                              {currency.name} ({currency.code}){" "}
+                              <span className="ml-2">{currency.symbol}</span>
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              {errors.sellingPrice && (
                   <p className="text-[#FF1925] text-sm font-circular-normal">
                     {errors.sellingPrice}
-                  </p>)} */}
-                
-              </div>
-              <div className="flex flex-col gap-[8px]">
+                  </p>)}
+            </div>
+            <div className="flex flex-col gap-[8px]">
               <label className="font-circular-normal text-[14px] text-[#1B1B1B] text-left">
                 Quantity <span className="text-[#FF1925]">*</span>
               </label>
@@ -285,18 +309,18 @@ useEffect(() => {
                     inputMode="numeric"
                     className="w-full h-[48px] md:h-[62px] rounded-[9px] p-[12px] outline-none border border-[#DEDEDE] focus:outline-none focus:ring-2 focus:ring-[#CCEBDB] focus:border-[#009A49] hover:ring-2 hover:ring-[#CCEBDB] transition-all placeholder:text-[#B8B8B8] text-[#2A2A2A] text-[16px] font-circular-normal text-center"
                     placeholder="Quantity"
-                    value={quantity === 0 ? '' : quantity}
+                    value={quantity === 0 ? "" : quantity}
                     onChange={(e) => {
-                      const value = e.target.value
+                      const value = e.target.value;
 
                       if (/^\d*$/.test(value)) {
-                        setQuantity(value === '' ? 0 : parseInt(value, 10))
-                        setErrors((prev) => ({ ...prev, quantity: '' }))
+                        setQuantity(value === "" ? 0 : parseInt(value, 10));
+                        setErrors((prev) => ({ ...prev, quantity: "" }));
                       } else {
                         setErrors((prev) => ({
                           ...prev,
-                          quantity: 'Please enter a valid number.',
-                        }))
+                          quantity: "Please enter a valid number.",
+                        }));
                       }
                     }}
                     required
@@ -305,7 +329,7 @@ useEffect(() => {
 
                 <button
                   className="h-[48px] md:h-[62px] w-[48px] md:w-[62px] flex items-center justify-center border border-[#1B1B1B] rounded-[9px] cursor-pointer hover:bg-[#D0D0D0]"
-                  onClick={increment}
+                  onClick={increment} type="button"
                 >
                   <FaPlus className="w-4 h-4 md:w-5 md:h-5" />
                 </button>
@@ -316,10 +340,7 @@ useEffect(() => {
                 </p>
               )}
             </div>
-              
-          </form>
-        </div>
-        <div className="md:bg-[#F6F8FA] md:border md:border-[#DEE5ED] rounded-bl-[12px] rounded-br-[12px] w-full p-4">
+                <div className="md:bg-[#F6F8FA] md:border md:border-[#DEE5ED] rounded-bl-[12px] rounded-br-[12px] w-full p-4">
           <div className="flex flex-col-reverse md:flex-row justify-end gap-4 w-full">
             <button
               type="button"
@@ -333,8 +354,8 @@ useEffect(() => {
               type="submit"
               className={`w-full md:w-auto px-[24px] py-[12px] rounded-[12px] border ${
                 isFormValid()
-                  ? 'bg-black text-white border-black'
-                  : 'bg-[#D0D0D0] text-[#F1F1F1] border-[#B8B8B8]'
+                  ? "bg-black text-white border-black"
+                  : "bg-[#D0D0D0] text-[#F1F1F1] border-[#B8B8B8]"
               }`}
               disabled={!isFormValid()}
             >
@@ -343,6 +364,8 @@ useEffect(() => {
               <span className="hidden md:inline">Add Stock</span>
             </button>
           </div>
+        </div>
+          </form>
         </div>
       </div>
     </div>
