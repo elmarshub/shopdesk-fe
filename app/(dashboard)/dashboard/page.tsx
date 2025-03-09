@@ -1,8 +1,4 @@
 "use client";
-<<<<<<< HEAD
-import ShopDeskModal from '@/components/modal/add-item';
-
-=======
 import ShopDeskModal from "@/components/modal/add-item";
 import { useEffect, useState, useRef } from "react";
 import { ChevronDown, MoreVertical } from "lucide-react";
@@ -10,37 +6,12 @@ import { useRouter } from "next/navigation";
 import EditItemModal from "@/components/modal/edit-stock";
 import AddItemModal from "@/components/modal/add-item";
 import DeleteItem from "@/components/modal/delete-item";
->>>>>>> upstream/main
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-<<<<<<< HEAD
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
-import {
-  Dialog,
-  DialogClose,
-  DialogOverlay
-} from "@/components/ui/dialog";
-
-import { ChevronDown } from "lucide-react";
-import { useState } from "react";
-import close from "../../../public/icons/close.svg";
-import stock from "../../../public/icons/stock.svg";
-
-import Logo from "@/components/functional/logo";
-import { DialogContent, DialogTitle } from "@radix-ui/react-dialog";
-import Image from "next/image";
-=======
 import LogoutConfirmModal from "@/components/modal/logoutConfirmationModal";
 import Image from "next/image";
 import Logo from "@/components/functional/logo";
@@ -54,7 +25,6 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import useTableAreaHeight from "./hooks/useTableAreaHeight";
->>>>>>> upstream/main
 
 const Page = () => {
   type StockItem = {
