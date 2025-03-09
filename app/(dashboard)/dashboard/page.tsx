@@ -53,9 +53,7 @@ const Page = () => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const [stockItems, setStockItems] = useState<StockItem[]>([
-    { id: 1, name: "Solace Recliner", price: 50, quantity: 40 },
-  ]);
+  const [stockItems, setStockItems] = useState<StockItem[]>([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
@@ -134,8 +132,8 @@ const Page = () => {
   }
 
   return (
-    <main className="px-6 py-4 w-full max-w-7xl mx-auto flex flex-col h-svh">
-      <div ref={tableAreaRef} className="space-y-8 w-full h-full">
+    <main className="px-6 py-4 w-full max-w-7xl mx-auto flex flex-col main-h-svh ">
+      <div ref={tableAreaRef} className="space-y-8 w-full h-full ">
         <LogoutConfirmModal
           open={isLogoutModalOpen}
           onOpenChange={setIsLogoutModalOpen}
@@ -289,7 +287,9 @@ const Page = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {Array.from({ length: rowsPerPage }).map((_, index) => {
+                  {Array.from({
+                    length: Math.max(rowsPerPage, stockItems.length),
+                  }).map((_, index) => {
                     const item = stockItems[index] || null;
                     return (
                       <TableRow key={index} className="h-[50px]">
