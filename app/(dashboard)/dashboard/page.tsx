@@ -1,10 +1,10 @@
 "use client";
-
-import { useEffect, useState } from "react";
+import ShopDeskModal from "@/components/modal/add-item";
+import { useEffect, useState, useRef } from "react";
 import { ChevronDown, MoreVertical } from "lucide-react";
 import { useRouter } from "next/navigation";
 import EditItemModal from "@/components/modal/edit-stock";
-import AddStockModal from "@/components/modal/add-item";
+import AddItemModal from "@/components/modal/add-item";
 import DeleteItem from "@/components/modal/delete-item";
 import {
   DropdownMenu,
@@ -24,21 +24,37 @@ import {
   TableHead,
   TableCell,
 } from "@/components/ui/table";
+import useTableAreaHeight from "./hooks/useTableAreaHeight";
 
 const Page = () => {
+  type StockItem = {
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+  };
+
+  const { tableAreaRef, tableAreaHeight } = useTableAreaHeight();
+  const rowsPerPage = Math.round(tableAreaHeight / 55) - 3;
+
   const [isOpen, setIsOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openAdd, setOpenAdd] = useState(false);
 
-  //const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState<{
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+  } | null>(null);
   const [user, setUser] = useState<any>(null);
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [stockItems, setStockItems] = useState([
-    { id: 1, name: "Solace Recliner", price: 50, quantity: 40 },
-  ]);
+
+  const [stockItems, setStockItems] = useState<StockItem[]>([]);
+
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
@@ -51,9 +67,27 @@ const Page = () => {
     }
   }, [router]);
 
-  const handleEditClick = () => {
-    // setSelectedItem(item);
-    setOpenEdit(true);
+  const handleEditClick = (item: {
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+  }) => {
+    setSelectedItem(item); // Set the selected item
+    setOpenEdit(true); // Open the edit modal
+  };
+
+  const handleSaveEdit = (updatedItem: {
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+  }) => {
+    setStockItems((prev) =>
+      prev.map((item) => (item.id === updatedItem.id ? updatedItem : item))
+    );
+
+    setOpenEdit(false); // Close the edit modal
   };
 
   const handleAddClick = () => {
@@ -61,8 +95,14 @@ const Page = () => {
     setOpenAdd(true);
   };
 
-  const handleDeleteClick = () => {
-    // setSelectedItem(item);
+  const handleDeleteClick = (item: {
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+  }) => {
+    setSelectedItem(item);
+
     setIsDeleteModalOpen(true);
   };
 
@@ -76,6 +116,13 @@ const Page = () => {
     //setSelectedItem(null);
   };
 
+  const handleDeleteItem = () => {
+    setIsDeleteModalOpen(false);
+    setStockItems((prev) =>
+      prev.filter((item) => item.id !== selectedItem?.id)
+    );
+  };
+
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -85,8 +132,8 @@ const Page = () => {
   }
 
   return (
-    <main className="px-6 py-4 w-full max-w-7xl mx-auto">
-      <div className="space-y-8 w-full">
+    <main className="px-6 py-4 w-full max-w-7xl mx-auto flex flex-col main-h-svh ">
+      <div ref={tableAreaRef} className="space-y-8 w-full h-full ">
         <LogoutConfirmModal
           open={isLogoutModalOpen}
           onOpenChange={setIsLogoutModalOpen}
@@ -96,6 +143,7 @@ const Page = () => {
           open={isDeleteModalOpen}
           onOpenChange={setIsDeleteModalOpen}
           onCancel={() => setIsDeleteModalOpen(false)}
+          onDelete={handleDeleteItem}
         />
         <div className="lg:border px-4 py-2 lg:shadow-md rounded-lg lg:flex items-center justify-between mx-auto">
           <div className="flex items-center gap-6">
@@ -139,14 +187,16 @@ const Page = () => {
               />
             </div>
 
-            <button
-              onClick={handleAddClick}
-              className="btn-primary max-[400px]:text-sm mb-2 max-[640px]:mb-4 text-nowrap self-end"
-            >
-              + Add New Stock
-            </button>
+            {stockItems.length > 0 && (
+              <button
+                onClick={handleAddClick}
+                className="btn-primary max-[400px]:text-sm mb-2 max-[640px]:mb-4 text-nowrap self-end"
+              >
+                + Add New Stock
+              </button>
+            )}
           </div>
-          <div className="border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg">
+          <div className="border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg flex-1">
             {stockItems.length === 0 ? (
               <div className="relative">
                 <div className="w-full overflow-x-auto">
@@ -191,8 +241,15 @@ const Page = () => {
                       >
                         + Add New Stock
                       </button>
-                      {/* <AddStockModal isOpen={isOpen} onClose={closeModal} /> */}
-                      <AddStockModal isOpen={openAdd} onClose={closeAddModal} />
+                      <ShopDeskModal
+                        isOpen={isOpen}
+                        onClose={closeModal}
+                        onSave={(newItem) => {
+                          setStockItems((prev) => [...prev, newItem]);
+
+                          closeModal();
+                        }}
+                      />
                     </div>
                   </div>
                 </div>
@@ -215,22 +272,24 @@ const Page = () => {
               <Table className="border-collapse  overflow-y-auto">
                 <TableHeader>
                   <TableRow className="h-[50px]">
-                    <TableHead className="px-4 py-2 text-left border-b border-r">
+                    <TableHead className="px-4 py-2 w-2/7 text-left border-b border-r">
                       ITEM NAME
                     </TableHead>
-                    <TableHead className="px-4 py-2 text-center border-b border-r">
+                    <TableHead className="px-4 py-2 w-1/7 text-center border-b border-r">
                       PRICE
                     </TableHead>
-                    <TableHead className="px-4 py-2 text-center border-b border-r hidden sm:table-cell">
+                    <TableHead className="px-4 py-2 w-1/7 text-center border-b border-r hidden sm:table-cell">
                       QUANTITY
                     </TableHead>
-                    <TableHead className="px-4 py-2 text-center border-b hidden sm:table-cell">
+                    <TableHead className="px-4 py-2 w-1/7 text-center border-b hidden sm:table-cell">
                       ACTION
                     </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {Array.from({ length: 10 }).map((_, index) => {
+                  {Array.from({
+                    length: Math.max(rowsPerPage, stockItems.length),
+                  }).map((_, index) => {
                     const item = stockItems[index] || null;
                     return (
                       <TableRow key={index} className="h-[50px]">
@@ -250,10 +309,14 @@ const Page = () => {
                                 <MoreVertical className="cursor-pointer" />
                               </DropdownMenuTrigger>
                               <DropdownMenuContent>
-                                <DropdownMenuItem onClick={handleEditClick}>
+                                <DropdownMenuItem
+                                  onClick={() => handleEditClick(item)}
+                                >
                                   Edit
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={handleDeleteClick}>
+                                <DropdownMenuItem
+                                  onClick={() => handleDeleteClick(item)}
+                                >
                                   Delete
                                 </DropdownMenuItem>
                               </DropdownMenuContent>
@@ -272,8 +335,22 @@ const Page = () => {
         </div>
       </div>
 
-      <EditItemModal isOpen={openEdit} onClose={closeEditModal} />
-      <AddStockModal isOpen={openAdd} onClose={closeAddModal} />
+      <EditItemModal
+        isOpen={openEdit}
+        onClose={closeEditModal}
+        item={selectedItem!}
+        onSave={handleSaveEdit}
+      />
+
+      <AddItemModal
+        isOpen={openAdd}
+        onClose={closeAddModal}
+        onSave={(newItem) => {
+          setStockItems((prev) => [...prev, newItem]);
+
+          closeModal();
+        }}
+      />
 
       <p className="text-center mt-4">
         © {new Date().getFullYear()}, Powered by Timbu Business

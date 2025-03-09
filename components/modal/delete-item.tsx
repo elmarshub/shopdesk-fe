@@ -14,7 +14,6 @@ import { LogOut } from "lucide-react"
 import Image from "next/image"
 import deleteRed from "@/public/icons/delete-red.svg"
 import { cn } from "@/lib/utils"
-import LogoutButton from "@/app/(auth)/sign-in/_components/logout"
 import DeleteItemButton from "./components/DeleteItemButton"
 
 interface LogoutModalProps {
@@ -22,6 +21,7 @@ interface LogoutModalProps {
   open?: boolean
   onOpenChange?: (open: boolean) => void
   triggerElement?: React.ReactNode
+  onDelete: () => void
 }
 
 const DeleteItem: React.FC<LogoutModalProps> = ({
@@ -29,6 +29,7 @@ const DeleteItem: React.FC<LogoutModalProps> = ({
   open,
   onOpenChange,
   triggerElement,
+  onDelete,
 }) => {
   const [dialogOpen, setDialogOpen] = React.useState(open || false)
 
@@ -47,6 +48,9 @@ const DeleteItem: React.FC<LogoutModalProps> = ({
     }
     onCancel?.()
   }
+
+
+
 
   React.useEffect(() => {
     if (open !== undefined) {
@@ -87,6 +91,7 @@ const DeleteItem: React.FC<LogoutModalProps> = ({
 
   <DeleteItemButton 
     itemId={"123"}
+    externalFunction={onDelete}
   />
 
   {/* <Button

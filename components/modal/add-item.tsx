@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import {
@@ -54,9 +53,19 @@ const currencies = [
 interface AddStockModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSave: (item: {
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+  }) => void;
 }
 
-export default function AddStockModal({ isOpen, onClose }: AddStockModalProps) {
+export default function ShopDeskModal({
+  isOpen,
+  onClose,
+  onSave,
+}: ShopDeskModalProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isCurrencyModalOpen, setCurrencyModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -69,13 +78,21 @@ export default function AddStockModal({ isOpen, onClose }: AddStockModalProps) {
   const [selectedSellingCurrency, setSelectedSellingCurrency] = useState(
     currencies[0]
   );
-
+  //this is a validation for testing display of errors
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
-    if (!productName) newErrors.productName = "Product Name is required.";
+
+    if (!productName.trim())
+      newErrors.productName = "Product Name is required.";
+
     if (!sellingPrice) newErrors.sellingPrice = "Selling Price is required.";
+    else if (isNaN(Number(sellingPrice)))
+      newErrors.sellingPrice = "Selling Price must be a number.";
+
     if (quantity === 0) newErrors.quantity = "Quantity must be greater than 0.";
+
     setErrors(newErrors);
+
     return Object.keys(newErrors).length === 0;
   };
 
@@ -90,28 +107,19 @@ export default function AddStockModal({ isOpen, onClose }: AddStockModalProps) {
     return productName && sellingPrice && quantity > 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      setIsLoading(true);
-      try {
-        const stock = await AddStock(
-          productName,
-          parseFloat(sellingPrice),
-          quantity,
-          "79dc8c9167fe48e39ee3088bff7f9d3f",
-          selectedSellingCurrency.code,
-          "160db8736a9d47989381e01a987e4413",
-          new Date().toISOString(),
-          selectedSellingCurrency
-        );
-        onClose();
-      } catch (error) {
-        console.error("Error adding stock:", error);
-      }
+      //submit logic
+      onSave({
+        id: Date.now(),
+        name: productName,
+        price: parseFloat(sellingPrice),
+        quantity: quantity,
+      });
+      onClose();
     }
   };
-
   const toggleCurrencyModal = () => {
     setCurrencyModalOpen((prev) => !prev);
   };
@@ -120,7 +128,7 @@ export default function AddStockModal({ isOpen, onClose }: AddStockModalProps) {
     setSelectedSellingCurrency(currency);
     setCurrencyModalOpen(false);
   };
-
+  //close modal when outside of div is clicked
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -136,7 +144,6 @@ export default function AddStockModal({ isOpen, onClose }: AddStockModalProps) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
   if (!isOpen) return null;
 
   return (
@@ -230,7 +237,7 @@ export default function AddStockModal({ isOpen, onClose }: AddStockModalProps) {
                   <input
                     type="text"
                     name="selling-price"
-                    className="w-full h-full p-3 outline-none placeholder:text-[#B8B8B8] text-[#2A2A2A] text-[16px] font-circular-normal"
+                    className="w-full h-full p-3 outline-none placeholder:text-[#B8B8B8] text-[#2A2A2A] text-base font-circular-normal"
                     placeholder="Amount"
                     value={sellingPrice}
                     onChange={(e) => setSellingPrice(e.target.value)}
@@ -280,6 +287,10 @@ export default function AddStockModal({ isOpen, onClose }: AddStockModalProps) {
                   </div>
                 )}
               </div>
+              {errors.sellingPrice && (
+                  <p className="text-[#FF1925] text-sm font-circular-normal">
+                    {errors.sellingPrice}
+                  </p>)}
             </div>
             <div className="flex flex-col gap-[8px]">
               <label className="font-circular-normal text-[14px] text-[#1B1B1B] text-left">
@@ -323,7 +334,7 @@ export default function AddStockModal({ isOpen, onClose }: AddStockModalProps) {
                   type="button"
                   aria-label="Increase Quantity"
                   className="h-[48px] md:h-[62px] w-[48px] md:w-[62px] flex items-center justify-center border border-[#1B1B1B] rounded-[9px] cursor-pointer hover:bg-[#D0D0D0]"
-                  onClick={increment}
+                  onClick={increment} type="button"
                 >
                   <FaPlus className="w-4 h-4 md:w-5 md:h-5" />
                 </button>
@@ -334,6 +345,26 @@ export default function AddStockModal({ isOpen, onClose }: AddStockModalProps) {
                 </p>
               )}
             </div>
+                <div className="md:bg-[#F6F8FA] md:border md:border-[#DEE5ED] rounded-bl-[12px] rounded-br-[12px] w-full p-4">
+          <div className="flex flex-col-reverse md:flex-row justify-end gap-4 w-full">
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-full md:w-auto bg-white border md:border-[#1B1B1B] border-[#E50000] md:text-black text-[#FF000D] px-[24px] py-[12px] rounded-[12px] hover:bg-[#D0D0D0]"
+            >
+              Cancel
+            </button>
+            <button
+              //submit button (should be inside form ,will change after design changes)
+              type="submit"
+              className={`w-full md:w-auto px-[24px] py-[12px] rounded-[12px] border ${
+                isFormValid()
+                  ? "bg-black text-white border-black"
+                  : "bg-[#D0D0D0] text-[#F1F1F1] border-[#B8B8B8]"
+              }`}
+              disabled={!isFormValid()}
+            >
+              <span className="md:hidden">Save</span>
 
             <div className="md:bg-[#F6F8FA] md:border md:border-[#DEE5ED] rounded-bl-[12px] rounded-br-[12px] w-full p-4">
               <div className="flex flex-col-reverse md:flex-row justify-end gap-4 w-full">
@@ -361,6 +392,8 @@ export default function AddStockModal({ isOpen, onClose }: AddStockModalProps) {
                 </button>
               </div>
             </div>
+          </form>
+        </div>
           </form>
         </div>
       </div>

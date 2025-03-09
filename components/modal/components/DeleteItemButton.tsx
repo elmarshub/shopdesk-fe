@@ -3,14 +3,15 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const DeleteItemButton = ({ itemId, className }: { itemId: string; className?: string }) => {
+const DeleteItemButton = ({ itemId, className, externalFunction }: { itemId: string; className?: string; externalFunction: Function }) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const handleDelete = async () => {
     setLoading(true);
+    externalFunction()
 
-    try {
+    /* try {
       const response = await fetch(`/api/items/${itemId}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
@@ -23,9 +24,9 @@ const DeleteItemButton = ({ itemId, className }: { itemId: string; className?: s
     } catch (error) {
       console.error("Delete error:", error);
     } finally {
-      router.refresh(); // Refresh page or update state accordingly
+      router.refresh();
       setLoading(false);
-    }
+    } */
   };
 
   return (
