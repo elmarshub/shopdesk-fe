@@ -1,19 +1,14 @@
 "use client";
 
 import Image from "next/image";
-<<<<<<< HEAD
+
 import { useEffect, useState } from "react";
 import Avatar1 from "./../../public/testimonial-images/avatar1.png";
 import Avatar2 from "./../../public/testimonial-images/avatar2.png";
 import Avatar3 from "./../../public/testimonial-images/avatar3.png";
 
 import { AnimatePresence, motion } from "framer-motion";
-=======
-import React, { useEffect, useState } from "react";
-import Avatar1 from "@/public/testimonial-images/avatar1.png";
-import Avatar2 from "@/public/testimonial-images/avatar2.png";
-import Avatar3 from "@/public/testimonial-images/avatar3.png";
->>>>>>> upstream/main
+
 import { Star } from "lucide-react";
 
 const testimonialsData = [
