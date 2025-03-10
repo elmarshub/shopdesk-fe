@@ -27,7 +27,7 @@ jobs:
               pm2 delete shopdesk || { echo 'pm2 delete shopdesk failed'; exit 1; } &&
               bun install || { echo 'bun install failed'; exit 1; } &&
               bun run build || { echo 'bun run build failed'; exit 1; } &&
-              pm2 start "bun start" --name "shopdesk" --watch || { echo 'pm2 start failed'; exit 1; }
+              pm2 start "bun start" --watch || { echo 'pm2 start failed'; exit 1; }
             else
               git clone $REPO_URL || { echo 'Git clone failed'; exit 1; } &&
               cd $(basename $REPO_URL .git) &&
