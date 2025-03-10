@@ -1,7 +1,7 @@
 import { getAccessToken } from "@/app/api/token";
 
 type Stock = {
-    id:string;
+  id: string;
   name: string;
   quantity: number;
   buying_price: number;
@@ -10,7 +10,15 @@ type Stock = {
   organization_id: string;
   date_created: string;
   selectedSellingCurrency: { code: string; name: string };
-  items: [];
+};
+
+type StockResponse = {
+  page: number;
+  size: number;
+  total: number;
+  previous_page: number | null;
+  next_page: number | null;
+  items: Stock[];
 };
 
 export async function AddStock(
@@ -58,7 +66,7 @@ export async function AddStock(
   }
 }
 
-export async function GetStock(): Promise<Stock[]> {
+export async function GetStock(): Promise<StockResponse> {
   try {
     const token = getAccessToken();
 

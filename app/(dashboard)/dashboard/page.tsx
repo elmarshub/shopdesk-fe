@@ -42,7 +42,6 @@ const Page = () => {
     original_quantity?: number;
     supplier?: null | any;
     timeslots?: any[];
-    items: [];
   };
 
   const { tableAreaRef, tableAreaHeight } = useTableAreaHeight();
@@ -143,19 +142,13 @@ const Page = () => {
           onOpenChange={setIsLogoutModalOpen}
           onCancel={() => setIsLogoutModalOpen(false)}
         />
-        {/* <DeleteItem
-          open={isDeleteModalOpen}
-          onOpenChange={setIsDeleteModalOpen}
-          onCancel={() => setIsDeleteModalOpen(false)}
-          onDelete={handleDeleteItem}
-        /> */}
 
         <DeleteItem
           open={isDeleteModalOpen}
           onOpenChange={setIsDeleteModalOpen}
           onCancel={() => setIsDeleteModalOpen(false)}
           onDelete={handleDeleteItem}
-          selectedItem={selectedItem}
+          selectedItem={selectedItem || undefined}
         />
         <div className="lg:border px-4 py-2 lg:shadow-md rounded-lg lg:flex items-center justify-between mx-auto">
           <div className="flex items-center gap-6">
