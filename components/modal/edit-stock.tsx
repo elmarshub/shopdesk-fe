@@ -14,14 +14,14 @@ interface EditItemModal {
   isOpen: boolean;
   onClose: () => void;
   item: {
-    id: number;
+    id: string;
     name: string;
     buying_price: number;
     quantity: number;
     currency_code: string;
   };
   onSave: (item: {
-    id: number;
+    id: string;
     name: string;
     buying_price: number;
     quantity: number;
