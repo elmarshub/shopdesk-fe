@@ -42,7 +42,6 @@ const Page = () => {
     original_quantity?: number;
     supplier?: null | any;
     timeslots?: any[];
-    items: [];
   };
 
   const { tableAreaRef, tableAreaHeight } = useTableAreaHeight();
