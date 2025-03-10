@@ -215,7 +215,7 @@ export default function EditItemModal({
                 <div className="h-8 border border-gray self-center"></div>
                 <div className="w-full">
                   <input
-                    type="text"
+                    type="number"
                     name="buying-price"
                     className="w-full h-full p-3 outline-none placeholder:text-[#B8B8B8] text-[#2A2A2A] text-base font-circular-normal"
                     placeholder="Amount"
@@ -289,7 +289,7 @@ export default function EditItemModal({
 
                 <div className="flex-grow relative">
                   <input
-                    type="text"
+                    type="number"
                     inputMode="numeric"
                     className="w-full h-[48px] md:h-[62px] rounded-[9px] p-[12px] outline-none border border-[#DEDEDE] focus:outline-none focus:ring-2 focus:ring-[#CCEBDB] focus:border-[#009A49] hover:ring-2 hover:ring-[#CCEBDB] transition-all placeholder:text-[#B8B8B8] text-[#2A2A2A] text-[16px] font-circular-normal text-center"
                     placeholder="Quantity"
