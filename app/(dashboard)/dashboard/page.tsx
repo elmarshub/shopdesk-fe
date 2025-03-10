@@ -80,7 +80,6 @@ const Page = () => {
         });
     }
   }, [router]);
-
   const handleEditClick = (item: StockItem) => {
     setSelectedItem(item); // Set the selected item
     setOpenEdit(true); // Open the edit modal
@@ -91,7 +90,11 @@ const Page = () => {
       prev.map((item) => (item.id === updatedItem.id ? updatedItem : item))
     );
 
-    setOpenEdit(false); // Close the edit modal
+    setOpenEdit(false);
+  };
+
+  const handleAddClick = () => {
+    setOpenAdd(true);
   };
 
   const handleDeleteClick = (item: StockItem) => {
@@ -101,12 +104,12 @@ const Page = () => {
 
   const closeEditModal = () => {
     setOpenEdit(false);
-    setSelectedItem(null);
+    setSelectedItem(null); // Clear the selected item
   };
 
   const closeAddModal = () => {
     setOpenAdd(false);
-    setSelectedItem(null);
+    setSelectedItem(null); // Clear the selected item
   };
 
   // const handleDeleteItem = () => {
@@ -272,7 +275,7 @@ const Page = () => {
                 </div>
               </div>
             ) : (
-              <Table className="border-collapse  overflow-y-auto">
+              <Table className="border-collapse overflow-y-auto">
                 <TableHeader>
                   <TableRow className="h-[50px]">
                     <TableHead className="px-4 py-2 w-2/7 text-left border-b border-r">
@@ -294,16 +297,32 @@ const Page = () => {
                     length: Math.max(rowsPerPage, stockItems.length),
                   }).map((_, index) => {
                     const item = stockItems[index] || null;
+                    const isEmptyRow = !item;
+                    const isMobile = window.innerWidth <= 640;
+                    const isNextEmptyRow = isEmptyRow && index === stockItems.length;
+
                     return (
-                      <TableRow key={index} className="h-[50px]">
+                      <TableRow
+                        key={index}
+                        className="h-[50px]"
+                        onTouchEnd={() => {
+                          if (isMobile && isNextEmptyRow) {
+                            handleAddClick();
+                          }
+                        }}
+                        onClick={() => {
+                          if (!isMobile && isNextEmptyRow) {
+                            handleAddClick();
+                          }
+                        }}
+                      >
                         <TableCell className="px-4 py-3 text-left border-r">
                           {item ? item.name : ""}
                         </TableCell>
                         <TableCell className="px-4 py-3 text-center border-r">
                           {item
-                            ? `${
-                                item.currency_code
-                              } ${item.buying_price?.toLocaleString()}`
+                            ? `${item.currency_code
+                            } ${item.buying_price?.toLocaleString()}`
                             : ""}
                         </TableCell>
                         <TableCell className="px-4 py-3 text-center border-r hidden sm:table-cell">
@@ -336,8 +355,7 @@ const Page = () => {
                     );
                   })}
                 </TableBody>
-              </Table>
-            )}
+              </Table>)}
           </div>
         </div>
       </div>
