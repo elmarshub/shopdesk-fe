@@ -209,6 +209,7 @@ const Page = () => {
 
                     closeModal();
                   }}
+                  
                 />
               </div>
             )}
@@ -223,6 +224,9 @@ const Page = () => {
                         ITEM NAME
                       </span>
                     </li>
+                    <li className="w-1/3 lg:w-1/6 lg:border-r-2 border-[#DEDEDE] text-center py-4 hover:cursor-pointer">
+    <span className="font-semibold text-black text-sm">SKU CODE</span> 
+  </li>
                     <li className="w-1/3 lg:w-1/6 lg:border-r-2 border-[#DEDEDE] text-center py-4 hover:cursor-pointer">
                       <span className="font-semibold text-black text-sm">
                         PRICE
@@ -266,6 +270,7 @@ const Page = () => {
                           setStockItems((prev) => [newItem, ...prev]);
                           closeModal();
                         }}
+                        
                       />
                     </div>
                   </div>
@@ -277,6 +282,9 @@ const Page = () => {
                   <TableRow className="h-[50px]">
                     <TableHead className="px-4 py-2 w-2/7 text-left border-b border-r">
                       ITEM NAME
+                    </TableHead>
+                    <TableHead className="px-4 py-2 w-1/7 text-center border-b border-r">
+                      SKU CODE
                     </TableHead>
                     <TableHead className="px-4 py-2 w-1/7 text-center border-b border-r">
                       PRICE
@@ -298,6 +306,9 @@ const Page = () => {
                       <TableRow key={index} className="h-[50px]">
                         <TableCell className="px-4 py-3 text-left border-r">
                           {item ? item.name : ""}
+                        </TableCell>
+                        <TableCell className="px-4 py-3 text-center border-r">
+                          {"SKU-CODE"}
                         </TableCell>
                         <TableCell className="px-4 py-3 text-center border-r">
                           {item
