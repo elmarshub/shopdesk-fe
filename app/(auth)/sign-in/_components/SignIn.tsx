@@ -42,8 +42,6 @@ export default function SignIn() {
       if (!data || data.error) {
         throw new Error(data?.message || "Invalid email or password.");
       }
-      sessionStorage.setItem("access_token", data.access_token);
-    sessionStorage.setItem("refresh_token", data.refresh_token);
 
     
     router.push("/dashboard");
