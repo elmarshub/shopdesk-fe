@@ -162,7 +162,7 @@ const Page = () => {
               The simplest way to manage your shop!
             </small>
           </div>
-          <div className="hidden lg:block">
+          <div className="hidden">
             <DropdownMenu modal>
               <DropdownMenuTrigger className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white">
                 <span className="py-2 px-4 rounded-lg bg-white text-black">
@@ -172,7 +172,7 @@ const Page = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem
-                  className="w-full px-[5rem] hidden lg:block"
+                  className="w-full px-[5rem] hidden"
                   onClick={() => setIsLogoutModalOpen(true)}
                 >
                   Log out
