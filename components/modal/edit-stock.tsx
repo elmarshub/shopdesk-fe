@@ -43,6 +43,7 @@ export default function EditItemModal({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const sellingPriceDivRef = useRef<HTMLDivElement>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const [productName, setProductName] = useState(item.name);
   const [buyingPrice, setBuyingPrice] = useState(item.buying_price?.toString());
@@ -84,6 +85,8 @@ export default function EditItemModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setIsLoading(true);
+
     if (validateForm()) {
       try {
         await editStock(item.id, {
@@ -104,6 +107,8 @@ export default function EditItemModal({
         onClose();
       } catch (error) {
         console.error("Failed to update stock:", error);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -359,7 +364,7 @@ export default function EditItemModal({
                   }`}
                   disabled={!isFormValid()}
                 >
-                  Save
+                  {isLoading ? "Saving..." : "Save"}
                 </button>
               </div>
             </div>
