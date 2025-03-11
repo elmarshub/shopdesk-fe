@@ -9,6 +9,7 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { currencies } from "./add-item";
+import { editStock } from "@/services/stock";
 
 interface EditItemModal {
   isOpen: boolean;
@@ -80,18 +81,30 @@ export default function EditItemModal({
     return productName && buyingPrice && quantity > 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateForm()) {
-      onSave({
-        id: item.id,
-        name: productName,
-        buying_price: parseFloat(buyingPrice),
-        quantity: quantity,
-        currency_code: selectedSellingCurrency.code,
-      });
 
-      onClose();
+    if (validateForm()) {
+      try {
+        await editStock(item.id, {
+          name: productName,
+          buying_price: parseFloat(buyingPrice),
+          quantity: quantity,
+          currency_code: selectedSellingCurrency.code,
+        });
+
+        onSave({
+          id: item.id,
+          name: productName,
+          buying_price: parseFloat(buyingPrice),
+          quantity: quantity,
+          currency_code: selectedSellingCurrency.code,
+        });
+
+        onClose();
+      } catch (error) {
+        console.error("Failed to update stock:", error);
+      }
     }
   };
 
