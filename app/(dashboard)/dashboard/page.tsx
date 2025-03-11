@@ -64,21 +64,16 @@ const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const token = sessionStorage.getItem("refresh_token");
-    if (!token) {
-      router.replace("/sign-in");
-    } else {
-      setIsLoading(true);
-      GetStock()
-        .then((data) => {
-          setStockItems(data.items);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching stock:", error);
-          setIsLoading(false);
-        });
-    }
+    setIsLoading(true);
+    GetStock()
+      .then((data) => {
+        setStockItems(data.items);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching stock:", error);
+        setIsLoading(false);
+      });
   }, [router]);
 
   const handleEditClick = (item: StockItem) => {
@@ -209,7 +204,6 @@ const Page = () => {
 
                     closeModal();
                   }}
-                  
                 />
               </div>
             )}
@@ -225,8 +219,10 @@ const Page = () => {
                       </span>
                     </li>
                     <li className="w-1/3 lg:w-1/6 lg:border-r-2 border-[#DEDEDE] text-center py-4 hover:cursor-pointer">
-    <span className="font-semibold text-black text-sm">SKU CODE</span> 
-  </li>
+                      <span className="font-semibold text-black text-sm">
+                        SKU CODE
+                      </span>
+                    </li>
                     <li className="w-1/3 lg:w-1/6 lg:border-r-2 border-[#DEDEDE] text-center py-4 hover:cursor-pointer">
                       <span className="font-semibold text-black text-sm">
                         PRICE
@@ -270,7 +266,6 @@ const Page = () => {
                           setStockItems((prev) => [newItem, ...prev]);
                           closeModal();
                         }}
-                        
                       />
                     </div>
                   </div>
