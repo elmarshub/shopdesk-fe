@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { refreshAccessToken } from "@/lib/refresh";
 
 export async function GET() {
-  const accessToken = (await cookies()).get("access_token")?.value;
-  if (!accessToken)
-    return NextResponse.json(
-      { error: "No access token found" },
-      { status: 401 }
-    );
+  let accessToken = (await cookies()).get("access_token")?.value;
+  if (!accessToken) {
+    accessToken = await refreshAccessToken();
+  }
   return NextResponse.json({ accessToken });
 }
