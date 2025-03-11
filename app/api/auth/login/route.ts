@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { refreshAccessToken } from "../refresh/route";
 
 export async function POST(req: Request) {
   try {
@@ -27,14 +26,13 @@ export async function POST(req: Request) {
       maxAge: 60 * 15,
     });
 
-    cookieStore.set("refresh_token", refresh_token, {
+    cookieStore.set("refreshToken", refresh_token, {
       httpOnly: true,
       secure: isProduction,
       sameSite: "strict",
       path: "/",
       maxAge: 60 * 60 * 24 * 3,
     });
-
     return NextResponse.json(data, { status: response.status });
   } catch (error) {
     return NextResponse.json(
