@@ -32,7 +32,7 @@ export async function AddStock(
   selectedSellingCurrency: { code: string; name: string }
 ): Promise<Stock> {
   try {
-    const token = getAccessToken();
+    const token = await getAccessToken();
     console.log("Token:", token);
 
     const response = await fetch("/api/stocks/create", {
