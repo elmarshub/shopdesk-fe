@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { refreshAccessToken } from "../refresh/route";
 
 export async function POST(req: Request) {
   try {
