@@ -34,7 +34,6 @@ const Page = () => {
     buying_price: number;
     quantity: number;
     currency_code: string;
-    sku_code: string;
     buying_date?: string;
     product_id?: string;
     status?: string;
@@ -153,7 +152,6 @@ const Page = () => {
           onCancel={() => setIsDeleteModalOpen(false)}
           onDelete={handleDeleteItem}
           selectedItem={selectedItem || undefined}
-          includeSkuCode
         />
         <div className="lg:border px-4 py-2 lg:shadow-md rounded-lg lg:flex items-center justify-between mx-auto">
           <div className="flex items-center gap-6">
@@ -213,8 +211,8 @@ const Page = () => {
                     setStockItems((prev) => [newItem, ...prev]); // Inserts new items at the top
 
                     closeModal();
-                    includeSkuCode
                   }}
+                  
                 />
               </div>
             )}
@@ -288,7 +286,7 @@ const Page = () => {
                     <TableHead className="px-4 py-2 w-2/7 text-left border-b border-r">
                       ITEM NAME
                     </TableHead>
-                    <TableHead className="px-4 py-2 w-2/7 text-left border-b border-r">
+                    <TableHead className="px-4 py-2 w-1/7 text-center border-b border-r">
                       SKU CODE
                     </TableHead>
                     <TableHead className="px-4 py-2 w-1/7 text-center border-b border-r">
@@ -329,8 +327,8 @@ const Page = () => {
                         <TableCell className="px-4 py-3 text-left border-r">
                           {item ? item.name : ""}
                         </TableCell>
-                        <TableCell className="px-4 py-3 text-left border-r">
-                          {item ? item.sku_code : ""}
+                        <TableCell className="px-4 py-3 text-center border-r">
+                          {"SKU-CODE"}
                         </TableCell>
                         <TableCell className="px-4 py-3 text-center border-r">
                           {item

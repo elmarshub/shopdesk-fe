@@ -57,7 +57,6 @@ interface AddStockModalProps {
     buying_price: number; // Changed from price to buying_price
     quantity: number;
     currency_code: string; // Added currency_code
-    sku_code: string;
   }) => void;
 }
 
@@ -80,11 +79,7 @@ export default function AddStockModal({
     currencies[0]
   );
 
-  const generateSKU = () => {
-    const randomNumber = Math.floor(Math.random() * 1000000);
-    return `SKU-${randomNumber}`;
-  };
-
+ 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
@@ -125,7 +120,7 @@ export default function AddStockModal({
     setIsLoading(true);
 
     try {
-      const finalSkuCode = skuCode.trim() ? skuCode : generateSKU();
+      // const finalSkuCode = skuCode.trim() || null;
 
       const newStock = await AddStock(
         productName,
@@ -136,7 +131,7 @@ export default function AddStockModal({
         "160db8736a9d47989381e01a987e4413", // Hardcoded organization_id
         new Date().toISOString(),
         selectedSellingCurrency,
-        finalSkuCode
+        // finalSkuCode
       );
 
       // Call the onSave callback with the new stock item
@@ -145,8 +140,7 @@ export default function AddStockModal({
         name: newStock.name,
         buying_price: newStock.buying_price,
         quantity: newStock.quantity,
-        currency_code: newStock.currency_code,
-        sku_code: finalSkuCode,
+        currency_code: newStock.currency_code
       });
 
       // Reset the form fields
@@ -244,15 +238,15 @@ export default function AddStockModal({
                 required
               />
             </div>
-            <div className="flex gap-5 flex-1">
-              <div className="flex flex-col gap-[8px] flex-1 w-[326px] border">
+            <div className="flex  gap-5 flex-1 max-[640px]:flex-col">
+              <div className="flex flex-col gap-[12px] flex-1 ">
                 <label className="font-circular-normal text-[14px] text-[#717171] text-left">
                   SKU Code
                 </label>
                 <input
                   type="text"
                   name="sku-code"
-                  className="w-full h-[48px] md:h-[62px] rounded-[9px] p-4 outline-none  border-[#DEDEDE] placeholder:text-[#B8B8B8] text-[#2A2A2A] text-[16px] font-circular-normal bg-white"
+                  className="w-full h-[48px] md:h-[62px] rounded-[9px] p-4 outline-none border border-[#DEDEDE] placeholder:text-[#B8B8B8] text-[#2A2A2A] text-[16px] font-circular-normal"
                   placeholder="SKU Code"
                   value={skuCode}
                   onChange={(e) => {
@@ -270,7 +264,7 @@ export default function AddStockModal({
                 )}
               </div>
 
-              <div className="flex flex-col gap-[8px] flex-1 w-[326px] ">
+              <div className="flex flex-col gap-[8px] flex-1 ">
                 <label className="font-circular-normal text-[14px] text-[#717171] text-left">
                   Selling Price <span className="text-[#FF1925]">*</span>
                 </label>
