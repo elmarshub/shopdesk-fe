@@ -413,7 +413,6 @@ const Page = () => {
                         <TableCell className="px-4 py-3 text-center hidden sm:table-cell"></TableCell>
                       </TableRow>
                     ))}
-
                     <TableCell colSpan={5}>
                       <PaginationFeature
                           totalItems={totalItems}
@@ -424,10 +423,14 @@ const Page = () => {
                           onItemsPerPageChange={handleItemsPerPageChange}
                         />
                     </TableCell>
-
                 </TableBody>
+                 
               </Table>
             )}
+              
+             
+                      
+                   
           </div>
         </div>
       </div>
@@ -440,7 +443,16 @@ const Page = () => {
       />
 
       <div className="flex flex-col gap-2 mt-4">
-        
+        <div className="bg-[#DEE5ED] p-2 flex items-center justify-between">
+          <PaginationFeature
+            totalItems={totalItems}
+            currentPage={currentPage}
+            itemsPerPage={rowsPerPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            onItemsPerPageChange={handleItemsPerPageChange}
+          />
+        </div>
 
         <p className="text-center mt-4">
           © {new Date().getFullYear()}, Powered by Timbu Business
