@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import EditItemModal from "@/components/modal/edit-stock";
 import AddItemModal from "@/components/modal/add-item";
 import DeleteItem from "@/components/modal/delete-item";
+import PaginationFeature from "@/components/functional/paginationfeature";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -45,7 +46,8 @@ const Page = () => {
   };
 
   const { tableAreaRef, tableAreaHeight } = useTableAreaHeight();
-  const rowsPerPage = Math.round(tableAreaHeight / 55) - 3;
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [isOpen, setIsOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
@@ -62,6 +64,27 @@ const Page = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+
+  // Calculate pagination values
+  const totalItems = stockItems.length;
+  const totalPages = Math.ceil(totalItems / rowsPerPage);
+
+  // Ensure current page is valid when total pages changes
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
+    }
+  }, [totalPages, currentPage]);
+
+  // Calculate which items to display based on current page and items per page
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const displayedItems = stockItems.slice(
+    startIndex,
+    Math.min(startIndex + rowsPerPage, totalItems)
+  );
+
+  // Calculate how many empty rows to add to maintain consistent table height
+  const emptyRowsCount = Math.max(0, rowsPerPage - displayedItems.length);
 
   useEffect(() => {
     setIsLoading(true);
@@ -104,13 +127,6 @@ const Page = () => {
     setSelectedItem(null);
   };
 
-  // const handleDeleteItem = () => {
-  //   setIsDeleteModalOpen(false);
-  //   setStockItems((prev) =>
-  //     prev.filter((item) => item.id !== selectedItem?.id)
-  //   );
-  // };
-
   const handleDeleteItem = async (itemId: string) => {
     try {
       await deleteStock(itemId);
@@ -119,6 +135,19 @@ const Page = () => {
     } catch (error) {
       console.error("Error deleting stock:", error);
     }
+  };
+
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  // Handle items per page change
+  const handleItemsPerPageChange = (count: number) => {
+    setRowsPerPage(count);
+    setCurrentPage(1);
   };
 
   if (isLoading) {
@@ -272,7 +301,7 @@ const Page = () => {
                 </div>
               </div>
             ) : (
-              <Table className="border-collapse  overflow-y-auto">
+              <Table className="border-collapse overflow-y-auto">
                 <TableHeader>
                   <TableRow className="h-[50px]">
                     <TableHead className="px-4 py-2 w-2/7 text-left border-b border-r">
@@ -293,54 +322,54 @@ const Page = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {Array.from({
-                    length: Math.max(rowsPerPage, stockItems.length),
-                  }).map((_, index) => {
-                    const item = stockItems[index] || null;
-                    return (
-                      <TableRow key={index} className="h-[50px]">
-                        <TableCell className="px-4 py-3 text-left border-r">
-                          {item ? item.name : ""}
-                        </TableCell>
-                        <TableCell className="px-4 py-3 text-center border-r">
-                          {"SKU-CODE"}
-                        </TableCell>
-                        <TableCell className="px-4 py-3 text-center border-r">
-                          {item
-                            ? `${
-                                item.currency_code
-                              } ${item.buying_price?.toLocaleString()}`
-                            : ""}
-                        </TableCell>
-                        <TableCell className="px-4 py-3 text-center border-r hidden sm:table-cell">
-                          {item ? item.quantity : ""}
-                        </TableCell>
-                        <TableCell className="px-4 py-3 text-center hidden sm:table-cell">
-                          {item ? (
-                            <DropdownMenu>
-                              <DropdownMenuTrigger>
-                                <MoreVertical className="cursor-pointer" />
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent>
-                                <DropdownMenuItem
-                                  onClick={() => handleEditClick(item)}
-                                >
-                                  Edit
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={() => handleDeleteClick(item)}
-                                >
-                                  Delete
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          ) : (
-                            ""
-                          )}
-                        </TableCell>
+                  {displayedItems.map((item, index) => (
+                    <TableRow key={item.id} className="h-[50px]">
+                      <TableCell className="px-4 py-3 text-left border-r">
+                        {item.name}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-center border-r">
+                        {"SKU-CODE"}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-center border-r">
+                        {`${
+                          item.currency_code
+                        } ${item.buying_price?.toLocaleString()}`}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-center border-r hidden sm:table-cell">
+                        {item.quantity}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-center hidden sm:table-cell">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger>
+                            <MoreVertical className="cursor-pointer" />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent>
+                            <DropdownMenuItem
+                              onClick={() => handleEditClick(item)}
+                            >
+                              Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => handleDeleteClick(item)}
+                            >
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {/* Add empty rows to maintain table height if needed */}
+                  {emptyRowsCount > 0 &&
+                    Array.from({ length: emptyRowsCount }).map((_, index) => (
+                      <TableRow key={`empty-${index}`} className="h-[50px]">
+                        <TableCell className="px-4 py-3 text-left border-r"></TableCell>
+                        <TableCell className="px-4 py-3 text-center border-r"></TableCell>
+                        <TableCell className="px-4 py-3 text-center border-r"></TableCell>
+                        <TableCell className="px-4 py-3 text-center border-r hidden sm:table-cell"></TableCell>
+                        <TableCell className="px-4 py-3 text-center hidden sm:table-cell"></TableCell>
                       </TableRow>
-                    );
-                  })}
+                    ))}
                 </TableBody>
               </Table>
             )}
@@ -356,23 +385,17 @@ const Page = () => {
       />
 
       <div className="flex flex-col gap-2 mt-4">
-        <div hidden className="bg-[#DEE5ED] p-2 w-full lg:hidden">
-          <p className="text-gray-400 text-sm flex items-center gap-1 justify-center text-center">
-            You have <span className="text-black">{stockItems.length}</span>{" "}
-            stock (Displaying{" "}
-            <span className="text-black">
-              {Math.max(rowsPerPage, stockItems.length)}
-            </span>{" "}
-            <Image
-              src="/icons/ArrowDropDown.svg"
-              alt=""
-              width={12}
-              height={12}
-              className="w-3 h-3"
-            />{" "}
-            per page)
-          </p>
+        <div className="bg-[#DEE5ED] p-2 flex items-center justify-between">
+          <PaginationFeature
+            totalItems={totalItems}
+            currentPage={currentPage}
+            itemsPerPage={rowsPerPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            onItemsPerPageChange={handleItemsPerPageChange}
+          />
         </div>
+
         <p className="text-center mt-4">
           © {new Date().getFullYear()}, Powered by Timbu Business
         </p>
