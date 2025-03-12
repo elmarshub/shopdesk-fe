@@ -673,7 +673,7 @@ const table = useReactTable({
               
               </>
 
-            )}   
+            )}
           </div>
         </div>
       </div>
