@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: version1.1 Pipeline
 
 on:
   workflow_dispatch
