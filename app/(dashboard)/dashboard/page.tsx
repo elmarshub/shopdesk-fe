@@ -48,7 +48,7 @@ declare module "@tanstack/react-table" {
     buying_price: number;
     quantity: number;
     currency_code: string;
-    sku: string;
+    sku?: string;
     buying_date?: string;
     product_id?: string;
     status?: string;
@@ -117,7 +117,7 @@ const Page = () => {
     .then((data) => {
       setStockItems(data.items.map((item: any) => ({
         ...item,
-        sku: item.sku || "N/A", 
+        sku: item.id.slice(0,8).toUpperCase() || "N/A", 
       })));
         setIsLoading(false);
       })
