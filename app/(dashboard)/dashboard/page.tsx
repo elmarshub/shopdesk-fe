@@ -650,24 +650,24 @@ const table = useReactTable({
   
   {/* Pagination */}
 
-</TableBody>
-            </Table>
-     <Table>
-<TableBody>
-  <TableRow>
-    <TableCell colSpan={columns.length} className="py-4">
-      <PaginationFeature
-        totalItems={isSearching ? filteredItems.length : stockItems.length}
-        currentPage={currentPage}
-        itemsPerPage={rowsPerPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-        onItemsPerPageChange={handleItemsPerPageChange}
-      />
-    </TableCell>
-  </TableRow>
+    </TableBody>
+                </Table>
+        <Table>
+    <TableBody>
+      <TableRow>
+        <TableCell colSpan={columns.length} className="py-4">
+          <PaginationFeature
+            totalItems={isSearching ? filteredItems.length : stockItems.length}
+            currentPage={currentPage}
+            itemsPerPage={rowsPerPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            onItemsPerPageChange={handleItemsPerPageChange}
+          />
+        </TableCell>
+      </TableRow>
 
-</TableBody>
+    </TableBody>
 
       </Table>       
               
