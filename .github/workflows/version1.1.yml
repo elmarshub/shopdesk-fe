@@ -43,4 +43,3 @@ jobs:
               echo 'Running bun start.....' &&
               pm2 start \"bun run start\" --name \"shopdesk\" --watch --ignore-watch \"node_modules logs\"
             fi
-          "
