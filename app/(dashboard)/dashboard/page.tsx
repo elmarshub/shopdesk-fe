@@ -1,11 +1,10 @@
 "use client";
 import LoadingAnimation from "@/components/functional/loading";
 import Logo from "@/components/functional/logo";
+import PaginationFeature from "@/components/functional/paginationfeature";
 import { default as AddItemModal } from "@/components/modal/add-item";
 import DeleteItem from "@/components/modal/delete-item";
-
 import EditItemModal from "@/components/modal/edit-stock";
-import LogoutConfirmModal from "@/components/modal/logoutConfirmationModal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,10 +19,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import box from "@/public/icons/box.svg";
 import { deleteStock, GetStock } from "@/services/stock";
-import { ChevronDown, MoreVertical } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import useTableAreaHeight from "./hooks/useTableAreaHeight";
 
@@ -45,7 +45,8 @@ const Page = () => {
   };
 
   const { tableAreaRef, tableAreaHeight } = useTableAreaHeight();
-  const rowsPerPage = Math.round(tableAreaHeight / 55) - 3;
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [isOpen, setIsOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
@@ -59,26 +60,47 @@ const Page = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [stockItems, setStockItems] = useState<StockItem[]>([]);
+  const [searchText, setSearchText] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const searchedItems = stockItems.filter((item) =>
+    item.name.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
+  // Calculate pagination values
+  const totalItems = stockItems.length;
+  const totalPages = Math.ceil(totalItems / rowsPerPage);
+
+  // Ensure current page is valid when total pages changes
   useEffect(() => {
-    const token = sessionStorage.getItem("refresh_token");
-    if (!token) {
-      router.replace("/sign-in");
-    } else {
-      setIsLoading(true);
-      GetStock()
-        .then((data) => {
-          setStockItems(data.items);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching stock:", error);
-          setIsLoading(false);
-        });
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages);
     }
+  }, [totalPages, currentPage]);
+
+  // Calculate which items to display based on current page and items per page
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const displayedItems = stockItems.slice(
+    startIndex,
+    Math.min(startIndex + rowsPerPage, totalItems)
+  );
+
+  // Calculate how many empty rows to add to maintain consistent table height
+  const emptyRowsCount = Math.max(0, rowsPerPage - displayedItems.length);
+
+  useEffect(() => {
+    setIsLoading(true);
+    GetStock()
+      .then((data) => {
+        setStockItems(data.items);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching stock:", error);
+        setIsLoading(false);
+      });
   }, [router]);
 
   const handleEditClick = (item: StockItem) => {
@@ -109,13 +131,6 @@ const Page = () => {
     setSelectedItem(null);
   };
 
-  // const handleDeleteItem = () => {
-  //   setIsDeleteModalOpen(false);
-  //   setStockItems((prev) =>
-  //     prev.filter((item) => item.id !== selectedItem?.id)
-  //   );
-  // };
-
   const handleDeleteItem = async (itemId: string) => {
     try {
       await deleteStock(itemId);
@@ -124,6 +139,19 @@ const Page = () => {
     } catch (error) {
       console.error("Error deleting stock:", error);
     }
+  };
+
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  // Handle items per page change
+  const handleItemsPerPageChange = (count: number) => {
+    setRowsPerPage(count);
+    setCurrentPage(1);
   };
 
   if (isLoading) {
@@ -159,17 +187,21 @@ const Page = () => {
               The simplest way to manage your shop!
             </small>
           </div>
-          <div className="hidden lg:block">
+          <div className="">
             <DropdownMenu modal>
-              <DropdownMenuTrigger className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white">
+              <DropdownMenuTrigger
+                disabled
+                className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white"
+              >
                 <span className="py-2 px-4 rounded-lg bg-white text-black">
-                  MM
+                  SL
                 </span>
-                Mark M <ChevronDown strokeWidth={1.5} color="white" />
+                Sodiq LTD
+                <ChevronDown strokeWidth={1.5} color="white" />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem
-                  className="w-full px-[5rem]"
+                  className="w-full px-[5rem] hidden"
                   onClick={() => setIsLogoutModalOpen(true)}
                 >
                   Log out
@@ -180,8 +212,8 @@ const Page = () => {
         </div>
 
         <div className="space-y-0 w-full ">
-          <div className="w-full flex justify-between max-[640px]:flex-col-reverse">
-            <div className="flex items-center justify-center gap-2 border border-b-white py-2 rounded-tr-lg rounded-tl-lg w-44 max-[640px]:w-full font-semibold px-9 shadow-inner">
+          <div className="w-full flex justify-between max-[800px]:flex-col-reverse">
+            <div className="flex items-center justify-center gap-2 border border-b-white py-2 rounded-tr-lg rounded-tl-lg w-44 max-[800px]:w-full font-semibold px-9 shadow-inner">
               Stock
               <Image
                 src="/icons/ui-box.svg"
@@ -193,13 +225,35 @@ const Page = () => {
             </div>
 
             {stockItems.length > 0 && (
-              <div className="z-50">
+              <div className="mb-2 max-[800px]:mb-4 z-50 max-[640px]:self-end flex items-center gap-2 justify-center max-[1000px]:flex-row-reverse max-[800px]:w-full">
                 <button
                   onClick={openModal}
-                  className="btn-primary max-[400px]:text-sm mb-2 max-[640px]:mb-4 text-nowrap self-end"
+                  className="btn-primary max-[400px]:text-sm text-nowrap max-[1000px]:hidden"
                 >
-                  + Add New Stock
+                  + Add New
                 </button>
+                <button
+                  onClick={openModal}
+                  className="btn-primary max-[400px]:text-sm text-nowrap min-[1000px]:hidden"
+                >
+                  +
+                </button>
+
+                <div className="relative max-[800px]:w-full">
+                  <input
+                    type="text"
+                    className="h-12 border w-[327px] max-[800px]:w-full rounded-md focus:outline-2 focus:outline-[#009A49] px-10"
+                    onChange={(event) => {
+                      setIsSearching(true);
+                      setSearchText(event.target.value);
+                      if (!event.target.value) {
+                        setIsSearching(false);
+                      }
+                    }}
+                  />
+
+                  <Search className="text-[#667085] absolute top-3 left-3 " />
+                </div>
 
                 <AddItemModal
                   isOpen={isOpen}
@@ -214,71 +268,92 @@ const Page = () => {
             )}
           </div>
           <div className="border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg flex-1">
-            {stockItems.length === 0 ? (
+            {stockItems.length === 0 ||
+            (isSearching && searchedItems.length === 0) ? (
               <div className="relative">
-                <div className="w-full overflow-x-auto">
-                  <ul className="flex items-center justify-between w-full rounded-tr-lg">
-                    <li className="w-2/3 lg:w-1/2 border-r-2 border-[#DEDEDE] text-left py-4 hover:cursor-pointer pl-4">
-                      <span className="font-semibold text-black text-sm ">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="h-[50px]">
+                      <TableHead className="px-4 py-2 w-2/7 max-[400px]:w-1/3 max-[400px]:px-1 text-left border-b border-r">
                         ITEM NAME
-                      </span>
-                    </li>
-                    <li className="w-1/3 lg:w-1/6 lg:border-r-2 border-[#DEDEDE] text-center py-4 hover:cursor-pointer">
-                      <span className="font-semibold text-black text-sm">
+                      </TableHead>
+                      <TableHead className="px-4 py-2 w-1/7 max-[400px]:w-1/3 max-[400px]:px-1 text-center border-b border-r">
+                        SKU CODE
+                      </TableHead>
+                      <TableHead className="px-4 py-2 w-1/7 max-[400px]:w-1/3 max-[400px]:px-1 text-center border-b border-r">
                         PRICE
-                      </span>
-                    </li>
-                    <li className="w-1/3 lg:w-1/6 border-r-2 border-[#DEDEDE] text-center py-4 hidden lg:flex justify-center hover:cursor-pointer">
-                      <span className="font-semibold text-black text-sm">
+                      </TableHead>
+                      <TableHead className="px-4 py-2 w-1/7 text-center border-b border-r hidden sm:table-cell">
                         QUANTITY
-                      </span>
-                    </li>
-                    <li className="w-1/3 lg:w-1/6  border-[#DEDEDE] text-center py-4 hidden lg:flex justify-center hover:cursor-pointer rounded-tr-lg">
-                      <span className="font-semibold text-black text-sm">
+                      </TableHead>
+                      <TableHead className="px-4 py-2 w-1/7 text-center border-b hidden sm:table-cell">
                         ACTION
-                      </span>
-                    </li>
-                  </ul>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                </Table>
+                <div className="w-full overflow-x-auto">
                   <span className="w-full h-px bg-[#DEDEDE] block"></span>
                   <div className="relative h-[80vh] w-full">
-                    <div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
-                      <Image
-                        src="/icons/empty-note-pad.svg"
-                        alt=""
-                        width={56}
-                        height={56}
-                        className="mx-auto"
-                      />
-                      <p className="text-[#888888] text-sm">
-                        You have 0 items in stock
-                      </p>
-                      <button
-                        type="button"
-                        onClick={openModal}
-                        className="btn-outline hover:cursor-pointer"
-                      >
-                        + Add New Stock
-                      </button>
-                      <AddItemModal
-                        isOpen={isOpen}
-                        onClose={closeModal}
-                        onSave={(newItem) => {
-                          setStockItems((prev) => [newItem, ...prev]);
-                          closeModal();
-                        }}
-                      />
-                    </div>
+                    {!(isSearching && searchedItems.length === 0) ? (
+                      <div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
+                        <Image
+                          src="/icons/empty-note-pad.svg"
+                          alt=""
+                          width={56}
+                          height={56}
+                          className="mx-auto"
+                        />
+                        <p className="text-[#888888] text-sm">
+                          You have 0 items in stock
+                        </p>
+                        <button
+                          type="button"
+                          onClick={openModal}
+                          className="btn-outline hover:cursor-pointer"
+                        >
+                          + Add New Stock
+                        </button>
+                        <AddItemModal
+                          isOpen={isOpen}
+                          onClose={closeModal}
+                          onSave={(newItem) => {
+                            setStockItems((prev) => [newItem, ...prev]);
+                            closeModal();
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="bg-[#F8FAFB] border border-[#DEDEDE] w-[563px] h-[200px] rounded-lg flex flex-col items-center justify-center gap-3 max-[800px]:w-[343px] max-[800px]:h-[334px]">
+                          <Image
+                            src={box}
+                            alt=""
+                            width={56}
+                            height={56}
+                            className="size-8"
+                          />
+
+                          <p className="text-[#2A2A2A] text-sm">
+                            Search Item not found.
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
             ) : (
-              <Table className="border-collapse  overflow-y-auto">
+              <Table className="border-collapse overflow-y-auto">
                 <TableHeader>
                   <TableRow className="h-[50px]">
-                    <TableHead className="px-4 py-2 w-2/7 text-left border-b border-r">
+                    <TableHead className="px-4 py-2 w-2/7 max-[400px]:w-1/3 max-[400px]:px-2 text-left border-b border-r">
                       ITEM NAME
                     </TableHead>
-                    <TableHead className="px-4 py-2 w-1/7 text-center border-b border-r">
+                    <TableHead className="px-4 py-2 w-1/7 max-[400px]:w-1/3 max-[400px]:px-2 text-center border-b border-r">
+                      SKU CODE
+                    </TableHead>
+                    <TableHead className="px-4 py-2 w-1/7 max-[400px]:w-1/3 max-[400px]:px-2 text-center border-b border-r">
                       PRICE
                     </TableHead>
                     <TableHead className="px-4 py-2 w-1/7 text-center border-b border-r hidden sm:table-cell">
@@ -290,16 +365,22 @@ const Page = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {Array.from({
-                    length: Math.max(rowsPerPage, stockItems.length),
-                  }).map((_, index) => {
-                    const item = stockItems[index] || null;
+                  {displayedItems.map((_, index) => {
+                    const item = !isSearching
+                      ? displayedItems[index] || null
+                      : searchedItems[index] || null;
                     return (
-                      <TableRow key={index} className="h-[50px]">
-                        <TableCell className="px-4 py-3 text-left border-r">
+                      <TableRow
+                        key={item ? item.id : index}
+                        className="h-[50px]"
+                      >
+                        <TableCell className="px-4 py-3 max-[400px]:w-1/3 max-[400px]:px-2 text-left border-r text-wrap break-words whitespace-normal">
                           {item ? item.name : ""}
                         </TableCell>
-                        <TableCell className="px-4 py-3 text-center border-r">
+                        <TableCell className="px-4 py-3 max-[400px]:w-1/3 max-[400px]:px-2 text-center border-r">
+                          {item ? item.id.slice(0, 8).toUpperCase() : ""}
+                        </TableCell>
+                        <TableCell className="px-4 py-3 max-[400px]:w-1/3 max-[400px]:px-2 text-center border-r text-wrap break-words whitespace-normal">
                           {item
                             ? `${
                                 item.currency_code
@@ -335,6 +416,27 @@ const Page = () => {
                       </TableRow>
                     );
                   })}
+                  {/* Add empty rows to maintain table height if needed */}
+                  {emptyRowsCount > 0 &&
+                    Array.from({ length: emptyRowsCount }).map((_, index) => (
+                      <TableRow key={`empty-${index}`} className="h-[50px]">
+                        <TableCell className="px-4 py-3 text-left border-r"></TableCell>
+                        <TableCell className="px-4 py-3 text-center border-r"></TableCell>
+                        <TableCell className="px-4 py-3 text-center border-r"></TableCell>
+                        <TableCell className="px-4 py-3 text-center border-r hidden sm:table-cell"></TableCell>
+                        <TableCell className="px-4 py-3 text-center hidden sm:table-cell"></TableCell>
+                      </TableRow>
+                    ))}
+                  <TableCell colSpan={5}>
+                    <PaginationFeature
+                      totalItems={totalItems}
+                      currentPage={currentPage}
+                      itemsPerPage={rowsPerPage}
+                      totalPages={totalPages}
+                      onPageChange={handlePageChange}
+                      onItemsPerPageChange={handleItemsPerPageChange}
+                    />
+                  </TableCell>
                 </TableBody>
               </Table>
             )}
@@ -350,23 +452,6 @@ const Page = () => {
       />
 
       <div className="flex flex-col gap-2 mt-4">
-        <div hidden className="bg-[#DEE5ED] p-2 w-full lg:hidden">
-          <p className="text-gray-400 text-sm flex items-center gap-1 justify-center text-center">
-            You have <span className="text-black">{stockItems.length}</span>{" "}
-            stock (Displaying{" "}
-            <span className="text-black">
-              {Math.max(rowsPerPage, stockItems.length)}
-            </span>{" "}
-            <Image
-              src="/icons/ArrowDropDown.svg"
-              alt=""
-              width={12}
-              height={12}
-              className="w-3 h-3"
-            />{" "}
-            per page)
-          </p>
-        </div>
         <p className="text-center mt-4">
           © {new Date().getFullYear()}, Powered by Timbu Business
         </p>
