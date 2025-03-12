@@ -668,12 +668,12 @@ const table = useReactTable({
   </TableRow>
 
 </TableBody>
-      
+
       </Table>       
               
               </>
 
-            )}                                                                
+            )}   
           </div>
         </div>
       </div>
