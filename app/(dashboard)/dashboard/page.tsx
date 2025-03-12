@@ -530,6 +530,7 @@ const table = useReactTable({
             )}
           </div>
           <div className="border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg flex-1 overflow-auto w-full">
+
           {(stockItems.length === 0 || (isSearching && searchedItems.length === 0)) ? (
               <div className="relative">
                 <Table>
