@@ -223,16 +223,16 @@ const Page = () => {
             </div>
 
             {stockItems.length > 0 && (
-              <div className="mb-2 max-[800px]:mb-4 z-50 max-[640px]:self-end flex items-center gap-2 justify-center max-[1000px]:flex-row-reverse max-[800px]:w-full">
+              <div className="mb-2 max-[800px]:mb-4 max-[640px]:self-end flex items-center justify-center max-[1000px]:flex-row-reverse max-[800px]:w-full">
               <button
                 onClick={openModal}
-                className="btn-primary max-[400px]:text-sm text-nowrap max-[1000px]:hidden"
+                className="btn-primary max-[400px]:text-sm text-nowrap max-[1000px]:hidden mr-2"
               >
                 + Add New
               </button>
               <button
                 onClick={openModal}
-                className="btn-primary max-[400px]:text-sm text-nowrap min-[1000px]:hidden"
+                className="btn-primary max-[400px]:text-sm text-nowrap min-[1000px]:hidden ml-2"
               >
                 +
               </button>
@@ -251,15 +251,18 @@ const Page = () => {
                 <Search className="text-[#667085] absolute top-3 left-3 " />
               </div>
 
-              <AddItemModal
-                isOpen={isOpen}
-                onClose={closeModal}
-                onSave={(newItem) => {
-                  setStockItems((prev) => [newItem, ...prev]); // Inserts new items at the top
+                <div className="z-10">
+                  <AddItemModal
+                    isOpen={isOpen}
+                    onClose={closeModal}
+                    onSave={(newItem) => {
+                      setStockItems((prev) => [newItem, ...prev]); // Inserts new items at the top
 
-                  closeModal();
-                }}
-              />
+                      closeModal();
+                    }}
+                  />                  
+                </div>
+                
             </div>
             )}
           </div>
