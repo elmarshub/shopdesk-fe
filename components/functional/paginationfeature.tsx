@@ -33,7 +33,7 @@ const PaginationFeature = ({
   onPageChange,
   onItemsPerPageChange,
 }: PaginationProps) => {
-  const itemsPerPageOptions = [2, 4, 6, 8, 10, 15, 20];
+  const itemsPerPageOptions = [5, 10, 15, 25, 50];
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
@@ -50,16 +50,16 @@ const PaginationFeature = ({
   };
 
   return (
-    <>
+    <div className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-[#32475C99]">
       <span className="text-sm flex items-center flex-wrap whitespace-nowrap">
-        You have <span className="font-medium mx-1">{totalItems}</span>
+        You have <span className="font-medium mx-1 text-[#2A2A2A]">{totalItems}</span>
         stock (Displaying{" "}
-        <span className="font-medium mx-1">
+        <span className="font-medium mx-1 text-[#2A2A2A]">
           {displayedItemsCount > 0 ? `${startIndex + 1}-${endIndex}` : 0}
         </span>{" "}
-        of <span className="font-medium mx-1">{totalItems}</span>
+        of <span className="font-medium mx-1 text-[#2A2A2A]">{totalItems}</span>
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex items-center font-medium mx-1">
+          <DropdownMenuTrigger className="flex items-center font-medium mx-1 text-[#2A2A2A]">
             {itemsPerPage} <ChevronDown className="w-3 h-3 ml-1" />
           </DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -149,6 +149,8 @@ const PaginationFeature = ({
               {currentPage < totalPages && (
                 <PaginationItem>
                   <PaginationNext
+                    className="border border-[#DEE5ED] py-2"
+                    pageNum={currentPage}
                     onClick={(e) => handlePageClick(e, currentPage + 1)}
                   />
                 </PaginationItem>
@@ -157,7 +159,7 @@ const PaginationFeature = ({
           </Pagination>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
