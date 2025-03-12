@@ -193,9 +193,9 @@ const Page = () => {
             <DropdownMenu modal>
               <DropdownMenuTrigger disabled className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white">
                 <span className="py-2 px-4 rounded-lg bg-white text-black">
-                  MM
+                  SL
                 </span>
-                Mark M <ChevronDown strokeWidth={1.5} color="white" />
+                Sodiq LTD<ChevronDown strokeWidth={1.5} color="white" />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem
@@ -426,11 +426,7 @@ const Page = () => {
                 </TableBody>
                  
               </Table>
-            )}
-              
-             
-                      
-                   
+            )}                                                                
           </div>
         </div>
       </div>
@@ -443,17 +439,6 @@ const Page = () => {
       />
 
       <div className="flex flex-col gap-2 mt-4">
-        <div className="bg-[#DEE5ED] p-2 flex items-center justify-between">
-          <PaginationFeature
-            totalItems={totalItems}
-            currentPage={currentPage}
-            itemsPerPage={rowsPerPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-            onItemsPerPageChange={handleItemsPerPageChange}
-          />
-        </div>
-
         <p className="text-center mt-4">
           © {new Date().getFullYear()}, Powered by Timbu Business
         </p>

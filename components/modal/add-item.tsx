@@ -239,7 +239,10 @@ export default function AddStockModal({
               />
             </div>
             <div className="flex  gap-5 flex-1 max-[640px]:flex-col">
-              <div className="flex flex-col gap-[12px] flex-1 ">
+              <div className="flex flex-col gap-[12px] flex-1 relative group">
+              <div className="absolute left-0 bottom-[-30px] bg-[#2A2A2A] text-white text-[12px] py-1 px-3 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                SKU Code is auto-assigned for now.
+              </div>
                 <label className="font-circular-normal text-[14px] text-[#717171] text-left">
                   SKU Code
                 </label>
@@ -256,6 +259,7 @@ export default function AddStockModal({
                       setSkuCode(value);
                     }
                   }}
+                  disabled
                 />
                 {errors.skuCode && (
                   <p className="text-[#FF1925] text-sm font-circular-normal">
