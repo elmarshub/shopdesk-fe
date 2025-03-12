@@ -88,6 +88,9 @@ const Page = () => {
   const searchedItems = stockItems.filter((item) =>
     item.name.toLowerCase().includes(searchText.toLowerCase()))
 
+  const filteredItems = stockItems.filter((item) =>
+    item.name.toLowerCase().includes(searchText.toLowerCase())
+  );
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
@@ -406,17 +409,15 @@ const Page = () => {
     ],
     [editedItem, isEditingTransition, handleInlineEdit, handleSaveInline]
   );
-  const paginatedData = stockItems.slice(
-    (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage
-  );
-  
-  const table = useReactTable({
-    data: paginatedData, 
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
-  
+  const paginatedData = isSearching
+  ? filteredItems.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
+  : stockItems.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
+
+const table = useReactTable({
+  data: paginatedData, 
+  columns,
+  getCoreRowModel: getCoreRowModel(),
+});
 
 
   if (isLoading) {
@@ -616,37 +617,48 @@ const Page = () => {
                   </TableRow>
                 ))}
               </TableHeader>
-            
-              <TableBody>
-                {table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id} className="h-[50px]">
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell
-                        key={cell.id}
-                        className={`px-4 py-3 text-center border-r ${
-                          cell.column.id === "name" ? "text-left w-[200px] overflow-hidden" : ""
-                        } ${cell.column.columnDef.meta?.className || ""}`}
-                      >
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-            
-                {/* Pagination */}
-                <TableRow>
-                  <TableCell colSpan={5} className="py-4">
-                    <PaginationFeature
-                      totalItems={totalItems} // ✅ Use full dataset length
-                      currentPage={currentPage}
-                      itemsPerPage={rowsPerPage}
-                      totalPages={totalPages}
-                      onPageChange={handlePageChange}
-                      onItemsPerPageChange={handleItemsPerPageChange}
-                    />
-                  </TableCell>
-                </TableRow>
-              </TableBody>
+        
+             <TableBody>
+  {Array.from({ length: 10 }).map((_, index) => {
+    const row = table.getRowModel().rows[index] || null; // Get row or null if not available
+
+    return (
+      <TableRow key={index} className="h-[50px]">
+        {row
+          ? row.getVisibleCells().map((cell) => (
+              <TableCell
+                key={cell.id}
+                className={`px-4 py-3 text-center border-r ${
+                  cell.column.id === "name" ? "text-left w-[200px] overflow-hidden" : ""
+                } ${cell.column.columnDef.meta?.className || ""}`}
+              >
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </TableCell>
+            ))
+          : columns.map((column) => (
+              <TableCell key={column.id} className="px-4 py-3 text-center border-r text-gray-400">
+                {""} {/* Placeholder for missing row */}
+              </TableCell>
+            ))}
+      </TableRow>
+    );
+  })}
+  
+  {/* Pagination */}
+  <TableRow>
+    <TableCell colSpan={columns.length} className="py-4">
+      <PaginationFeature
+        totalItems={isSearching ? filteredItems.length : stockItems.length}
+        currentPage={currentPage}
+        itemsPerPage={rowsPerPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+        onItemsPerPageChange={handleItemsPerPageChange}
+      />
+    </TableCell>
+  </TableRow>
+</TableBody>
+
             </Table>
             
 
