@@ -33,7 +33,7 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import { getAccessToken } from "@/app/api/token";
-<<<<<<< HEAD
+
 import useTableAreaHeight from "./hooks/useTableAreaHeight";
 import { deleteStock, GetStock } from "@/services/stock";
 import { useRouter } from "next/navigation";
@@ -46,9 +46,8 @@ import {
   Trash2,
 } from "lucide-react";
 import Image from "next/image";
-=======
+
 import Sidebar from "@/components/functional/sidebar";
->>>>>>> upstream/main
 
 declare module "@tanstack/react-table" {
   interface ColumnMeta<TData, TValue> {
@@ -592,43 +591,14 @@ const Page = () => {
               </div>
             )}
           </div>
-<<<<<<< HEAD
-          <div className="border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg flex-1 overflow-auto w-full">
-            {stockItems.length === 0 ||
-            (isSearching && filteredItems.length === 0) ? (
-              <div className="relative">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="h-[50px]">
-                      <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-2/7 min-w-[120px] max-[400px]:w-1/3 max-[400px]:px-1 text-left border-b border-r">
-                        ITEM NAME
-                      </TableHead>
-                      <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] max-[400px]:w-1/3 max-[400px]:px-1 text-center border-b border-r">
-                        SKU CODE
-                      </TableHead>
-                      <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] max-[400px]:w-1/3 max-[400px]:px-1 text-center border-b border-r">
-                        PRICE
-                      </TableHead>
-                      <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] text-center border-b border-r ">
-                        QUANTITY
-                      </TableHead>
-                      <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] text-center border-b ">
-                        ACTION
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                </Table>
-                <div className="w-full overflow-x-auto">
-                  <span className="w-full h-px bg-[#DEDEDE] block"></span>
-                  <div className="relative h-[80vh] w-full">
-                    {!(isSearching && filteredItems.length === 0) ? (
-                      <div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
-=======
           <div className="flex w-full overflow-hidden mx-auto">
-            <div className={`border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg flex-1 overflow-auto w-full transition-all duration-300 ease-in-out ${
-              isSidebarOpen ? "w-full max-w-[989px] mr-1" : "w-full"
-            }`}>
-            {(stockItems.length === 0 || (isSearching && filteredItems.length === 0)) ? (
+            <div
+              className={`border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg flex-1 overflow-auto w-full transition-all duration-300 ease-in-out ${
+                isSidebarOpen ? "w-full max-w-[989px] mr-1" : "w-full"
+              }`}
+            >
+              {stockItems.length === 0 ||
+              (isSearching && filteredItems.length === 0) ? (
                 <div className="relative">
                   <Table>
                     <TableHeader>
@@ -651,53 +621,38 @@ const Page = () => {
                       </TableRow>
                     </TableHeader>
                   </Table>
-                  <div className="w-full overflow-x-auto">                  
+                  <div className="w-full overflow-x-auto">
                     <span className="w-full h-px bg-[#DEDEDE] block"></span>
                     <div className="relative h-[80vh] w-full">
-                      {!(isSearching && filteredItems.length === 0)?(<div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
->>>>>>> upstream/main
-                        <Image
-                          src="/icons/empty-note-pad.svg"
-                          alt=""
-                          width={56}
-                          height={56}
-                          className="mx-auto"
-                        />
-                        <p className="text-[#888888] text-sm">
-                          You have 0 items in stock
-                        </p>
-                        <button
-                          type="button"
-                          onClick={openModal}
-                          className="btn-outline hover:cursor-pointer"
-                        >
-                          + Add New Stock
-                        </button>
-                        <AddItemModal
-                          isOpen={isOpen}
-                          onClose={closeModal}
-                          onSave={(newItem) => {
-                            setStockItems((prev) => [newItem, ...prev]);
-                            closeModal();
-                          }}
-                        />
-<<<<<<< HEAD
-                      </div>
-                    ) : (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="bg-[#F8FAFB] border border-[#DEDEDE] w-[563px] h-[200px] rounded-lg flex flex-col items-center justify-center gap-3 max-[800px]:w-[343px] max-[800px]:h-[334px]">
+                      {!(isSearching && filteredItems.length === 0) ? (
+                        <div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
                           <Image
-                            src={box}
+                            src="/icons/empty-note-pad.svg"
                             alt=""
                             width={56}
                             height={56}
-                            className="size-8"
+                            className="mx-auto"
                           />
-                          <p className="text-[#2A2A2A] text-sm">
-                            Search Item not found.
+                          <p className="text-[#888888] text-sm">
+                            You have 0 items in stock
                           </p>
-=======
-                      </div>):(
+                          <button
+                            type="button"
+                            onClick={openModal}
+                            className="btn-outline hover:cursor-pointer"
+                          >
+                            + Add New Stock
+                          </button>
+                          <AddItemModal
+                            isOpen={isOpen}
+                            onClose={closeModal}
+                            onSave={(newItem) => {
+                              setStockItems((prev) => [newItem, ...prev]);
+                              closeModal();
+                            }}
+                          />
+                        </div>
+                      ) : (
                         <div className="absolute inset-0 flex items-center justify-center">
                           <div className="bg-[#F8FAFB] border border-[#DEDEDE] w-[563px] h-[200px] rounded-lg flex flex-col items-center justify-center gap-3 max-[800px]:w-[343px] max-[800px]:h-[334px]">
                             <Image
@@ -707,184 +662,115 @@ const Page = () => {
                               height={56}
                               className="size-8"
                             />
-                            <p className="text-[#2A2A2A] text-sm">Search Item not found.</p>
+                            <p className="text-[#2A2A2A] text-sm">
+                              Search Item not found.
+                            </p>
                           </div>
->>>>>>> upstream/main
                         </div>
                       )}
                     </div>
                   </div>
                 </div>
-<<<<<<< HEAD
-              </div>
-            ) : (
-              <>
-                <Table className="border-collapse border-b min-w-[590px] table-fixed">
-                  <TableHeader>
-                    {table
-                      .getHeaderGroups()
-                      .map((headerGroup: { id: string; headers: any[] }) => (
+              ) : (
+                <>
+                  <Table className="border-collapse border-b min-w-[590px] table-fixed">
+                    <TableHeader>
+                      {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id} className="h-[50px]">
-                          {headerGroup.headers.map(
-                            (header: {
-                              id: string;
-                              column: any;
-                              getContext: () => any;
-                            }) => (
-                              <TableHead
-                                key={header.id}
-                                className={`text-[#090F1C] font-circular-medium px-4 py-2 text-center border-b border-r min-w-[100px] ${
-                                  header.column.id === "name"
-                                    ? "text-left w-2/7 max-[750px]:w-1/7"
-                                    : "w-1/7"
-                                } ${
-                                  header.column.columnDef.meta?.className || ""
-                                }`}
-                              >
-                                {flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext()
-                                )}
-                              </TableHead>
-                            )
-                          )}
+                          {headerGroup.headers.map((header) => (
+                            <TableHead
+                              key={header.id}
+                              className={`text-[#090F1C] font-circular-medium px-4 py-2 text-center border-b border-r min-w-[100px] ${
+                                header.column.id === "name"
+                                  ? "text-left w-2/7 max-[750px]:w-1/7"
+                                  : "w-1/7"
+                              } ${
+                                header.column.columnDef.meta?.className || ""
+                              }`}
+                            >
+                              {flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                            </TableHead>
+                          ))}
                         </TableRow>
                       ))}
-                  </TableHeader>
-                  <TableBody>
-                    {Array.from({ length: rowsPerPage }).map((_, index) => {
-                      const row = table.getRowModel().rows[index] || null; // Get row or null if not available
+                    </TableHeader>
+                    <TableBody>
+                      {Array.from({ length: rowsPerPage }).map((_, index) => {
+                        const row = table.getRowModel().rows[index] || null; // Get row or null if not available
 
-                      return (
-                        <TableRow key={index} className="h-[50px]">
-                          {row
-                            ? row.getVisibleCells().map((cell: any) => (
-                                <TableCell
-                                  key={cell.id}
-                                  className={`px-4 py-3 text-center border-r ${
-                                    cell.column.id === "name"
-                                      ? "text-left overflow-hidden"
-                                      : ""
-                                  } ${
-                                    cell.column.columnDef.meta?.className || ""
-                                  }`}
-                                >
-                                  {flexRender(
-                                    cell.column.columnDef.cell,
-                                    cell.getContext()
-                                  )}
-                                </TableCell>
-                              ))
-                            : columns.map((column: ColumnDef<StockItem>) => (
-                                <TableCell
-                                  key={column.id}
-                                  className="px-4 py-3 text-center border-r text-gray-400"
-                                >
-                                  {""} {/* Placeholder for missing row */}
-                                </TableCell>
-                              ))}
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-                <Table>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell colSpan={columns.length} className="py-4">
-                        <PaginationFeature
-                          totalItems={
-                            isSearching
-                              ? filteredItems.length
-                              : stockItems.length
-                          }
-                          currentPage={currentPage}
-                          itemsPerPage={rowsPerPage}
-                          totalPages={totalPages}
-                          onPageChange={handlePageChange}
-                          onItemsPerPageChange={handleItemsPerPageChange}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </>
-=======
-              ) : (
-              <>
-                <Table className="border-collapse border-b min-w-[590px] table-fixed">
-                  <TableHeader>
-                    {table.getHeaderGroups().map((headerGroup) => (
-                      <TableRow key={headerGroup.id} className="h-[50px]">
-                        {headerGroup.headers.map((header) => (
-                          <TableHead
-                            key={header.id}
-                            className={`text-[#090F1C] font-circular-medium px-4 py-2 text-center border-b border-r min-w-[100px] ${
-                              header.column.id === "name" ? "text-left w-2/7 max-[750px]:w-1/7" : "w-1/7"
-                            } ${header.column.columnDef.meta?.className || ""}`}
+                        return (
+                          <TableRow
+                            key={index}
+                            className="h-[50px] cursor-pointer"
+                            onClick={() => row && handleRowClick(row.original)}
                           >
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                          </TableHead>
-                        ))}
+                            {row
+                              ? row.getVisibleCells().map((cell) => (
+                                  <TableCell
+                                    key={cell.id}
+                                    className={`px-4 py-3 text-center border-r ${
+                                      cell.column.id === "name"
+                                        ? "text-left overflow-hidden"
+                                        : ""
+                                    } ${
+                                      cell.column.columnDef.meta?.className ||
+                                      ""
+                                    }`}
+                                  >
+                                    {flexRender(
+                                      cell.column.columnDef.cell,
+                                      cell.getContext()
+                                    )}
+                                  </TableCell>
+                                ))
+                              : columns.map((column) => (
+                                  <TableCell
+                                    key={column.id}
+                                    className="px-4 py-3 text-center border-r text-gray-400"
+                                  >
+                                    {""} {/* Placeholder for missing row */}
+                                  </TableCell>
+                                ))}
+                          </TableRow>
+                        );
+                      })}
+
+                      {/* Pagination */}
+                    </TableBody>
+                  </Table>
+                  <Table>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell colSpan={columns.length} className="py-4">
+                          <PaginationFeature
+                            totalItems={
+                              isSearching
+                                ? filteredItems.length
+                                : stockItems.length
+                            }
+                            currentPage={currentPage}
+                            itemsPerPage={rowsPerPage}
+                            totalPages={totalPages}
+                            onPageChange={handlePageChange}
+                            onItemsPerPageChange={handleItemsPerPageChange}
+                          />
+                        </TableCell>
                       </TableRow>
-                    ))}
-                  </TableHeader>        
-                   <TableBody>
-                    {Array.from({ length: rowsPerPage }).map((_, index) => {
-                      const row = table.getRowModel().rows[index] || null; // Get row or null if not available
-
-      return (
-        <TableRow key={index} className="h-[50px] cursor-pointer" onClick={() => row && handleRowClick(row.original)}>
-          {row
-            ? row.getVisibleCells().map((cell) => (
-                <TableCell
-                  key={cell.id}
-                  className={`px-4 py-3 text-center border-r ${
-                    cell.column.id === "name" ? "text-left overflow-hidden" : ""
-                  } ${cell.column.columnDef.meta?.className || ""}`}
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))
-            : columns.map((column) => (
-                <TableCell key={column.id} className="px-4 py-3 text-center border-r text-gray-400">
-                  {""} {/* Placeholder for missing row */}
-                </TableCell>
-              ))}
-        </TableRow>
-      );
-    })}
-    
-    {/* Pagination */}
-
-  </TableBody>
-              </Table>
-      <Table>
-  <TableBody>
-    <TableRow>
-      <TableCell colSpan={columns.length} className="py-4">
-        <PaginationFeature
-          totalItems={isSearching ? filteredItems.length : stockItems.length}
-          currentPage={currentPage}
-          itemsPerPage={rowsPerPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-          onItemsPerPageChange={handleItemsPerPageChange}
-        />
-      </TableCell>
-    </TableRow>
-
-  </TableBody>
-        
-        </Table>       
-                
+                    </TableBody>
+                  </Table>
                 </>
-
-              )}                                                                
+              )}
             </div>
             {isSidebarOpen && (
-              <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} selectedItem={selectedItem} onSave={handleSaveEdit} />
->>>>>>> upstream/main
+              <Sidebar
+                isOpen={isSidebarOpen}
+                onClose={closeSidebar}
+                selectedItem={selectedItem}
+                onSave={handleSaveEdit}
+              />
             )}
           </div>
         </div>
