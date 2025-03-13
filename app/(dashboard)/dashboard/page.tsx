@@ -85,11 +85,8 @@ const Page = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const priceInputRef = useRef<HTMLInputElement>(null);
   const quantityInputRef = useRef<HTMLInputElement>(null);
-  const searchedItems = stockItems.filter((item) =>
-    item.name.toLowerCase().includes(searchText.toLowerCase()))
-
-  const filteredItems = stockItems.filter((item) =>
-    item.name.toLowerCase().includes(searchText.toLowerCase())
+  const filteredItems = stockItems.filter((item) =>   
+      item.name.toLowerCase().includes(searchText.toLowerCase()) || (item.sku && item.sku.toLowerCase().includes(searchText.toLowerCase()))         
   );
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
@@ -530,7 +527,7 @@ const table = useReactTable({
             )}
           </div>
           <div className="border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg flex-1 overflow-auto w-full">
-          {(stockItems.length === 0 || (isSearching && searchedItems.length === 0)) ? (
+          {(stockItems.length === 0 || (isSearching && filteredItems.length === 0)) ? (
               <div className="relative">
                 <Table>
                   <TableHeader>
@@ -556,7 +553,7 @@ const table = useReactTable({
                 <div className="w-full overflow-x-auto">                  
                   <span className="w-full h-px bg-[#DEDEDE] block"></span>
                   <div className="relative h-[80vh] w-full">
-                    {!(isSearching && searchedItems.length === 0)?(<div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
+                    {!(isSearching && filteredItems.length === 0)?(<div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
                       <Image
                         src="/icons/empty-note-pad.svg"
                         alt=""
@@ -592,86 +589,77 @@ const table = useReactTable({
                             height={56}
                             className="size-8"
                           />
-
                           <p className="text-[#2A2A2A] text-sm">Search Item not found.</p>
                         </div>
-
                       </div>
                     )}
                   </div>
                 </div>
               </div>
             ) : (
-              <>
+            <>
               <Table className="border-collapse border-b min-w-[590px] table-fixed">
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id} className="h-[50px]">
-                    {headerGroup.headers.map((header) => (
-                      <TableHead
-                        key={header.id}
-                        className={`text-[#090F1C] font-circular-medium px-4 py-2 text-center border-b border-r min-w-[100px] ${
-                          header.column.id === "name" ? "text-left w-2/7 max-[750px]:w-1/7" : "w-1/7"
-                        } ${header.column.columnDef.meta?.className || ""}`}
-                      >
-                        {flexRender(header.column.columnDef.header, header.getContext())}
-                      </TableHead>
-                    ))}
+                <TableHeader>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <TableRow key={headerGroup.id} className="h-[50px]">
+                      {headerGroup.headers.map((header) => (
+                        <TableHead
+                          key={header.id}
+                          className={`text-[#090F1C] font-circular-medium px-4 py-2 text-center border-b border-r min-w-[100px] ${
+                            header.column.id === "name" ? "text-left w-2/7 max-[750px]:w-1/7" : "w-1/7"
+                          } ${header.column.columnDef.meta?.className || ""}`}
+                        >
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                        </TableHead>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableHeader>        
+                <TableBody>
+                  {Array.from({ length: rowsPerPage }).map((_, index) => {
+                    const row = table.getRowModel().rows[index] || null; // Get row or null if not available
+
+                    return (
+                      <TableRow key={index} className="h-[50px]">
+                        {row
+                          ? row.getVisibleCells().map((cell) => (
+                              <TableCell
+                                key={cell.id}
+                                className={`px-4 py-3 text-center border-r ${
+                                  cell.column.id === "name" ? "text-left overflow-hidden" : ""
+                                } ${cell.column.columnDef.meta?.className || ""}`}
+                              >
+                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                              </TableCell>
+                            ))
+                          : columns.map((column) => (
+                              <TableCell key={column.id} className="px-4 py-3 text-center border-r text-gray-400">
+                                {""} {/* Placeholder for missing row */}
+                              </TableCell>
+                            ))}
+                      </TableRow>
+
+                    );
+                  })}
+                </TableBody>
+              </Table>
+              <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell colSpan={columns.length} className="py-4">
+                      <PaginationFeature
+                        totalItems={isSearching ? filteredItems.length : stockItems.length}
+                        currentPage={currentPage}
+                        itemsPerPage={rowsPerPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                        onItemsPerPageChange={handleItemsPerPageChange}
+                      />
+                    </TableCell>
                   </TableRow>
-                ))}
-              </TableHeader>
-        
-             <TableBody>
-  {Array.from({ length: rowsPerPage }).map((_, index) => {
-    const row = table.getRowModel().rows[index] || null; // Get row or null if not available
-
-    return (
-      <TableRow key={index} className="h-[50px]">
-        {row
-          ? row.getVisibleCells().map((cell) => (
-              <TableCell
-                key={cell.id}
-                className={`px-4 py-3 text-center border-r ${
-                  cell.column.id === "name" ? "text-left overflow-hidden" : ""
-                } ${cell.column.columnDef.meta?.className || ""}`}
-              >
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </TableCell>
-            ))
-          : columns.map((column) => (
-              <TableCell key={column.id} className="px-4 py-3 text-center border-r text-gray-400">
-                {""} {/* Placeholder for missing row */}
-              </TableCell>
-            ))}
-      </TableRow>
-    );
-  })}
-  
-  {/* Pagination */}
-
-</TableBody>
-            </Table>
-     <Table>
-<TableBody>
-  <TableRow>
-    <TableCell colSpan={columns.length} className="py-4">
-      <PaginationFeature
-        totalItems={isSearching ? filteredItems.length : stockItems.length}
-        currentPage={currentPage}
-        itemsPerPage={rowsPerPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-        onItemsPerPageChange={handleItemsPerPageChange}
-      />
-    </TableCell>
-  </TableRow>
-
-</TableBody>
-      
-      </Table>       
-              
-              </>
-
+                </TableBody>     
+              </Table>                    
+            </>
             )}                                                                
           </div>
         </div>
