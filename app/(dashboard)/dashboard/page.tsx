@@ -377,11 +377,14 @@ const Page = () => {
               {isTransitioning ? (
                 <Loader2 className="w-4 h-4 animate-spin mx-auto" />
               ) : isEditingThisRow ? (
-                <div className="flex justify-center items-center gap-2">
-                  <SaveAll
-                    className="cursor-pointer text-[#19A45B] w-[24px] h-[24px]"
-                    onClick={handleSaveInline}
-                  />
+                <div className="flex justify-center items-center gap-2 cursor-pointer"
+                onClick={handleSaveInline}>
+                  <div className="flex justify-center items-center gap-2 text-[20px]">
+                    <SaveAll
+                      className="cursor-pointer text-black w-[16px] h-[16px]"                      
+                    />
+                  </div>
+                  <p>Save</p>                
                 </div>
               ) : (
                 <div className="flex justify-center items-center gap-2">
@@ -600,7 +603,7 @@ const table = useReactTable({
               </div>
             ) : (
               <>
-              <Table className="border-collapse min-w-[590px] table-fixed">
+              <Table className="border-collapse border-b min-w-[590px] table-fixed">
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id} className="h-[50px]">
@@ -619,7 +622,7 @@ const table = useReactTable({
               </TableHeader>
         
              <TableBody>
-  {Array.from({ length: paginatedData.length }).map((_, index) => {
+  {Array.from({ length: rowsPerPage }).map((_, index) => {
     const row = table.getRowModel().rows[index] || null; // Get row or null if not available
 
     return (
