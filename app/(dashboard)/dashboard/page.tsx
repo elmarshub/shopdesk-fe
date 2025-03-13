@@ -327,7 +327,7 @@ const Page = () => {
                   className="w-full border rounded px-2 py-1 text-center"
                 />
               ) : (
-                <span className="block overflow-auto scrollbar-hide">{`${row.original.currency_code} ${row.original.buying_price?.toLocaleString()}`}</span>
+                <span className="block w-full overflow-x-clip">{`${row.original.currency_code} ${row.original.buying_price?.toLocaleString()}`}</span>
                 
               )}
             </div>
