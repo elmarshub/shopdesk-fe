@@ -34,7 +34,7 @@ jobs:
               git clone $REPO_URL || { echo 'Git clone failed'; exit 1; } &&
               cd $(basename $REPO_URL .git) &&
               git checkout version1.4 &&
-              echo 'Checked out to Version 1.3' &&
+              echo 'Checked out to Version 1.4' &&
               echo 'Running bun install.....' &&
               bun install || { echo 'bun install failed'; exit 1; } &&
               echo 'Running bun run build.....' &&
