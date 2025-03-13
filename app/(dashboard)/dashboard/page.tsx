@@ -265,7 +265,7 @@ const Page = () => {
           const isTransitioning = isEditingTransition === row.original.id;
 
           return (
-            <div className="inline-block w-full max-w-[200px] overflow-hidden">
+            <div className="inline-block w-full overflow-hidden">
               {isTransitioning ? (
                 <Loader2 className="w-4 h-4 animate-spin mx-auto" />
               ) : isEditingThisRow ? (
@@ -274,10 +274,10 @@ const Page = () => {
                   value={editedItem?.name || ""}
                   onChange={(e) => handleInputChange("name", e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSaveInline()}
-                  className="w-full max-w-[200px] min-w-0 border rounded px-2 py-1 text-left box-border"
+                  className="w-full min-w-0 border rounded px-2 py-1 text-left box-border"
                 />
               ) : (
-                <span className="block truncate">{row.original.name}</span>
+                <span className="block text-balance">{row.original.name}</span>
               )}
             </div>
           );
@@ -289,19 +289,14 @@ const Page = () => {
         cell: ({ row }) => {
           const isEditingThisRow = editedItem?.id === row.original.id;
           const isTransitioning = isEditingTransition === row.original.id;
-  
+      
           return (
-            <div className="inline-block w-full max-w-[200px] overflow-hidden">
+            <div className="inline-block w-full overflow-hidden">
               {isTransitioning ? (
                 <Loader2 className="w-4 h-4 animate-spin mx-auto" />
               ) : isEditingThisRow ? (
-                <input
-                  value={editedItem?.sku || ""}
-                  onChange={(e) => handleInputChange("sku", e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSaveInline()}
-                  className="w-full max-w-[200px] min-w-0 border rounded px-2 py-1 text-left box-border"
-                />
-              ) : (
+                <span className="block truncate">{row.original.id.slice(0, 8).toUpperCase()}</span>
+              ) :(
                 <span className="block truncate">{row.original.sku}</span>
               )}
             </div>
@@ -317,7 +312,7 @@ const Page = () => {
 
           return (
             <div
-              className="inline-block w-[calc(100%-2rem)] max-w-[100px]"
+              className="inline-block w-full max-w-[100px]"
               onClick={() => !isEditingThisRow && handleInlineEdit(row.original, "buying_price")}
             >
               {isTransitioning ? (
@@ -332,7 +327,8 @@ const Page = () => {
                   className="w-full border rounded px-2 py-1 text-center"
                 />
               ) : (
-                `${row.original.currency_code} ${row.original.buying_price?.toLocaleString()}`
+                <span className="block overflow-auto scrollbar-hide">{`${row.original.currency_code} ${row.original.buying_price?.toLocaleString()}`}</span>
+                
               )}
             </div>
           );
@@ -367,7 +363,7 @@ const Page = () => {
             </div>
           );
         },
-        meta: { className: "hidden sm:table-cell" },
+        meta: { className: "" },
       },
       {
         id: "actions",
@@ -404,7 +400,7 @@ const Page = () => {
             </div>
           );
         },
-        meta: { className: "hidden sm:table-cell" },
+        meta: { className: "" },
       },
     ],
     [editedItem, isEditingTransition, handleInlineEdit, handleSaveInline]
@@ -527,25 +523,25 @@ const table = useReactTable({
             </div>
             )}
           </div>
-          <div className="border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg flex-1">
+          <div className="border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg flex-1 overflow-auto w-full">
           {(stockItems.length === 0 || (isSearching && searchedItems.length === 0)) ? (
               <div className="relative">
                 <Table>
                   <TableHeader>
                     <TableRow className="h-[50px]">
-                      <TableHead className="px-4 py-2 w-2/7 max-[400px]:w-1/3 max-[400px]:px-1 text-left border-b border-r">
+                      <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-2/7 min-w-[120px] max-[400px]:w-1/3 max-[400px]:px-1 text-left border-b border-r">
                         ITEM NAME
                       </TableHead>
-                      <TableHead className="px-4 py-2 w-1/7 max-[400px]:w-1/3 max-[400px]:px-1 text-center border-b border-r">
+                      <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] max-[400px]:w-1/3 max-[400px]:px-1 text-center border-b border-r">
                         SKU CODE
                       </TableHead>
-                      <TableHead className="px-4 py-2 w-1/7 max-[400px]:w-1/3 max-[400px]:px-1 text-center border-b border-r">
+                      <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] max-[400px]:w-1/3 max-[400px]:px-1 text-center border-b border-r">
                         PRICE
                       </TableHead>
-                      <TableHead className="px-4 py-2 w-1/7 text-center border-b border-r hidden sm:table-cell">
+                      <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] text-center border-b border-r ">
                         QUANTITY
                       </TableHead>
-                      <TableHead className="px-4 py-2 w-1/7 text-center border-b hidden sm:table-cell">
+                      <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] text-center border-b ">
                         ACTION
                       </TableHead>
                     </TableRow>
@@ -600,15 +596,16 @@ const table = useReactTable({
                 </div>
               </div>
             ) : (
-              <Table className="border-collapse overflow-y-auto table-fixed">
+              <>
+              <Table className="border-collapse min-w-[590px] table-fixed">
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id} className="h-[50px]">
                     {headerGroup.headers.map((header) => (
                       <TableHead
                         key={header.id}
-                        className={`px-4 py-2 text-center border-b border-r ${
-                          header.column.id === "name" ? "text-left w-[200px]" : ""
+                        className={`text-[#090F1C] font-circular-medium px-4 py-2 text-center border-b border-r min-w-[100px] ${
+                          header.column.id === "name" ? "text-left w-2/7 max-[750px]:w-1/7" : "w-1/7"
                         } ${header.column.columnDef.meta?.className || ""}`}
                       >
                         {flexRender(header.column.columnDef.header, header.getContext())}
@@ -619,7 +616,7 @@ const table = useReactTable({
               </TableHeader>
         
              <TableBody>
-  {Array.from({ length: 10 }).map((_, index) => {
+  {Array.from({ length: paginatedData.length }).map((_, index) => {
     const row = table.getRowModel().rows[index] || null; // Get row or null if not available
 
     return (
@@ -629,7 +626,7 @@ const table = useReactTable({
               <TableCell
                 key={cell.id}
                 className={`px-4 py-3 text-center border-r ${
-                  cell.column.id === "name" ? "text-left w-[200px] overflow-hidden" : ""
+                  cell.column.id === "name" ? "text-left overflow-hidden" : ""
                 } ${cell.column.columnDef.meta?.className || ""}`}
               >
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -645,6 +642,11 @@ const table = useReactTable({
   })}
   
   {/* Pagination */}
+
+</TableBody>
+            </Table>
+     <Table>
+<TableBody>
   <TableRow>
     <TableCell colSpan={columns.length} className="py-4">
       <PaginationFeature
@@ -657,10 +659,12 @@ const table = useReactTable({
       />
     </TableCell>
   </TableRow>
-</TableBody>
 
-            </Table>
-            
+</TableBody>
+      
+      </Table>       
+              
+              </>
 
             )}                                                                
           </div>
