@@ -5,6 +5,7 @@ import PaginationFeature from "@/components/functional/paginationfeature";
 import { default as AddItemModal } from "@/components/modal/add-item";
 import DeleteItem from "@/components/modal/delete-item";
 import EditItemModal from "@/components/modal/edit-stock";
+import LogoutConfirmModal from "@/components/modal/logoutConfirmationModal";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,7 +24,7 @@ import box from "@/public/icons/box.svg";
 import { deleteStock, GetStock } from "@/services/stock";
 import { ChevronDown, MoreVertical, Search } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import useTableAreaHeight from "./hooks/useTableAreaHeight";
 
