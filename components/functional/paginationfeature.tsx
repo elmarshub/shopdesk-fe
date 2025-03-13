@@ -50,10 +50,13 @@ const PaginationFeature = ({
   };
 
   return (
-    <div className="w-full flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-[#32475C99]">
-      <span className="text-sm flex items-center flex-wrap whitespace-nowrap">
-        You have <span className="font-medium mx-1 text-[#2A2A2A]">{totalItems}</span>
-        stock (Displaying{" "}
+    <div className="w-full flex flex-col min-[500px]:flex-row min-[500px]:items-center min-[500px]:justify-between gap-2 text-[#32475C99]">
+      <span className="text-sm flex items-center justify-center flex-wrap whitespace-nowrap">
+        <span className="max-[640px]:hidden">
+          You have <span className="font-medium mx-1 text-[#2A2A2A]">{totalItems}</span>
+          stock
+        </span>
+        (Displaying{""}
         <span className="font-medium mx-1 text-[#2A2A2A]">
           {displayedItemsCount > 0 ? `${startIndex + 1}-${endIndex}` : 0}
         </span>{" "}
