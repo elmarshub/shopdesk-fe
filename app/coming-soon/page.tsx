@@ -66,33 +66,38 @@ const Page = () => {
         <Menu className="md:hidden block" />
       </header>
 
-      <div className="hidden md:grid grid-cols-2 absolute left-0 md:top-[7%] lg:top-[2%]">
-        <Image src={vectorLeft} alt="vector" priority className="aria-hidden" />
-        <Image
-          src={vectorRight}
-          alt="vector"
-          priority
-          className="aria-hidden"
-        />
-      </div>
-
       <section
         className={`${sharedClass} gap-16 w-full md:mb-[61px] md:mt-[80px]`}
       >
-        <div className={`${sharedClass} gap-3 md:w-8/10 w-full`}>
+        <div
+          className={`${sharedClass} gap-3 md:w-8/10 w-full max-w-2xl relative`}
+        >
           <h2 className="text-center p-5 backdrop-blur-[200px] text-[1b1b1b] rounded-[500px] text-[40px] sm:text-5xl md:text-6xl leading-[100%] font-[700]">
             Tired of Wasting Hours on{" "}
             <span className="text-[#009A49]">Inventory</span> ?
           </h2>
+          <div className="hidden md:grid grid-cols-2 absolute top-3">
+            <Image
+              src={vectorLeft}
+              alt="vector"
+              priority
+              className="aria-hidden"
+            />
+            <Image
+              src={vectorRight}
+              alt="vector"
+              priority
+              className="aria-hidden"
+            />
+          </div>
           <p className="text-center font-[300] px-3 text-[16px] sm:text-[32px] leading-normal text-[#717171] md:w-3xl">
             Join Early Access & Automate Your Inventory With Ease—Free for 6
-            Months!
-            <span className="text-[#009A49] md:block hidden">
-              {" "}
+            Months!{" "}
+            <span className="text-[#009A49] md:inline-block hidden underline cursor-pointer">
               Sign Up Now!
             </span>
           </p>
-          <Button className="md:hidden block"> Sign Up Now</Button>
+          <Button className="md:hidden block "> Sign Up Now</Button>
         </div>
       </section>
 
