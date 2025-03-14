@@ -125,7 +125,7 @@ const Page = () => {
         console.error("Error fetching stock:", error);
         setIsLoading(false);
       });
-  }, []);
+  }, [router, stockItems.length]);
 
   const handleEditClick = (item: StockItem) => {
     setSelectedItem(item); 
