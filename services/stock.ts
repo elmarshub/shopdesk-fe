@@ -47,7 +47,7 @@ export async function AddStock(
         buying_price: sellingPrice,
         quantity: quantity,
         currency_code: selectedSellingCurrency.code,
-        product_id: "79dc8c9167fe48e39ee3088bff7f9d3f",
+        product_id: "ea0dee9f87644f7a8fa57a4343653413",
         organization_id: "160db8736a9d47989381e01a987e4413",
         date_created: new Date().toISOString(),
       }),
