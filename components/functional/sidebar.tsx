@@ -1,9 +1,9 @@
 import { StockItem } from "@/app/(dashboard)/dashboard/page";
 import { X } from "lucide-react";
 import React, { useState } from "react";
-import EditItemModal from "@/components/modal/edit-stock";
 import ImageUploader from "@/components/modal/add-image";
 import { Button } from "@/components/ui/button";
+import EditImage from "@/components/modal/edit-image";
 /* import Image from "next/image"; */
 
 interface SidebarProps {
@@ -39,8 +39,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     };
 
     onSave(updatedItem);
-    closeImageUploader();
-    
+    closeImageUploader(); 
   };
 
   return (
@@ -163,7 +162,11 @@ const Sidebar: React.FC<SidebarProps> = ({
             </div>
             <p
               className="text-black md:text-[#009A49] font-circular-normal text-sm md:text-base leading-6 cursor-pointer md:w-1/3 text-right border border-[#A0A0A0] rounded-xl py-3 px-6 md:py-0 md:px-0 md:border-none"
-              onClick={openImageUploader}
+              onClick={
+                selectedItem.images && selectedItem.images.length > 0
+                  ? openEditModal 
+                  : openImageUploader 
+              }
             >
               {selectedItem.images && selectedItem.images.length > 0
                 ? "Edit"
@@ -195,14 +198,13 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Edit Modal */}
       {isEditModalOpen && (
-        <EditItemModal
+        <EditImage
           isOpen={isEditModalOpen}
-          item={selectedItem}
-          onClose={closeEditModal}
-          onSave={(updatedItem) => {
-            onSave(updatedItem);
-            closeEditModal();
-          }}
+          itemName={selectedItem.name}
+          existingImages={selectedItem.images || []}
+          onCancel={closeEditModal}
+          onSave={handleSaveImages}
+          onDeleteImage={() => void 0}
         />
       )}
       {/* Image Uploader Modal */}
