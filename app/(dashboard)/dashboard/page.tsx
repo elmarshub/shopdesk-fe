@@ -1,14 +1,7 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef, useMemo } from "react";
-import {
-  ChevronDown,
-  Edit,
-  Loader2,
-  MoreVertical,
-  SaveAll,
-  Trash2,
-} from "lucide-react";
+import { useEffect, useState,useCallback,useRef,useMemo } from "react";
+import { ChevronDown, Edit, Loader2, MoreVertical, SaveAll, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import EditItemModal from "@/components/modal/edit-stock";
 import AddItemModal from "@/components/modal/add-item";
@@ -71,6 +64,7 @@ export type StockItem = {
 };
 
 const Page = () => {
+
   const { tableAreaRef, tableAreaHeight } = useTableAreaHeight();
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -89,9 +83,7 @@ const Page = () => {
   const [stockItems, setStockItems] = useState<StockItem[]>([]);
   const [searchText, setSearchText] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const [isEditingTransition, setIsEditingTransition] = useState<string | null>(
-    null
-  );
+  const [isEditingTransition, setIsEditingTransition] = useState<string | null>(null);
   const [editedItem, setEditedItem] = useState<StockItem | null>(null);
   const [activeField, setActiveField] = useState<keyof StockItem | null>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -168,7 +160,7 @@ const Page = () => {
         console.error("Error fetching stock:", error);
         setIsLoading(false);
       });
-  }, [router]);
+  }, [router, stockItems.length]);
 
   const handleEditClick = (item: StockItem) => {
     setSelectedItem(item);
@@ -364,7 +356,10 @@ const Page = () => {
           const isTransitioning = isEditingTransition === row.original.id;
 
           return (
-            <div className="inline-block w-full overflow-hidden">
+            <div 
+              className="w-full h-full flex items-center overflow-hidden"
+              onClick={() => !isEditingThisRow && handleInlineEdit(row.original, "name")}
+            >
               {isTransitioning ? (
                 <Loader2 className="w-4 h-4 animate-spin mx-auto" />
               ) : isEditingThisRow ? (
@@ -373,10 +368,10 @@ const Page = () => {
                   value={editedItem?.name || ""}
                   onChange={(e) => handleInputChange("name", e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSaveInline()}
-                  className="w-full min-w-0 border rounded px-2 py-1 text-left box-border"
+                  className="no-spinner w-full h-full min-w-0 border text-left box-border p-2 focus:outline-[#009A49]"
                 />
               ) : (
-                <span className="block text-balance">{row.original.name}</span>
+                <span className="block text-balance p-2">{row.original.name}</span>
               )}
             </div>
           );
@@ -394,10 +389,8 @@ const Page = () => {
               {isTransitioning ? (
                 <Loader2 className="w-4 h-4 animate-spin mx-auto" />
               ) : isEditingThisRow ? (
-                <span className="block truncate">
-                  {row.original.id.slice(0, 8).toUpperCase()}
-                </span>
-              ) : (
+                <span className="block truncate">{row.original.id.slice(0, 8).toUpperCase()}</span>
+              ) :(
                 <span className="block truncate">{row.original.sku}</span>
               )}
             </div>
@@ -413,11 +406,8 @@ const Page = () => {
 
           return (
             <div
-              className="inline-block w-full max-w-[100px]"
-              onClick={() =>
-                !isEditingThisRow &&
-                handleInlineEdit(row.original, "buying_price")
-              }
+              className="flex w-full h-full items-center justify-center"
+              onClick={() => !isEditingThisRow && handleInlineEdit(row.original, "buying_price")}
             >
               {isTransitioning ? (
                 <Loader2 className="w-4 h-4 animate-spin mx-auto" />
@@ -426,16 +416,13 @@ const Page = () => {
                   ref={priceInputRef}
                   type="number"
                   value={editedItem?.buying_price ?? ""}
-                  onChange={(e) =>
-                    handleInputChange("buying_price", e.target.value)
-                  }
+                  onChange={(e) => handleInputChange("buying_price", e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSaveInline()}
-                  className="w-full border rounded px-2 py-1 text-center"
+                  className="no-spinner w-full h-full border text-center focus:outline-[#009A49]"
                 />
               ) : (
-                <span className="block w-full overflow-x-clip">{`${
-                  row.original.currency_code
-                } ${row.original.buying_price?.toLocaleString()}`}</span>
+                <span className="block w-full overflow-x-clip">{`${row.original.currency_code} ${row.original.buying_price?.toLocaleString()}`}</span>
+                
               )}
             </div>
           );
@@ -450,10 +437,8 @@ const Page = () => {
 
           return (
             <div
-              className="inline-block w-[calc(100%-2rem)] max-w-[60px]"
-              onClick={() =>
-                !isEditingThisRow && handleInlineEdit(row.original, "quantity")
-              }
+              className="flex h-full w-full items-center justify-center"
+              onClick={() => !isEditingThisRow && handleInlineEdit(row.original, "quantity")}
             >
               {isTransitioning ? (
                 <Loader2 className="w-4 h-4 animate-spin mx-auto" />
@@ -462,11 +447,9 @@ const Page = () => {
                   ref={quantityInputRef}
                   type="number"
                   value={editedItem?.quantity ?? ""}
-                  onChange={(e) =>
-                    handleInputChange("quantity", e.target.value)
-                  }
+                  onChange={(e) => handleInputChange("quantity", e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSaveInline()}
-                  className="w-full border rounded px-2 py-1 text-center"
+                  className="no-spinner w-full h-full border px-2 py-1 text-center focus:outline-[#009A49]"
                 />
               ) : (
                 row.original.quantity
@@ -488,12 +471,12 @@ const Page = () => {
               {isTransitioning ? (
                 <Loader2 className="w-4 h-4 animate-spin mx-auto" />
               ) : isEditingThisRow ? (
-                <div
-                  className="flex justify-center items-center gap-2 cursor-pointer"
-                  onClick={handleSaveInline}
-                >
+                <div className="flex justify-center items-center gap-2 cursor-pointer"
+                onClick={handleSaveInline}>
                   <div className="flex justify-center items-center gap-2 text-[20px]">
-                    <SaveAll className="cursor-pointer text-black w-[16px] h-[16px]" />
+                    <SaveAll
+                      className="cursor-pointer text-black w-[16px] h-[16px]"                      
+                    />
                   </div>
                   <p>Save</p>
                 </div>
@@ -520,14 +503,8 @@ const Page = () => {
     [editedItem, isEditingTransition, handleInlineEdit, handleSaveInline]
   );
   const paginatedData = isSearching
-    ? filteredItems.slice(
-        (currentPage - 1) * rowsPerPage,
-        currentPage * rowsPerPage
-      )
-    : stockItems.slice(
-        (currentPage - 1) * rowsPerPage,
-        currentPage * rowsPerPage
-      );
+  ? filteredItems.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
+  : stockItems.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
   const table = useReactTable({
     data: paginatedData,
@@ -579,15 +556,11 @@ const Page = () => {
           </div>
           <div className="">
             <DropdownMenu modal>
-              <DropdownMenuTrigger
-                disabled
-                className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white"
-              >
+              <DropdownMenuTrigger disabled className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white">
                 <span className="py-2 px-4 rounded-lg bg-white text-black">
                   SL
                 </span>
-                Sodiq LTD
-                <ChevronDown strokeWidth={1.5} color="white" />
+                Sodiq LTD<ChevronDown strokeWidth={1.5} color="white" />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem

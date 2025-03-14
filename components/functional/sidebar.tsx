@@ -3,8 +3,13 @@ import { X } from "lucide-react";
 import React, { useState } from "react";
 import ImageUploader from "@/components/modal/add-image";
 import { Button } from "@/components/ui/button";
-import EditImage from "@/components/modal/edit-image";
+//import EditStockV3Modal from "../modal/modalV3/edit-stock";
+import EditPriceModal from "../modal/modalV3/edit-price";
+import EditStockName from "../modal/modalV3/edit-name";
+import EditQuantityModal from "../modal/modalV3/edit-quantity";
+import EditSuccessModal from "../modal/modalV3/edit-success";
 /* import Image from "next/image"; */
+
 
 interface SidebarProps {
   isOpen: boolean;
@@ -13,15 +18,13 @@ interface SidebarProps {
   onSave: (updatedItem: StockItem) => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({
-  isOpen,
-  onClose,
-  selectedItem,
-  onSave,
-}) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, selectedItem, onSave }) => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [isImageUploaderOpen, setImageUploaderOpen] = useState(false);
-
+  const [isEditNameOpen, setEditNameOpen] = useState(false);
+  const [isEditQuantityOpen, setEditQuantityOpen] = useState(false);
+  const [isEditPriceOpen, setEditPriceOpen] = useState(false);
+  const [isSuccessModalOpen , setSuccessOpen] = useState(false)
+  
   if (!isOpen || !selectedItem) return null;
 
   const openEditModal = () => setEditModalOpen(true);
@@ -42,6 +45,24 @@ const Sidebar: React.FC<SidebarProps> = ({
     closeImageUploader(); 
   };
 
+  const openEditName = () => setEditNameOpen(true);
+  const closeEditName = () => setEditNameOpen(false);
+  
+  const openEditQuantity = () => setEditQuantityOpen(true);
+  const closeEditQuantity = () => setEditQuantityOpen(false);
+  
+  const openSucessModal = () => setSuccessOpen(true);
+  const closeSuccessModal = () => setSuccessOpen(false);
+  
+  const openEditPriceModal = () => setEditPriceOpen(true);
+  const closeEditPriceModal = () => setEditPriceOpen(false);
+  
+  const handleSavePrice = (updatedPrice: number) => {
+    const updatedItem = { ...selectedItem, buying_price: updatedPrice };
+    onSave(updatedItem); 
+    closeEditPriceModal(); 
+  }
+
   return (
     <>
       <div className="fixed inset-0 md:relative  w-full max-w-[344px] md:max-w-[356px] bg-white transition-transform duration-300 ease-in-out transform translate-x-0 flex flex-col flex-grow  items-start rounded-xl md:border md:border-[#DEE5ED] ml-4 mr-[15px] md:m-0">
@@ -49,28 +70,24 @@ const Sidebar: React.FC<SidebarProps> = ({
           <p className="font-circular-medium text-2xl leading-9">
             {selectedItem.name}
           </p>
-          <button
-            onClick={onClose}
-            className="p-[9px] bg-neutral-200 rounded-md"
-          >
+          <button onClick={onClose} className="p-[9px] bg-neutral-200 rounded-md">
             <X size={16} />
           </button>
         </div>
 
         {/* Mobile */}
         <div className="flex items-center justify-between border-b border-b-[#DEE5ED] w-full md:hidden">
-          <p className="font-circular-medium text-xl leading-9">Edit Stock</p>
-          <button
-            onClick={onClose}
-            className="p-[7px] bg-neutral-200 rounded-md"
-          >
+          <p className="font-circular-medium text-xl leading-9">
+            Edit Stock
+          </p>
+          <button onClick={onClose} className="p-[7px] bg-neutral-200 rounded-md">
             <X size={13} />
           </button>
         </div>
 
         <div className="flex flex-col md:py-5 md:px-4 items-start gap-5 w-full">
           {/* Product */}
-          <div className="flex p-3 items-start gap-5 rounded-md w-full md:hidden">
+          <div className="flex p-3 items-start gap-5 rounded-md w-full ">
             <div className="flex flex-col gap-1 w-2/3">
               <p className="text-[#717171] text-base font-circular-normal leading-7">
                 Product name
@@ -81,7 +98,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             </div>
             <p
               className="text-[#1B1B1B] md:text-[#009A49] font-circular-normal text-sm leading-6 cursor-pointer md:w-1/3 text-right border border-[#A0A0A0] rounded-xl py-3 px-6 md:py-0 md:px-0 md:border-none"
-              onClick={openEditModal}
+              onClick={openEditName}
             >
               Edit
             </p>
@@ -90,7 +107,8 @@ const Sidebar: React.FC<SidebarProps> = ({
           {/* Price */}
           <div className="flex p-3 items-start gap-5 rounded-md md:border md:border-[#E9EEF3] md:bg-[#F8FAFB] w-full">
             <div className="flex flex-col gap-1 w-2/3">
-              <p className="text-[#717171] text-base md:text-lg font-circular-normal leading-7">
+              <p className="text-[#717171] text-base md:text-lg font-circular-normal leading-7" 
+              >
                 Price
               </p>
               <p className="text-[#2A2A2A] text-lg md:text-xl leading-7.5 font-circular-normal">
@@ -99,7 +117,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             </div>
             <p
               className="text-[#1B1B1B] md:text-[#009A49] font-circular-normal text-sm md:text-base leading-6 cursor-pointer md:w-1/3 text-right border border-[#A0A0A0] rounded-xl py-3 px-6 md:py-0 md:px-0 md:border-none"
-              onClick={openEditModal}
+              onClick={openEditPriceModal}
             >
               Edit
             </p>
@@ -127,7 +145,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             </div>
             <p
               className="text-black md:text-[#009A49] font-circular-normal text-sm md:text-base leading-6 cursor-pointer md:w-1/3 text-right border border-[#A0A0A0] rounded-xl py-3 px-6 md:py-0 md:px-0 md:border-none"
-              onClick={openEditModal}
+              onClick={openEditQuantity}
             >
               Edit
             </p>
@@ -196,8 +214,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         </div>
       </div>
 
-      {/* Edit Modal */}
-      {isEditModalOpen && (
+{isEditModalOpen && (
         <EditImage
           isOpen={isEditModalOpen}
           itemName={selectedItem.name}
@@ -207,15 +224,76 @@ const Sidebar: React.FC<SidebarProps> = ({
           onDeleteImage={() => void 0}
         />
       )}
-      {/* Image Uploader Modal */}
-      <ImageUploader
-        isOpen={isImageUploaderOpen}
-        itemName={selectedItem.name}
-        existingImages={selectedItem.images || []}
-        onSave={handleSaveImages}
-        onCancel={closeImageUploader}
-      />
-    </>
+
+
+   {/**   {isEditModalOpen && (
+        <EditStockV3Modal
+          isOpen={isEditModalOpen}
+          item={selectedItem} 
+          onClose={closeEditModal}
+          onSave={(updatedItem) => {
+            onSave(updatedItem);
+            closeEditModal();
+          }}
+          openSuccessModal={openSucessModal}
+          />
+      )}
+      */}
+      {isEditQuantityOpen && (
+  <EditQuantityModal
+    isOpen={isEditQuantityOpen}
+    item={selectedItem} 
+    onClose={closeEditQuantity}
+    onSave={(updatedItem) => {
+      onSave(updatedItem);
+      closeEditQuantity();
+    }}
+    openSuccessModal={openSucessModal}
+    />
+)}
+
+{isSuccessModalOpen && (
+    <EditSuccessModal
+      isOpen={isSuccessModalOpen}
+      onClose={closeSuccessModal} 
+    />
+)}
+
+{isEditPriceOpen&&(
+<EditPriceModal
+ isOpen={isEditPriceOpen}
+ onClose={closeEditPriceModal}
+  item={selectedItem} 
+  openSuccessModal={openSucessModal} 
+  onSave={handleSavePrice}
+  />
+)}
+
+
+
+{isEditNameOpen && (
+  <EditStockName
+    isOpen={isEditNameOpen}
+    item={selectedItem} 
+    onClose={closeEditName}
+    onSave={(updatedItem) => {
+      onSave(updatedItem);
+      closeEditName();
+    }}
+    openSuccessModal={openSucessModal}
+    />
+)}
+
+
+
+      {isSuccessModalOpen && (
+          <EditSuccessModal
+            isOpen={isSuccessModalOpen}
+            onClose={closeSuccessModal} 
+          />
+      )}
+
+    </>  
   );
 };
 
