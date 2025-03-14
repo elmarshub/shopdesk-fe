@@ -1,22 +1,24 @@
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request) {
+export async function POST(req: Request) {
   try {
-    const url = new URL(req.url);
+    const body = await req.formData();
+    // const body = await req.json();
     const token = req.headers.get("authorization");
 
-    const product_id = url.searchParams.get("product_id");
-    const organization_id = "160db8736a9d47989381e01a987e4413";
+    // console.log("Token:", token);
 
     const response = await fetch(
-      `https://api.timbu.cloud/stocks?product_id=${product_id}&organization_id=${organization_id}`,
+      "https://api.timbu.cloud/products",
       {
-        method: "GET",
+        method: "POST",
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json",
+        //   "Content-Type": "application/json",
           Authorization: `${token}`,
         },
+
+        body,
       }
     );
 

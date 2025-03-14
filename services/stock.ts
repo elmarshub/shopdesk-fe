@@ -1,5 +1,7 @@
 import { getAccessToken } from "@/app/api/token";
 
+const organization_id = "160db8736a9d47989381e01a987e4413";
+
 type Stock = {
   id: string;
   name: string;
@@ -12,6 +14,36 @@ type Stock = {
   selectedSellingCurrency: { code: string; name: string };
 };
 
+type Product = {
+  name: string;
+  description: string;
+  unique_id: string;
+  url_slug: string;
+  is_available: boolean;
+  is_service: boolean;
+  previous_url_slugs: {};
+  unavailable: false;
+  // "unavailable_start": "2025-03-14T13:14:42.799Z"
+  // "unavailable_end": "2025-03-14T13:14:42.799Z",
+  status: string;
+  id: string;
+  parent_product_id: string;
+  parent: string;
+  organization_id: string;
+  categories: [];
+  date_created: string;
+  last_updated: string;
+  user_id: string;
+  current_price: string;
+  is_deleted: boolean;
+  available_quantity: number;
+  selling_price: number;
+  discounted_price: number;
+  buying_price: number;
+  photos: [];
+  attributes: {};
+}
+
 type StockResponse = {
   page: number;
   size: number;
@@ -20,6 +52,55 @@ type StockResponse = {
   next_page: number | null;
   items: Stock[];
 };
+
+type ProductResponse = {
+  page: number;
+  size: number;
+  total: number;
+  debug: null;
+  previous_page:number | null;
+  next_page: number | null;
+  items: Product[];
+}
+
+export async function CreateProduct(
+  productName: string,
+ unique_id:string
+): Promise<Product> {
+
+  const formData = new FormData();
+  formData.append("organization_id", organization_id);
+  formData.append("name", productName);
+   if (unique_id !== ""){
+    formData.append("unique_id", unique_id);
+   }
+  
+
+  try {
+    const token = await getAccessToken();
+    console.log("Token:", token);
+
+    const response = await fetch("/api/product/create", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to add stock");
+    }
+
+    return data.id;
+  } catch (error) {
+    console.error("Error adding stock:", error);
+    throw error;
+  }
+}
 
 export async function AddStock(
   productName: string,
@@ -32,6 +113,7 @@ export async function AddStock(
   selectedSellingCurrency: { code: string; name: string }
 ): Promise<Stock> {
   try {
+    const product_id = await CreateProduct(productName, "")
     const token = await getAccessToken();
     console.log("Token:", token);
 
@@ -47,8 +129,8 @@ export async function AddStock(
         buying_price: sellingPrice,
         quantity: quantity,
         currency_code: selectedSellingCurrency.code,
-        product_id: "79dc8c9167fe48e39ee3088bff7f9d3f",
-        organization_id: "160db8736a9d47989381e01a987e4413",
+        product_id: product_id,
+        organization_id: organization_id,
         date_created: new Date().toISOString(),
       }),
     });
@@ -65,12 +147,38 @@ export async function AddStock(
     throw error;
   }
 }
-
-export async function GetStock(): Promise<StockResponse> {
+export async function GetProduct(): Promise<StockResponse> {
   try {
     const token = await getAccessToken();
 
-    const response = await fetch(`/api/stocks/get`, {
+    const response = await fetch(`/api/product/get`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to fetch stock");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error fetching stock:", error);
+    throw error;
+  }
+}
+const data2 = GetProduct();
+console.log(data2);
+
+export async function GetStock(product_id:string): Promise<StockResponse> {
+  try {
+    const token = await getAccessToken();
+
+    const response = await fetch(`/api/stocks/get?product_id=${product_id}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
