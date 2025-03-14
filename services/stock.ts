@@ -1,6 +1,10 @@
 import { getAccessToken } from "@/app/api/token";
 
-const organization_id = "160db8736a9d47989381e01a987e4413";
+
+// const cookieStore =  cookies();
+//     const organization_id = cookieStore.get("organizationId")?.value;
+
+// const organization_id = "160db8736a9d47989381e01a987e4413";
 
 type Stock = {
   id: string;
@@ -68,17 +72,23 @@ export async function CreateProduct(
  unique_id:string
 ): Promise<Product> {
 
-  const formData = new FormData();
-  formData.append("organization_id", organization_id);
-  formData.append("name", productName);
-   if (unique_id !== ""){
-    formData.append("unique_id", unique_id);
-   }
+
   
 
   try {
+    const organization_id = sessionStorage.getItem("organizationId");
+    if (!organization_id) {
+      throw new Error("Organization ID is missing from sessionStorage");
+    }
     const token = await getAccessToken();
     console.log("Token:", token);
+    const formData = new FormData();
+    formData.append("organization_id", organization_id);
+    formData.append("name", productName);
+     if (unique_id !== ""){
+      formData.append("unique_id", unique_id);
+     }
+
 
     const response = await fetch("/api/product/create", {
       method: "POST",

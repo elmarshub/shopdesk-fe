@@ -1,9 +1,14 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+
+
+const cookieStore = await cookies();
+    const organization_id = cookieStore.get("organizationId")?.value;
 
 export async function PUT(req: Request) {
     try {
       const token = req.headers.get("authorization");
-      const organization_id = "160db8736a9d47989381e01a987e4413"; 
+      // const organization_id = "160db8736a9d47989381e01a987e4413"; 
       
       const body = await req.json();
       const stock_id = body.stock_id;

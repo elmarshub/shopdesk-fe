@@ -7,6 +7,7 @@ import EditItemModal from "@/components/modal/edit-stock";
 import AddItemModal from "@/components/modal/add-item";
 import DeleteItem from "@/components/modal/delete-item";
 import PaginationFeature from "@/components/functional/paginationfeature";
+import { useOrganization } from "@/app/api/useOrganization";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,6 +38,7 @@ import {
 } from "@tanstack/react-table";
 import { getAccessToken } from "@/app/api/token";
 import Sidebar from "@/components/functional/sidebar";
+import { GetOrganization } from "@/services/organization";
 
 declare module "@tanstack/react-table" {
   interface ColumnMeta<TData, TValue> {
@@ -91,6 +93,9 @@ declare module "@tanstack/react-table" {
   };
 
 const Page = () => {
+  GetOrganization();
+  const { organizationId, organizationName, organizationInitials } =
+    useOrganization();
 
   const { tableAreaRef, tableAreaHeight } = useTableAreaHeight();
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -531,11 +536,15 @@ const table = useReactTable({
           </div>
           <div className="">
             <DropdownMenu modal>
-              <DropdownMenuTrigger disabled className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white">
+            <DropdownMenuTrigger
+                disabled
+                className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white"
+              >
                 <span className="py-2 px-4 rounded-lg bg-white text-black">
-                  SL
+                  {organizationInitials}
                 </span>
-                Sodiq LTD<ChevronDown strokeWidth={1.5} color="white" />
+                {organizationName}
+                <ChevronDown strokeWidth={1.5} color="white" />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem
