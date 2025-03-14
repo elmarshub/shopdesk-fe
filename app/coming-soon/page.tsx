@@ -186,13 +186,13 @@ const Page = () => {
         </div>
       </section>
 
-      <section className=" flex flex-col items-center md:gap-16 gap-8 md:py-16 py-8">
+      <section className=" flex flex-col items-center md:gap-16 gap-8 md:py-16 py-8 ">
         <div className="w-full flex justify-center items-center ">
           <p className="text-[#009A49] text-center md:text-[32px] text-base leading-[24px] font-[500]  bg-[#009A49]/5 md:py-6 py-3 px-6 md:px-[70px] rounded-[64px]">
             Why Join the Waiting List?
           </p>
         </div>
-        <div className="flex items-center justify-center w-full flex-wrap md:gap-y-[64px] gap-12 text-center">
+        <div className="flex items-center justify-center w-full flex-wrap md:gap-y-[64px] gap-12 text-center max-w-6xl mx-auto">
           <div className="flex justify-between items-center flex-col md:flex-row gap-12 w-9/12">
             <div className="flex flex-col items-center justify-center gap-5 ">
               <Image
