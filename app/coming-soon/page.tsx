@@ -12,6 +12,7 @@ import vectorLeft from "@/public/coming-soon/Vector-left.svg";
 
 import vectorRight from "@/public/coming-soon/Vector-right.svg";
 import facebook from "@/public/icons/facebook.svg";
+import github from "@/public/icons/github.svg";
 import instagram from "@/public/icons/instagram.svg";
 import logo from "@/public/icons/logo.svg";
 import twitter from "@/public/icons/twitter.svg";
@@ -65,33 +66,38 @@ const Page = () => {
         <Menu className="md:hidden block" />
       </header>
 
-      <div className="hidden md:grid grid-cols-2 absolute left-0 md:top-[7%] lg:top-[2%]">
-        <Image src={vectorLeft} alt="vector" priority className="aria-hidden" />
-        <Image
-          src={vectorRight}
-          alt="vector"
-          priority
-          className="aria-hidden"
-        />
-      </div>
-
       <section
         className={`${sharedClass} gap-16 w-full md:mb-[61px] md:mt-[80px]`}
       >
-        <div className={`${sharedClass} gap-3 md:w-8/10 w-full`}>
+        <div
+          className={`${sharedClass} gap-3 md:w-8/10 w-full max-w-2xl relative`}
+        >
           <h2 className="text-center p-5 backdrop-blur-[200px] text-[1b1b1b] rounded-[500px] text-[40px] sm:text-5xl md:text-6xl leading-[100%] font-[700]">
             Tired of Wasting Hours on{" "}
             <span className="text-[#009A49]">Inventory</span> ?
           </h2>
+          <div className="hidden md:grid grid-cols-2 absolute top-3">
+            <Image
+              src={vectorLeft}
+              alt="vector"
+              priority
+              className="aria-hidden"
+            />
+            <Image
+              src={vectorRight}
+              alt="vector"
+              priority
+              className="aria-hidden"
+            />
+          </div>
           <p className="text-center font-[300] px-3 text-[16px] sm:text-[32px] leading-normal text-[#717171] md:w-3xl">
             Join Early Access & Automate Your Inventory With Ease—Free for 6
-            Months!
-            <span className="text-[#009A49] md:block hidden">
-              {" "}
+            Months!{" "}
+            <span className="text-[#009A49] md:inline-block hidden underline cursor-pointer">
               Sign Up Now!
             </span>
           </p>
-          <Button className="md:hidden block"> Sign Up Now</Button>
+          <Button className="md:hidden block "> Sign Up Now</Button>
         </div>
       </section>
 
@@ -139,7 +145,7 @@ const Page = () => {
 
       {/* <Features text="FEATURES ROLLING IN" /> */}
 
-      <section className="bg-[#E5F5ED] flex flex-col items-center gap-16 md:py-[100px] pt-12  w-full mt-8 md:mt-0">
+      <section className="bg-[#E5F5ED] flex flex-col items-center gap-16 md:py-[100px] py-12  w-full mt-8 md:mt-0">
         <div className="w-full flex justify-center items-center ">
           <p className="text-[#009A49] text-center md:text-[32px] text-base leading-[24px] font-[500]  bg-[#009A49]/10 md:py-6 py-3 px-6 md:px-[70px]  rounded-[64px] md:w-[500px]">
             Sign Up for Early Access
@@ -185,13 +191,13 @@ const Page = () => {
         </div>
       </section>
 
-      <section className=" flex flex-col items-center md:gap-16 gap-8 md:py-16 py-8">
+      <section className=" flex flex-col items-center md:gap-16 gap-8 md:py-16 py-8 ">
         <div className="w-full flex justify-center items-center ">
           <p className="text-[#009A49] text-center md:text-[32px] text-base leading-[24px] font-[500]  bg-[#009A49]/5 md:py-6 py-3 px-6 md:px-[70px] rounded-[64px]">
             Why Join the Waiting List?
           </p>
         </div>
-        <div className="flex items-center justify-center w-full flex-wrap md:gap-y-[64px] gap-12 text-center">
+        <div className="flex items-center justify-center w-full flex-wrap md:gap-y-[64px] gap-12 text-center max-w-6xl mx-auto">
           <div className="flex justify-between items-center flex-col md:flex-row gap-12 w-9/12">
             <div className="flex flex-col items-center justify-center gap-5 ">
               <Image
@@ -261,8 +267,8 @@ const Page = () => {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-center w-full md:hidden ">
-          <p className="text-2xl font-medium text-center">
+        <div className="flex items-center justify-center w-full mt-8">
+          <p className="md:text-2xl text-base font-medium text-center text-[#5f5f5f]">
             Spots Are Limited <br />
             <span className="text-[#009A49]"> Join the Waiting List Now!</span>
           </p>
@@ -298,12 +304,46 @@ const Page = () => {
         />
       </section>
 
-      <footer className="py-[41px] px-[72px] flex justify-center items-center content-center bg-white">
+      <footer className="py-[41px] px-[72px] flex flex-col gap-12 justify-center items-center content-center bg-white border-t border-t-[#e2e8f0]">
+        <div className="space-x-2 sm:space-x-6 md:space-x-16 md:hidden flex ">
+          <button className={socialLinkButtonClass}>
+            <Image
+              src={twitter}
+              alt="our twitter page"
+              height={24}
+              className="h-[16px] sm:h-[24px]"
+            />
+          </button>
+          <button className={socialLinkButtonClass}>
+            <Image
+              src={facebook}
+              alt="our facebook page"
+              height={24}
+              className="h-[16px] sm:h-[24px]"
+            />
+          </button>
+          <button className={socialLinkButtonClass}>
+            <Image
+              src={instagram}
+              alt="our instagram page"
+              height={24}
+              className="h-[16px] sm:h-[24px]"
+            />
+          </button>
+          <button className={socialLinkButtonClass}>
+            <Image
+              src={github}
+              alt="our github page"
+              height={24}
+              className="h-[16px] sm:h-[24px]"
+            />
+          </button>
+        </div>
         <div className="h-[61px] w-full flex flex-col md:flex-row md:justify-between md:items-end">
           <p className="text-[#71717a] text-[14px] leading-[22px] font-[400] text-center">
             © Copyright 2024, Powered by Timbu Business
           </p>
-          <div className="flex gap-[10px] flex-col md:flex-row md:gap-[54px] items-center *:text-[#71717a] *:text-[14px] *:leading-[22px] *:font-[400] *:text-center pl-3">
+          <div className="md:flex gap-[10px] flex-col md:flex-row md:gap-[54px] items-center *:text-[#71717a] *:text-[14px] *:leading-[22px] *:font-[400] *:text-center pl-3 hidden ">
             <p>Cookies</p>
             <p>Terms of Sevice</p>
             <p>Privacy Policy</p>
