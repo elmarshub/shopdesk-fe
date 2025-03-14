@@ -277,7 +277,7 @@ const Page = () => {
                   value={editedItem?.name || ""}
                   onChange={(e) => handleInputChange("name", e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSaveInline()}
-                  className="w-full h-full min-w-0 border text-left box-border p-2 focus:outline-[#009A49]"
+                  className="no-spinner w-full h-full min-w-0 border text-left box-border p-2 focus:outline-[#009A49]"
                 />
               ) : (
                 <span className="block text-balance p-2">{row.original.name}</span>
@@ -327,7 +327,7 @@ const Page = () => {
                   value={editedItem?.buying_price ?? ""}
                   onChange={(e) => handleInputChange("buying_price", e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSaveInline()}
-                  className="w-full h-full border text-center focus:outline-[#009A49]"
+                  className="no-spinner w-full h-full border text-center focus:outline-[#009A49]"
                 />
               ) : (
                 <span className="block w-full overflow-x-clip">{`${row.original.currency_code} ${row.original.buying_price?.toLocaleString()}`}</span>
@@ -358,7 +358,7 @@ const Page = () => {
                   value={editedItem?.quantity ?? ""}
                   onChange={(e) => handleInputChange("quantity", e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSaveInline()}
-                  className="w-full h-full border px-2 py-1 text-center focus:outline-[#009A49]"
+                  className="no-spinner w-full h-full border px-2 py-1 text-center focus:outline-[#009A49]"
                 />
               ) : (
                 row.original.quantity
