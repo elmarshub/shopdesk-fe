@@ -635,7 +635,7 @@ const Page = () => {
           <div className="flex w-full overflow-hidden mx-auto">
             <div
               className={`border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg flex-1 overflow-auto w-full transition-all duration-300 ease-in-out ${
-                isSidebarOpen ? "w-full max-w-[989px] mr-1" : "w-full"
+                isSidebarOpen ? "md:w-[calc(100%-360px)] mr-1" : "w-full"
               }`}
             >
               {stockItems.length === 0 ||
