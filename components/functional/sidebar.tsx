@@ -2,8 +2,10 @@ import { StockItem } from "@/app/(dashboard)/dashboard/page";
 import { X } from "lucide-react";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import EditStockV3Modal from "../modal/modalV3/edit-stock";
+//import EditStockV3Modal from "../modal/modalV3/edit-stock";
 import EditPriceModal from "../modal/modalV3/edit-price";
+import EditStockName from "../modal/modalV3/edit-name";
+import EditQuantityModal from "../modal/modalV3/edit-quantity";
 import EditSuccessModal from "../modal/modalV3/edit-success";
 /* import Image from "next/image"; */
 
@@ -16,21 +18,25 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, selectedItem, onSave }) => {
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [isEditPriceModalOpen, setEditPriceModalOpen] = useState(false);
-  const [isSuccessModalOpen , setSuccessModalOpen] = useState(false)
-
-  if (!isOpen || !selectedItem) return null;
-
-  const openEditModal = () => setEditModalOpen(true);
-  const closeEditModal = () => setEditModalOpen(false);
-
-  const openSucessModal = () => setSuccessModalOpen(true);
-  const closeSuccessModal = () => setSuccessModalOpen(false);
+  const [isEditNameOpen, setEditNameOpen] = useState(false);
+  const [isEditQuantityOpen, setEditQuantityOpen] = useState(false);
+  const [isEditPriceOpen, setEditPriceOpen] = useState(false);
+  const [isSuccessModalOpen , setSuccessOpen] = useState(false)
   
-  const openEditPriceModal = () => setEditPriceModalOpen(true);
-  const closeEditPriceModal = () => setEditPriceModalOpen(false);
-
+  if (!isOpen || !selectedItem) return null;
+  
+  const openEditName = () => setEditNameOpen(true);
+  const closeEditName = () => setEditNameOpen(false);
+  
+  const openEditQuantity = () => setEditQuantityOpen(true);
+  const closeEditQuantity = () => setEditQuantityOpen(false);
+  
+  const openSucessModal = () => setSuccessOpen(true);
+  const closeSuccessModal = () => setSuccessOpen(false);
+  
+  const openEditPriceModal = () => setEditPriceOpen(true);
+  const closeEditPriceModal = () => setEditPriceOpen(false);
+  
   const handleSavePrice = (updatedPrice: number) => {
     const updatedItem = { ...selectedItem, buying_price: updatedPrice };
     onSave(updatedItem); 
@@ -73,7 +79,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, selectedItem, onSave
             </div>
             <p
               className="text-[#1B1B1B] md:text-[#009A49] font-circular-normal text-sm leading-6 cursor-pointer md:w-1/3 text-right border border-[#A0A0A0] rounded-xl py-3 px-6 md:py-0 md:px-0 md:border-none"
-              onClick={openEditModal}
+              onClick={openEditName}
             >
               Edit
             </p>
@@ -120,7 +126,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, selectedItem, onSave
             </div>
             <p
               className="text-black md:text-[#009A49] font-circular-normal text-sm md:text-base leading-6 cursor-pointer md:w-1/3 text-right border border-[#A0A0A0] rounded-xl py-3 px-6 md:py-0 md:px-0 md:border-none"
-              onClick={openEditModal}
+              onClick={openEditQuantity}
             >
               Edit
             </p>
@@ -150,7 +156,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, selectedItem, onSave
       </div>
 
       {/* Edit Modal */}
-      {isEditModalOpen && (
+   {/**   {isEditModalOpen && (
         <EditStockV3Modal
           isOpen={isEditModalOpen}
           item={selectedItem} 
@@ -162,6 +168,52 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, selectedItem, onSave
           openSuccessModal={openSucessModal}
           />
       )}
+      */}
+      {isEditQuantityOpen && (
+  <EditQuantityModal
+    isOpen={isEditQuantityOpen}
+    item={selectedItem} 
+    onClose={closeEditQuantity}
+    onSave={(updatedItem) => {
+      onSave(updatedItem);
+      closeEditQuantity();
+    }}
+    openSuccessModal={openSucessModal}
+    />
+)}
+
+{isSuccessModalOpen && (
+    <EditSuccessModal
+      isOpen={isSuccessModalOpen}
+      onClose={closeSuccessModal} 
+    />
+)}
+
+{isEditPriceOpen&&(
+<EditPriceModal
+ isOpen={isEditPriceOpen}
+ onClose={closeEditPriceModal}
+  item={selectedItem} 
+  openSuccessModal={openSucessModal} 
+  onSave={handleSavePrice}
+  />
+)}
+
+
+
+{isEditNameOpen && (
+  <EditStockName
+    isOpen={isEditNameOpen}
+    item={selectedItem} 
+    onClose={closeEditName}
+    onSave={(updatedItem) => {
+      onSave(updatedItem);
+      closeEditName();
+    }}
+    openSuccessModal={openSucessModal}
+    />
+)}
+
 
       {isSuccessModalOpen && (
           <EditSuccessModal
@@ -170,16 +222,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, selectedItem, onSave
           />
       )}
 
-      {isEditPriceModalOpen&&(
-      <EditPriceModal
-       isOpen={isEditPriceModalOpen}
-       onClose={closeEditPriceModal}
-        item={selectedItem} 
-        openSuccessModal={openSucessModal} 
-        onSave={handleSavePrice}
-        />
-      )}
-    </>
+    </>  
   );
 };
 
