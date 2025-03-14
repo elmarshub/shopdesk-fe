@@ -12,6 +12,7 @@ import vectorLeft from "@/public/coming-soon/Vector-left.svg";
 
 import vectorRight from "@/public/coming-soon/Vector-right.svg";
 import facebook from "@/public/icons/facebook.svg";
+import github from "@/public/icons/github.svg";
 import instagram from "@/public/icons/instagram.svg";
 import logo from "@/public/icons/logo.svg";
 import twitter from "@/public/icons/twitter.svg";
@@ -139,7 +140,7 @@ const Page = () => {
 
       {/* <Features text="FEATURES ROLLING IN" /> */}
 
-      <section className="bg-[#E5F5ED] flex flex-col items-center gap-16 md:py-[100px] pt-12  w-full mt-8 md:mt-0">
+      <section className="bg-[#E5F5ED] flex flex-col items-center gap-16 md:py-[100px] py-12  w-full mt-8 md:mt-0">
         <div className="w-full flex justify-center items-center ">
           <p className="text-[#009A49] text-center md:text-[32px] text-base leading-[24px] font-[500]  bg-[#009A49]/10 md:py-6 py-3 px-6 md:px-[70px]  rounded-[64px] md:w-[500px]">
             Sign Up for Early Access
@@ -261,8 +262,8 @@ const Page = () => {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-center w-full md:hidden ">
-          <p className="text-2xl font-medium text-center">
+        <div className="flex items-center justify-center w-full mt-8">
+          <p className="md:text-2xl text-base font-medium text-center text-[#5f5f5f]">
             Spots Are Limited <br />
             <span className="text-[#009A49]"> Join the Waiting List Now!</span>
           </p>
@@ -298,12 +299,46 @@ const Page = () => {
         />
       </section>
 
-      <footer className="py-[41px] px-[72px] flex justify-center items-center content-center bg-white">
+      <footer className="py-[41px] px-[72px] flex flex-col gap-12 justify-center items-center content-center bg-white border-t border-t-[#e2e8f0]">
+        <div className="space-x-2 sm:space-x-6 md:space-x-16 md:hidden flex ">
+          <button className={socialLinkButtonClass}>
+            <Image
+              src={twitter}
+              alt="our twitter page"
+              height={24}
+              className="h-[16px] sm:h-[24px]"
+            />
+          </button>
+          <button className={socialLinkButtonClass}>
+            <Image
+              src={facebook}
+              alt="our facebook page"
+              height={24}
+              className="h-[16px] sm:h-[24px]"
+            />
+          </button>
+          <button className={socialLinkButtonClass}>
+            <Image
+              src={instagram}
+              alt="our instagram page"
+              height={24}
+              className="h-[16px] sm:h-[24px]"
+            />
+          </button>
+          <button className={socialLinkButtonClass}>
+            <Image
+              src={github}
+              alt="our github page"
+              height={24}
+              className="h-[16px] sm:h-[24px]"
+            />
+          </button>
+        </div>
         <div className="h-[61px] w-full flex flex-col md:flex-row md:justify-between md:items-end">
           <p className="text-[#71717a] text-[14px] leading-[22px] font-[400] text-center">
             © Copyright 2024, Powered by Timbu Business
           </p>
-          <div className="flex gap-[10px] flex-col md:flex-row md:gap-[54px] items-center *:text-[#71717a] *:text-[14px] *:leading-[22px] *:font-[400] *:text-center pl-3">
+          <div className="md:flex gap-[10px] flex-col md:flex-row md:gap-[54px] items-center *:text-[#71717a] *:text-[14px] *:leading-[22px] *:font-[400] *:text-center pl-3 hidden ">
             <p>Cookies</p>
             <p>Terms of Sevice</p>
             <p>Privacy Policy</p>
