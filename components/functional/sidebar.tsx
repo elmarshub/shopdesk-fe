@@ -68,7 +68,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, selectedItem, onSave
 
         <div className="flex flex-col md:py-5 md:px-4 items-start gap-5 w-full">
           {/* Product */}
-          <div className="flex p-3 items-start gap-5 rounded-md w-full md:hidden">
+          <div className="flex p-3 items-start gap-5 rounded-md w-full ">
             <div className="flex flex-col gap-1 w-2/3">
               <p className="text-[#717171] text-base font-circular-normal leading-7">
                 Product name
