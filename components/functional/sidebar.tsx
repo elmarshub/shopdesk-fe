@@ -3,11 +3,12 @@ import { X } from "lucide-react";
 import React, { useState } from "react";
 import ImageUploader from "@/components/modal/add-image";
 import { Button } from "@/components/ui/button";
-//import EditStockV3Modal from "../modal/modalV3/edit-stock";
+import EditStockV3Modal from "../modal/modalV3/edit-stock";
 import EditPriceModal from "../modal/modalV3/edit-price";
 import EditStockName from "../modal/modalV3/edit-name";
 import EditQuantityModal from "../modal/modalV3/edit-quantity";
 import EditSuccessModal from "../modal/modalV3/edit-success";
+import EditImage from "../modal/edit-image";
 /* import Image from "next/image"; */
 
 
@@ -24,6 +25,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, selectedItem, onSave
   const [isEditQuantityOpen, setEditQuantityOpen] = useState(false);
   const [isEditPriceOpen, setEditPriceOpen] = useState(false);
   const [isSuccessModalOpen , setSuccessOpen] = useState(false)
+  const [isImageUploaderOpen, setImageUploaderOpen] = useState(false);
+  const [isEditImageModalOpen, setEditImageModalOpen] = useState(false);
+  //const [isAddImgaeModalOpen, setIsAddImgaeModalOpen] = useState(false)
   
   if (!isOpen || !selectedItem) return null;
 
@@ -32,6 +36,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, selectedItem, onSave
 
   const openImageUploader = () => setImageUploaderOpen(true);
   const closeImageUploader = () => setImageUploaderOpen(false);
+
+  const openEditImageModal = () => setEditImageModalOpen(true);
+  const closeEditImageModal = () => setEditImageModalOpen(false);
 
   // Handle saving images from the uploader
   const handleSaveImages = (images: { id: string; src: string }[]) => {
@@ -180,10 +187,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, selectedItem, onSave
             </div>
             <p
               className="text-black md:text-[#009A49] font-circular-normal text-sm md:text-base leading-6 cursor-pointer md:w-1/3 text-right border border-[#A0A0A0] rounded-xl py-3 px-6 md:py-0 md:px-0 md:border-none"
-              onClick={
+              onClick={()=>{
                 selectedItem.images && selectedItem.images.length > 0
-                  ? openEditModal 
-                  : openImageUploader 
+                  ? openEditImageModal
+                  : openImageUploader                
+              }
               }
             >
               {selectedItem.images && selectedItem.images.length > 0
@@ -214,9 +222,9 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, selectedItem, onSave
         </div>
       </div>
 
-{isEditModalOpen && (
+      {isEditImageModalOpen && (
         <EditImage
-          isOpen={isEditModalOpen}
+          isOpen={isEditImageModalOpen}
           itemName={selectedItem.name}
           existingImages={selectedItem.images || []}
           onCancel={closeEditModal}
@@ -226,7 +234,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, selectedItem, onSave
       )}
 
 
-   {/**   {isEditModalOpen && (
+   {/**{isEditModalOpen && (
         <EditStockV3Modal
           isOpen={isEditModalOpen}
           item={selectedItem} 
@@ -240,51 +248,17 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, selectedItem, onSave
       )}
       */}
       {isEditQuantityOpen && (
-  <EditQuantityModal
-    isOpen={isEditQuantityOpen}
-    item={selectedItem} 
-    onClose={closeEditQuantity}
-    onSave={(updatedItem) => {
-      onSave(updatedItem);
-      closeEditQuantity();
-    }}
-    openSuccessModal={openSucessModal}
-    />
-)}
-
-{isSuccessModalOpen && (
-    <EditSuccessModal
-      isOpen={isSuccessModalOpen}
-      onClose={closeSuccessModal} 
-    />
-)}
-
-{isEditPriceOpen&&(
-<EditPriceModal
- isOpen={isEditPriceOpen}
- onClose={closeEditPriceModal}
-  item={selectedItem} 
-  openSuccessModal={openSucessModal} 
-  onSave={handleSavePrice}
-  />
-)}
-
-
-
-{isEditNameOpen && (
-  <EditStockName
-    isOpen={isEditNameOpen}
-    item={selectedItem} 
-    onClose={closeEditName}
-    onSave={(updatedItem) => {
-      onSave(updatedItem);
-      closeEditName();
-    }}
-    openSuccessModal={openSucessModal}
-    />
-)}
-
-
+        <EditQuantityModal
+          isOpen={isEditQuantityOpen}
+          item={selectedItem} 
+          onClose={closeEditQuantity}
+          onSave={(updatedItem) => {
+            onSave(updatedItem);
+            closeEditQuantity();
+          }}
+          openSuccessModal={openSucessModal}
+          />
+      )}
 
       {isSuccessModalOpen && (
           <EditSuccessModal
@@ -293,6 +267,43 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, selectedItem, onSave
           />
       )}
 
+      {isEditPriceOpen&&(
+      <EditPriceModal
+      isOpen={isEditPriceOpen}
+      onClose={closeEditPriceModal}
+        item={selectedItem} 
+        openSuccessModal={openSucessModal} 
+        onSave={handleSavePrice}
+        />
+      )}
+
+      {isEditNameOpen && (
+        <EditStockName
+          isOpen={isEditNameOpen}
+          item={selectedItem} 
+          onClose={closeEditName}
+          onSave={(updatedItem) => {
+            onSave(updatedItem);
+            closeEditName();
+          }}
+          openSuccessModal={openSucessModal}
+          />
+      )}
+
+      {isSuccessModalOpen && (
+          <EditSuccessModal
+            isOpen={isSuccessModalOpen}
+            onClose={closeSuccessModal} 
+          />
+      )}
+
+      <ImageUploader
+        isOpen={isImageUploaderOpen}
+        itemName={selectedItem.name}
+        existingImages={selectedItem.images || []}
+        onSave={handleSaveImages}
+        onCancel={closeImageUploader}
+      />
     </>  
   );
 };

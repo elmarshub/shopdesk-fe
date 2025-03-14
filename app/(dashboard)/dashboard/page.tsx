@@ -752,7 +752,7 @@ const Page = () => {
                               ? row.getVisibleCells().map((cell) => (
                                   <TableCell
                                     key={cell.id}
-                                    className={`px-4 py-3 text-center border-r ${
+                                    className={`h-[50px] p-0 text-center border-r ${
                                       cell.column.id === "name"
                                         ? "text-left overflow-hidden"
                                         : ""
@@ -770,7 +770,7 @@ const Page = () => {
                               : columns.map((column) => (
                                   <TableCell
                                     key={column.id}
-                                    className="px-4 py-3 text-center border-r text-gray-400"
+                                    className="text-center border-r text-gray-400"
                                   >
                                     {""} {/* Placeholder for missing row */}
                                   </TableCell>
@@ -833,12 +833,12 @@ const Page = () => {
         </div>
       </div>
 
-      {/* <EditItemModal
+      <EditItemModal
         isOpen={openEdit}
         onClose={closeEditModal}
         item={selectedItem!}
         onSave={handleSaveEdit}
-      /> */}
+      />
 
       <div className="flex flex-col gap-2 mt-4">
         <p className="text-center mt-4">
