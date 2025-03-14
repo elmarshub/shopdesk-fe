@@ -14,7 +14,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
-import { useEffect, useState } from "react";
 
 type PaginationProps = {
   totalItems: number;
@@ -51,6 +50,7 @@ const PaginationFeature = ({
 
   return (
     <div className="w-full flex flex-col min-[500px]:flex-row min-[500px]:items-center min-[500px]:justify-between gap-2 text-[#32475C99]">
+      {/* Items per page and count */}
       <span className="text-sm flex items-center justify-center flex-wrap whitespace-nowrap">
         <span className="max-[640px]:hidden">
           You have <span className="font-medium mx-1 text-[#2A2A2A]">{totalItems}</span>
@@ -80,10 +80,12 @@ const PaginationFeature = ({
         per page)
       </span>
 
-      <div>
-        {totalPages > 1 && (
-          <Pagination className="mt-2 md:mt-0">
-            <PaginationContent className="flex-wrap">
+      {/* Pagination controls */}
+      {totalPages > 1 && (
+        <div className="w-full min-[500px]:w-auto">
+          <Pagination className="w-full">
+            <PaginationContent className="w-full flex justify-between min-[500px]:justify-center gap-1">
+              {/* Previous button */}
               {currentPage > 1 && (
                 <PaginationItem>
                   <PaginationPrevious
@@ -92,6 +94,7 @@ const PaginationFeature = ({
                 </PaginationItem>
               )}
 
+              {/* First page */}
               {currentPage > 2 && (
                 <PaginationItem className="hidden sm:inline-flex">
                   <PaginationLink onClick={(e) => handlePageClick(e, 1)}>
@@ -100,12 +103,14 @@ const PaginationFeature = ({
                 </PaginationItem>
               )}
 
+              {/* Ellipsis before current page */}
               {currentPage > 3 && (
                 <PaginationItem className="hidden md:inline-flex">
                   <PaginationEllipsis />
                 </PaginationItem>
               )}
 
+              {/* Previous page */}
               {currentPage > 1 && (
                 <PaginationItem>
                   <PaginationLink
@@ -116,16 +121,17 @@ const PaginationFeature = ({
                 </PaginationItem>
               )}
 
+              {/* Current page */}
               <PaginationItem>
                 <PaginationLink isActive onClick={(e) => e.preventDefault()}>
                   {currentPage}
                 </PaginationLink>
               </PaginationItem>
 
+              {/* Next page */}
               {currentPage < totalPages && (
                 <PaginationItem>
                   <PaginationLink
-                    href="#"
                     onClick={(e) => handlePageClick(e, currentPage + 1)}
                   >
                     {currentPage + 1}
@@ -133,12 +139,14 @@ const PaginationFeature = ({
                 </PaginationItem>
               )}
 
+              {/* Ellipsis after current page */}
               {currentPage < totalPages - 2 && (
                 <PaginationItem className="hidden md:inline-flex">
                   <PaginationEllipsis />
                 </PaginationItem>
               )}
 
+              {/* Last page */}
               {currentPage < totalPages - 1 && (
                 <PaginationItem className="hidden sm:inline-flex">
                   <PaginationLink
@@ -149,10 +157,10 @@ const PaginationFeature = ({
                 </PaginationItem>
               )}
 
+              {/* Next button */}
               {currentPage < totalPages && (
                 <PaginationItem>
                   <PaginationNext
-                    className="border border-[#DEE5ED] py-2"
                     pageNum = {currentPage}
                     onClick={(e) => handlePageClick(e, currentPage + 1)}
                   />
@@ -160,8 +168,8 @@ const PaginationFeature = ({
               )}
             </PaginationContent>
           </Pagination>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

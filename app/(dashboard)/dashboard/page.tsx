@@ -813,18 +813,21 @@ const Page = () => {
                     <TableBody>
                       <TableRow>
                         <TableCell colSpan={columns.length} className="py-4">
-                          <PaginationFeature
-                            totalItems={
-                              isSearching
-                                ? filteredItems.length
-                                : stockItems.length
-                            }
-                            currentPage={currentPage}
-                            itemsPerPage={rowsPerPage}
-                            totalPages={totalPages}
-                            onPageChange={handlePageChange}
-                            onItemsPerPageChange={handleItemsPerPageChange}
-                          />
+                          <div className="flex justify-center w-full">
+                            <PaginationFeature
+                              totalItems={
+                                isSearching
+                                  ? filteredItems.length
+                                  : stockItems.length
+                              }
+                              currentPage={currentPage}
+                              itemsPerPage={rowsPerPage}
+                              totalPages={totalPages}
+                              onPageChange={handlePageChange}
+                              onItemsPerPageChange={handleItemsPerPageChange}
+                            />
+                          </div>
+                          
                         </TableCell>
                       </TableRow>
                     </TableBody>
