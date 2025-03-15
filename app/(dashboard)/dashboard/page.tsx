@@ -97,7 +97,7 @@ declare module "@tanstack/react-table" {
 const Page = () => {
   const { organizationId, organizationName, organizationInitial } =
     useStore();
-  
+   
   const { tableAreaRef, tableAreaHeight } = useTableAreaHeight();
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -152,6 +152,7 @@ const Page = () => {
     setIsLoading(true);
     GetProduct()
     .then((data) => {
+      setIsLoading(false);
       setProductItems(data.items.map((item: any) => ({
         ...item, 
       })));
@@ -160,7 +161,7 @@ const Page = () => {
       .catch((error) => {
         console.error("Error fetching stock:", error);
       });
-  }, [router, productItems.length]);
+  }, [router]);
   
   useEffect(() => {
     if (productItems.length === 0) return; 
@@ -195,7 +196,7 @@ const Page = () => {
     };
   
     fetchStocks();
-  }, [productItems]); 
+  }, [productItems.length]); 
 
   const handleEditClick = (item: StockItem) => {
     setSelectedItem(item); 
@@ -229,7 +230,7 @@ const Page = () => {
     try {
       await deleteStock(itemId);
       setIsDeleteModalOpen(false);
-      setStockItems((prev) => prev.filter((item) => item.id !== itemId));
+      setStockItems((prev) => prev.filter((item) => item.product_id !== itemId));
     } catch (error) {
       console.error("Error deleting stock:", error);
     }
@@ -525,7 +526,7 @@ const table = useReactTable({
           onOpenChange={setIsDeleteModalOpen}
           onCancel={() => setIsDeleteModalOpen(false)}
           onDelete={handleDeleteItem}
-          selectedItem={selectedItem || undefined}
+          selectedItem={selectedItem ? { product_id: selectedItem.product_id ?? "" } : undefined}
         />
         <div className="lg:border px-4 py-2 lg:shadow-md rounded-lg lg:flex items-center justify-between mx-auto">
           <div className="flex items-center gap-6">
@@ -550,7 +551,7 @@ const table = useReactTable({
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem
-                  className="w-full px-[5rem] hidden"
+                  className="w-full px-[5rem]"
                   onClick={() => setIsLogoutModalOpen(true)}
                 >
                   Log out

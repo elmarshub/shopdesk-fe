@@ -62,7 +62,7 @@ type ProductResponse = {
   next_page: number | null;
   items: Product[];
 }
-
+const token = await getAccessToken();
 export async function CreateProduct(
   productName: string,
   unique_id:string,
@@ -152,7 +152,6 @@ export async function AddStock(
 export async function GetProduct(): Promise<StockResponse> {
   const organization_id = useStore.getState().organizationId;
   try {
-    const token = await getAccessToken();
 
     const response = await fetch(`/api/product/get?organization_id=${organization_id}`, {
       method: "GET",
@@ -178,8 +177,6 @@ export async function GetProduct(): Promise<StockResponse> {
 export async function GetStock(product_id:string): Promise<StockResponse> {
   const organization_id = useStore.getState().organizationId;
   try {
-    const token = await getAccessToken();
-
     const response = await fetch(`/api/stocks/get?organization_id=${organization_id}&product_id=${product_id}`, {
       method: "GET",
       headers: {
@@ -201,19 +198,18 @@ export async function GetStock(product_id:string): Promise<StockResponse> {
   }
 }
 
-export async function deleteStock(stockId: string): Promise<void> {
+export async function deleteStock(productId: string): Promise<void> {
   const organization_id = useStore.getState().organizationId;
   try {
     const token = await getAccessToken();
-
-    const response = await fetch(`/api/stocks/delete`, {
+    const product_id = productId;
+    const response = await fetch(`/api/product/${product_id}?organization_id=${organization_id}`, {
       method: "DELETE",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ stock_id: stockId, organization_id: organization_id })
     });
 
     if (!response.ok) {

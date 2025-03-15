@@ -20,7 +20,7 @@ interface DeleteItemProps {
   onOpenChange?: (open: boolean) => void;
   triggerElement?: React.ReactNode;
   onDelete: (itemId: string) => void;
-  selectedItem?: { id: string };
+  selectedItem?: { product_id: string };
 }
 
 const DeleteItem: React.FC<DeleteItemProps> = ({
@@ -97,7 +97,7 @@ const DeleteItem: React.FC<DeleteItemProps> = ({
             </Button>
 
             <DeleteItemButton
-              itemId={selectedItem?.id}
+              itemId={selectedItem?.product_id}
               externalFunction={onDelete}
             />
           </DialogFooter>
