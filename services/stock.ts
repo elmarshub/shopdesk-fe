@@ -131,7 +131,8 @@ export async function AddStock(
         buying_price: sellingPrice,
         quantity: quantity,
         currency_code: selectedSellingCurrency.code,
-
+        organization_id: organization_id,
+        product_id: product_id,
         date_created: new Date().toISOString(),
       }),
     });
