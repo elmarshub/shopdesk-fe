@@ -203,7 +203,7 @@ export async function deleteStock(productId: string): Promise<void> {
   try {
     const token = await getAccessToken();
     const product_id = productId;
-    const response = await fetch(`/api/product/${product_id}?organization_id=${organization_id}`, {
+    const response = await fetch(`/api/product/delete?product_id=${product_id}&organization_id=${organization_id}`, {
       method: "DELETE",
       headers: {
         Accept: "application/json",
