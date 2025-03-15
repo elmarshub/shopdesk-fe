@@ -45,6 +45,7 @@ import {
 } from "@tanstack/react-table";
 import { getAccessToken } from "@/app/api/token";
 import Sidebar from "@/components/functional/sidebar";
+import SalesTab from "@/components/functional/salestab";
 
 declare module "@tanstack/react-table" {
   interface ColumnMeta<TData, TValue> {
@@ -74,6 +75,9 @@ const Page = () => {
   const { tableAreaRef, tableAreaHeight } = useTableAreaHeight();
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+
+  //Active Tab
+  const [activeTab, setActiveTab] = useState("stock");
 
   const [isOpen, setIsOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
@@ -602,16 +606,59 @@ const Page = () => {
         </div>
 
         <div className="space-y-0 w-full ">
-          <div className="w-full flex justify-between max-[800px]:flex-col-reverse">
-            <div className="flex items-center justify-center gap-2 border border-b-white py-2 rounded-tr-lg rounded-tl-lg w-44 max-[800px]:w-full font-semibold px-9 shadow-inner">
-              Stock
-              <Image
-                src="/icons/ui-box.svg"
-                alt=""
-                width={20}
-                height={20}
-                className="w-5 h-5"
-              />
+        <div className="w-full flex justify-between max-[800px]:flex-col-reverse">
+        <div className="flex">
+              <div
+                className={`flex items-center justify-center gap-2 rounded-tl-lg border-2 border-gray-100 px-4 py-3 ${
+                  activeTab === "stock" ? "bg-white" : "bg-gray-100"
+                }`}
+                onClick={() => setActiveTab("stock")}
+                role="button"
+                style={{ cursor: "pointer", width: "160px" }}
+              >
+                <span
+                  className={
+                    activeTab === "stock" 
+                    ? "text-black bg-white" 
+                    : "bg-gray-100 text-gray-400"
+                  }
+                >
+                  Stock
+                </span>
+                <Image
+                  src={activeTab === "stock" ? "/icons/ui-box.svg" : "/icons/ui-box-grey.svg"}
+                  alt=""
+                  width={16}
+                  height={16}
+                  className="w-5 h-5"
+                />
+              </div>
+
+              <div
+                className={`flex items-center justify-center gap-2 border-2 border-gray-100 px-4 py-3 rounded-tr-lg ${
+                  activeTab === "sales" ? "bg-white" : "bg-gray-100"
+                }`}
+                onClick={() => setActiveTab("sales")}
+                role="button"
+                style={{ cursor:"pointer", width: "160px" }}
+              >
+                <span
+                  className={
+                    activeTab === "sales" ? 
+                    "text-black bg-white" 
+                    : "text-gray-400 bg-gray-100"
+                  }
+                >
+                  Sales
+                </span>
+                <Image
+                  src={activeTab === "sales" ? "/icons/sale-tab.svg" : "/icons/sale-tab-grey.svg"}
+                  alt=""
+                  width={16}
+                  height={16}
+                  className="w-5 h-5"
+                />
+              </div>
             </div>
 
             {stockItems.length > 0 && (
@@ -660,6 +707,7 @@ const Page = () => {
             )}
           </div>
           <div className="flex w-full overflow-hidden mx-auto">
+          {activeTab === "stock" ? (
             <div
               className={`border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg flex-1 overflow-auto w-full transition-all duration-300 ease-in-out ${
                 isSidebarOpen ? "w-full max-w-[989px] mr-1" : "w-full"
@@ -767,7 +815,7 @@ const Page = () => {
                     </TableHeader>
                     <TableBody>
                       {Array.from({ length: rowsPerPage }).map((_, index) => {
-                        const row = table.getRowModel().rows[index] || null; // Get row or null if not available
+                        const row = table.getRowModel().rows[index] || null;
 
                         return (
                           <TableRow
@@ -832,6 +880,14 @@ const Page = () => {
                 </>
               )}
             </div>
+           ) : (
+              <SalesTab
+                onAddSale={() => {
+                  console.log("Add sale action triggered");
+                  console.log("Active tab:", activeTab);
+                }}
+              />
+            )}
             {isSidebarOpen && (
               <Sidebar
                 key={
