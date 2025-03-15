@@ -1,5 +1,6 @@
 "use client";
 
+
 import { useEffect, useState,useCallback,useRef,useMemo } from "react";
 import { ChevronDown, Edit, Loader2, MoreVertical, SaveAll, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -7,6 +8,8 @@ import EditItemModal from "@/components/modal/edit-stock";
 import AddItemModal from "@/components/modal/add-item";
 import DeleteItem from "@/components/modal/delete-item";
 import PaginationFeature from "@/components/functional/paginationfeature";
+import { useOrganization } from "@/app/api/useOrganization";
+import { useStore } from "@/store/useStore";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,7 +29,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import useTableAreaHeight from "./hooks/useTableAreaHeight";
-import { deleteStock, GetStock } from "@/services/stock";
+import { deleteStock,GetProduct, GetStock } from "@/services/stock";
 import { Search } from "lucide-react";
 import box from "@/public/icons/box.svg";
 import {
@@ -37,6 +40,7 @@ import {
 } from "@tanstack/react-table";
 import { getAccessToken } from "@/app/api/token";
 import Sidebar from "@/components/functional/sidebar";
+
 
 declare module "@tanstack/react-table" {
   interface ColumnMeta<TData, TValue> {
@@ -60,8 +64,40 @@ declare module "@tanstack/react-table" {
     timeslots?: any[];
   };
 
-const Page = () => {
+  export type ProductItem = {
+    name: string;
+  description: string;
+  unique_id: string;
+  url_slug: string;
+  is_available: boolean;
+  is_service: boolean;
+  previous_url_slugs: {};
+  unavailable: false;
+  // "unavailable_start": "2025-03-14T13:14:42.799Z"
+  // "unavailable_end": "2025-03-14T13:14:42.799Z",
+  status: string;
+  id: string;
+  parent_product_id: string;
+  parent: string;
+  organization_id: string;
+  categories: [];
+  date_created: string;
+  last_updated: string;
+  user_id: string;
+  current_price: string;
+  is_deleted: boolean;
+  available_quantity: number;
+  selling_price: number;
+  discounted_price: number;
+  buying_price: number;
+  photos: [];
+  attributes: {};
+  };
 
+const Page = () => {
+  const { organizationId, organizationName, organizationInitial } =
+    useStore();
+  
   const { tableAreaRef, tableAreaHeight } = useTableAreaHeight();
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -78,6 +114,7 @@ const Page = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [stockItems, setStockItems] = useState<StockItem[]>([]);
+  const [productItems, setProductItems] = useState<ProductItem[]>([]);
   const [searchText, setSearchText] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [isEditingTransition, setIsEditingTransition] = useState<string | null>(null);
@@ -113,19 +150,52 @@ const Page = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    GetStock()
+    GetProduct()
     .then((data) => {
-      setStockItems(data.items.map((item: any) => ({
-        ...item,
-        sku: item.id.slice(0,8).toUpperCase() || "N/A", 
+      setProductItems(data.items.map((item: any) => ({
+        ...item, 
       })));
-        setIsLoading(false);
+        
       })
       .catch((error) => {
         console.error("Error fetching stock:", error);
-        setIsLoading(false);
       });
-  }, [router, stockItems.length]);
+  }, [router, productItems.length]);
+  
+  useEffect(() => {
+    if (productItems.length === 0) return; 
+    setIsLoading(true);
+  
+    const fetchStocks = async () => {
+      try {
+        const stockData = await Promise.all(
+          productItems.map((product) => GetStock(product.id))
+        );
+  
+        const formattedStockItems = stockData.flatMap((data) =>
+          data.items.map((stock: any) => {
+           
+            const matchingProduct = productItems.find(
+              (product) => product.id === stock.product_id
+            );
+  
+            return {
+              ...stock,
+              sku: matchingProduct?.unique_id,
+            };
+          })
+        );
+  
+        setStockItems(formattedStockItems);
+      } catch (error) {
+        console.error("Error fetching stock:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    fetchStocks();
+  }, [productItems]); 
 
   const handleEditClick = (item: StockItem) => {
     setSelectedItem(item); 
@@ -198,7 +268,8 @@ const Page = () => {
 
   const handleSaveInline = async () => {
     if (!editedItem) return;
-  
+    
+    const organization_id = useStore.getState().organizationId;
     try {
       const token = await getAccessToken();
       setIsEditingTransition(editedItem.id);
@@ -210,6 +281,7 @@ const Page = () => {
           Authorization: `Bearer ${token}`, 
         },
         body: JSON.stringify({
+          organization_id: organization_id,
           stock_id: editedItem.id,
           name: editedItem.name,
           buying_price: editedItem.buying_price,
@@ -298,7 +370,7 @@ const Page = () => {
               {isTransitioning ? (
                 <Loader2 className="w-4 h-4 animate-spin mx-auto" />
               ) : isEditingThisRow ? (
-                <span className="block truncate">{row.original.id.slice(0, 8).toUpperCase()}</span>
+                <span className="block truncate">{row.original.sku}</span>
               ) :(
                 <span className="block truncate">{row.original.sku}</span>
               )}
@@ -466,11 +538,15 @@ const table = useReactTable({
           </div>
           <div className="">
             <DropdownMenu modal>
-              <DropdownMenuTrigger disabled className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white">
+            <DropdownMenuTrigger
+                disabled
+                className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white"
+              >
                 <span className="py-2 px-4 rounded-lg bg-white text-black">
-                  SL
+                  {organizationInitial}
                 </span>
-                Sodiq LTD<ChevronDown strokeWidth={1.5} color="white" />
+                {organizationName}
+                <ChevronDown strokeWidth={1.5} color="white" />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem

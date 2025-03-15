@@ -5,12 +5,13 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { sendLoginEmail } from "@/services/loginEmail";
-
+import { getOrganization } from "@/services/getOrganization";
 import Illustration from "@/public/auth/illustration.svg";
 import Cube from "@/public/auth/cube.svg";
 import { AuthFooter } from "./footer";
 import Logo from "@/components/functional/logo";
 import { loginUser } from "@/services/auth";
+import { useStore } from "@/store/useStore";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -18,6 +19,7 @@ export default function SignIn() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [touched, setTouched] = useState({ email: false, password: false });
+  const { setOrganizationId, setOrganizationName } = useStore();
 
   const router = useRouter();
 
@@ -39,6 +41,10 @@ export default function SignIn() {
       const data = await loginUser(email, password);
       const { first_name, last_name } = data.data;
       await sendLoginEmail(email, first_name, last_name);
+      const organization = await getOrganization();
+
+      setOrganizationId(organization?.[0].id || "");
+      setOrganizationName(organization?.[0].name || "");
 
       if (!data || data.error) {
         throw new Error(data?.message || "Invalid email or password.");
