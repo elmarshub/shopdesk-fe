@@ -1,12 +1,12 @@
 "use client";
 
-
 import { useEffect, useState,useCallback,useRef,useMemo } from "react";
 import { ChevronDown, Edit, Loader2, MoreVertical, SaveAll, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import EditItemModal from "@/components/modal/edit-stock";
 import AddItemModal from "@/components/modal/add-item";
 import DeleteItem from "@/components/modal/delete-item";
+import ImageUploader from "@/components/modal/add-image";
 import PaginationFeature from "@/components/functional/paginationfeature";
 import { useOrganization } from "@/app/api/useOrganization";
 import { useStore } from "@/store/useStore";
@@ -41,7 +41,6 @@ import {
 import { getAccessToken } from "@/app/api/token";
 import Sidebar from "@/components/functional/sidebar";
 
-
 declare module "@tanstack/react-table" {
   interface ColumnMeta<TData, TValue> {
     className?: string;
@@ -62,9 +61,11 @@ declare module "@tanstack/react-table" {
     original_quantity?: number;
     supplier?: null | any;
     timeslots?: any[];
+    image?: { id: string; src: string } | null;
+    images?: { id: string; src: string }[];
   };
 
-  export type ProductItem = {
+export type ProductItem = {
     name: string;
   description: string;
   unique_id: string;
@@ -148,6 +149,34 @@ const Page = () => {
 
   const emptyRowsCount = Math.max(0, rowsPerPage - displayedItems.length);
 
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [currentItem, setCurrentItem] = useState<StockItem | null>(null);
+
+  const handleImageClick = (item: StockItem) => {
+    setCurrentItem(item);
+    setImageModalOpen(true);
+  };
+
+  const handleSaveImages = (images: { id: string; src: string }[]) => {
+    if (!currentItem) return;
+
+    const updatedItems = stockItems.map((item) => {
+      if (item.id === currentItem.id) {
+        return {
+          ...item,
+          image: images.length > 0 ? images[0] : null,
+          images: images,
+        };
+      }
+      return item;
+    });
+
+    setStockItems(updatedItems);
+
+    setImageModalOpen(false);
+    setCurrentItem(null);
+  };
+
   useEffect(() => {
     setIsLoading(true);
     GetProduct()
@@ -199,8 +228,8 @@ const Page = () => {
   }, [productItems.length]); 
 
   const handleEditClick = (item: StockItem) => {
-    setSelectedItem(item); 
-    setOpenEdit(true); 
+    setSelectedItem(item);
+    setOpenEdit(true);
   };
 
   const handleSaveEdit = (updatedItem: StockItem) => {
@@ -208,7 +237,8 @@ const Page = () => {
       prev.map((item) => (item.id === updatedItem.id ? updatedItem : item))
     );
 
-    setOpenEdit(false); 
+    setSelectedItem({ ...updatedItem });
+    setOpenEdit(false);
   };
 
   const handleDeleteClick = (item: StockItem) => {
@@ -247,19 +277,25 @@ const Page = () => {
     setCurrentPage(1);
   };
 
-  const handleInlineEdit = useCallback((item: StockItem, field: keyof StockItem = "name") => {
-    setIsEditingTransition(item.id); 
-    setEditedItem({ ...item });
-    setActiveField(field);
-    setIsEditingTransition(null); 
-  }, []);
-  
+  const handleInlineEdit = useCallback(
+    (item: StockItem, field: keyof StockItem = "name") => {
+      setIsEditingTransition(item.id);
+      setEditedItem({ ...item });
+      setActiveField(field);
+      setIsEditingTransition(null);
+    },
+    []
+  );
+
   const handleInputChange = useCallback(
     (field: keyof StockItem, value: string) => {
       if (editedItem) {
         setEditedItem((prev) => ({
           ...prev!,
-          [field]: field === "quantity" || field === "buying_price" ? Number(value) : value,
+          [field]:
+            field === "quantity" || field === "buying_price"
+              ? Number(value)
+              : value,
         }));
         setActiveField(field);
       }
@@ -274,12 +310,12 @@ const Page = () => {
     try {
       const token = await getAccessToken();
       setIsEditingTransition(editedItem.id);
-  
+
       const response = await fetch("/api/stocks/edit", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, 
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           organization_id: organization_id,
@@ -290,17 +326,17 @@ const Page = () => {
           currency_code: editedItem.currency_code,
         }),
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to update stock item");
       }
-  
+
       setStockItems((prevItems) =>
         prevItems.map((item) =>
           item.id === editedItem.id ? { ...item, ...editedItem } : item
         )
       );
-  
+
       setEditedItem(null);
     } catch (error) {
       console.error("Error saving changes:", error);
@@ -312,7 +348,7 @@ const Page = () => {
 
   useEffect(() => {
     if (editedItem && activeField) {
-         switch (activeField) {
+      switch (activeField) {
         case "name":
           nameInputRef.current?.focus();
           break;
@@ -328,6 +364,55 @@ const Page = () => {
 
   const columns: ColumnDef<StockItem>[] = useMemo(
     () => [
+      {
+        accessorKey: "image",
+        header: "IMAGE",
+        size: 80,
+        cell: ({ row }) => {
+          const item = row.original;
+          const hasImage =
+            item.image || (item.images && item.images.length > 0);
+
+          return (
+            <div className="flex items-center justify-center">
+              {hasImage ? (
+                <div
+                  className="w-10 h-10 relative cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleImageClick(item);
+                  }}
+                >
+                  <img
+                    src={
+                      item.image?.src || (item.images && item.images[0]?.src)
+                    }
+                    alt={item.name}
+                    className="w-full h-full object-cover rounded"
+                  />
+                </div>
+              ) : (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleImageClick(item);
+                  }}
+                  className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center text-gray-400 hover:bg-gray-200"
+                >
+                  <span className="text-xs">
+                    <Image 
+                    src="/icons/column-img.svg"
+                    alt="Add Image"
+                    width={20}
+                    height={20}
+                    />
+                  </span>
+                </button>
+              )}
+            </div>
+          );
+        },
+      },
       {
         accessorKey: "name",
         header: "ITEM NAME",
@@ -365,7 +450,7 @@ const Page = () => {
         cell: ({ row }) => {
           const isEditingThisRow = editedItem?.id === row.original.id;
           const isTransitioning = isEditingTransition === row.original.id;
-      
+
           return (
             <div className="inline-block w-full overflow-hidden">
               {isTransitioning ? (
@@ -460,7 +545,7 @@ const Page = () => {
                       className="cursor-pointer text-black w-[16px] h-[16px]"                      
                     />
                   </div>
-                  <p>Save</p>                
+                  <p>Save</p>
                 </div>
               ) : (
                 <div className="flex justify-center items-center gap-2">
@@ -488,12 +573,11 @@ const Page = () => {
   ? filteredItems.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
   : stockItems.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
-const table = useReactTable({
-  data: paginatedData, 
-  columns,
-  getCoreRowModel: getCoreRowModel(),
-});
-
+  const table = useReactTable({
+    data: paginatedData,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
 
   if (isLoading) {
     return (
@@ -576,18 +660,18 @@ const table = useReactTable({
 
             {stockItems.length > 0 && (
               <div className="mb-2 max-[800px]:mb-4 max-[640px]:self-end flex items-center justify-center max-[1000px]:flex-row-reverse max-[800px]:w-full">
-              <button
-                onClick={openModal}
-                className="btn-primary max-[400px]:text-sm text-nowrap max-[1000px]:hidden mr-2"
-              >
-                + Add New
-              </button>
-              <button
-                onClick={openModal}
-                className="btn-primary max-[400px]:text-sm text-nowrap min-[1000px]:hidden ml-2"
-              >
-                +
-              </button>
+                <button
+                  onClick={openModal}
+                  className="btn-primary max-[400px]:text-sm text-nowrap max-[1000px]:hidden mr-2"
+                >
+                  + Add New
+                </button>
+                <button
+                  onClick={openModal}
+                  className="btn-primary max-[400px]:text-sm text-nowrap min-[1000px]:hidden ml-2"
+                >
+                  +
+                </button>
 
               <div className="relative max-[800px]:w-full">
                 <input type="text" 
@@ -645,36 +729,38 @@ const table = useReactTable({
                       </TableRow>
                     </TableHeader>
                   </Table>
-                  <div className="w-full overflow-x-auto">                  
+                  <div className="w-full overflow-x-auto">
                     <span className="w-full h-px bg-[#DEDEDE] block"></span>
                     <div className="relative h-[80vh] w-full">
-                      {!(isSearching && filteredItems.length === 0)?(<div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
-                        <Image
-                          src="/icons/empty-note-pad.svg"
-                          alt=""
-                          width={56}
-                          height={56}
-                          className="mx-auto"
-                        />
-                        <p className="text-[#888888] text-sm">
-                          You have 0 items in stock
-                        </p>
-                        <button
-                          type="button"
-                          onClick={openModal}
-                          className="btn-outline hover:cursor-pointer"
-                        >
-                          + Add New Stock
-                        </button>
-                        <AddItemModal
-                          isOpen={isOpen}
-                          onClose={closeModal}
-                          onSave={(newItem) => {
-                            setStockItems((prev) => [newItem, ...prev]);
-                            closeModal();
-                          }}
-                        />
-                      </div>):(
+                      {!(isSearching && filteredItems.length === 0) ? (
+                        <div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
+                          <Image
+                            src="/icons/empty-note-pad.svg"
+                            alt=""
+                            width={56}
+                            height={56}
+                            className="mx-auto"
+                          />
+                          <p className="text-[#888888] text-sm">
+                            You have 0 items in stock
+                          </p>
+                          <button
+                            type="button"
+                            onClick={openModal}
+                            className="btn-outline hover:cursor-pointer"
+                          >
+                            + Add New Stock
+                          </button>
+                          <AddItemModal
+                            isOpen={isOpen}
+                            onClose={closeModal}
+                            onSave={(newItem) => {
+                              setStockItems((prev) => [newItem, ...prev]);
+                              closeModal();
+                            }}
+                          />
+                        </div>
+                      ) : (
                         <div className="absolute inset-0 flex items-center justify-center">
                           <div className="bg-[#F8FAFB] border border-[#DEDEDE] w-[563px] h-[200px] rounded-lg flex flex-col items-center justify-center gap-3 max-[800px]:w-[343px] max-[800px]:h-[334px]">
                             <Image
@@ -684,7 +770,9 @@ const table = useReactTable({
                               height={56}
                               className="size-8"
                             />
-                            <p className="text-[#2A2A2A] text-sm">Search Item not found.</p>
+                            <p className="text-[#2A2A2A] text-sm">
+                              Search Item not found.
+                            </p>
                           </div>
                         </div>
                       )}
@@ -757,18 +845,36 @@ const table = useReactTable({
             )}                                                                
             </div>
               {isSidebarOpen && (
-                <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} selectedItem={selectedItem} onSave={handleSaveEdit} />
-              )}
-            </div>
+              <Sidebar
+                key={
+                  selectedItem?.id + "-" + (selectedItem?.images?.length || 0)
+                }
+                isOpen={isSidebarOpen}
+                onClose={closeSidebar}
+                selectedItem={selectedItem}
+                onSave={handleSaveEdit}
+              />
+            )}
+            {/*Image Upload Modal */}
+            {imageModalOpen && (
+              <ImageUploader
+                itemName={currentItem?.name || ""}
+                existingImages={currentItem?.images || []}
+                onSave={handleSaveImages}
+                onCancel={() => setImageModalOpen(false)}
+                isOpen={imageModalOpen}
+              />
+            )}
+          </div>
         </div>
       </div>
 
-      {/* <EditItemModal
+      <EditItemModal
         isOpen={openEdit}
         onClose={closeEditModal}
         item={selectedItem!}
         onSave={handleSaveEdit}
-      /> */}
+      />
 
       <div className="flex flex-col gap-2 mt-4">
         <p className="text-center mt-4">
