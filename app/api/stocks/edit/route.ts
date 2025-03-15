@@ -1,13 +1,16 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+
+
+
 
 export async function PUT(req: Request) {
     try {
       const token = req.headers.get("authorization");
-      const organization_id = "160db8736a9d47989381e01a987e4413"; 
-      
+
       const body = await req.json();
       const stock_id = body.stock_id;
-  
+      const organization_id = body.organization_id;
       if (!stock_id) {
         return NextResponse.json({ message: "Stock ID is required" }, { status: 400 });
       }
@@ -22,11 +25,12 @@ export async function PUT(req: Request) {
             Authorization: `${token}`,
           },
           body: JSON.stringify({
-            organization_id: organization_id, 
+            
             name: body.name,
             buying_price: body.buying_price,
             quantity: body.quantity,
             currency_code: body.currency_code,
+            organization_id: organization_id,
           }),
         }
       );

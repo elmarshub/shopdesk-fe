@@ -3,11 +3,11 @@ import { NextResponse } from "next/server";
 export async function DELETE(req: Request) {
   try {
     const token = req.headers.get("authorization");
-    const organization_id = "160db8736a9d47989381e01a987e4413";
+
     
         const body = await req.json();
     const stock_id = body.stock_id;
-
+    const organization_id = body.organization_id
     if (!stock_id) {
       return NextResponse.json({ message: "Stock ID is required" }, { status: 400 });
     }

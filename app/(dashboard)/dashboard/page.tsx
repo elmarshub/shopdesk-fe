@@ -8,6 +8,8 @@ import AddItemModal from "@/components/modal/add-item";
 import DeleteItem from "@/components/modal/delete-item";
 import ImageUploader from "@/components/modal/add-image";
 import PaginationFeature from "@/components/functional/paginationfeature";
+import { useOrganization } from "@/app/api/useOrganization";
+import { useStore } from "@/store/useStore";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,7 +29,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import useTableAreaHeight from "./hooks/useTableAreaHeight";
-import { deleteStock, GetStock } from "@/services/stock";
+import { deleteStock,GetProduct, GetStock } from "@/services/stock";
 import { Search } from "lucide-react";
 import box from "@/public/icons/box.svg";
 import {
@@ -44,27 +46,59 @@ declare module "@tanstack/react-table" {
     className?: string;
   }
 }
-export type StockItem = {
+  export type StockItem = {
+    id: string;
+    name: string;
+    buying_price: number;
+    quantity: number;
+    currency_code: string;
+    sku?: string;
+    buying_date?: string;
+    product_id?: string;
+    status?: string;
+    user_id?: string;
+    date_created?: string;
+    original_quantity?: number;
+    supplier?: null | any;
+    timeslots?: any[];
+    image?: { id: string; src: string } | null;
+    images?: { id: string; src: string }[];
+  };
+
+export type ProductItem = {
+    name: string;
+  description: string;
+  unique_id: string;
+  url_slug: string;
+  is_available: boolean;
+  is_service: boolean;
+  previous_url_slugs: {};
+  unavailable: false;
+  // "unavailable_start": "2025-03-14T13:14:42.799Z"
+  // "unavailable_end": "2025-03-14T13:14:42.799Z",
+  status: string;
   id: string;
-  name: string;
+  parent_product_id: string;
+  parent: string;
+  organization_id: string;
+  categories: [];
+  date_created: string;
+  last_updated: string;
+  user_id: string;
+  current_price: string;
+  is_deleted: boolean;
+  available_quantity: number;
+  selling_price: number;
+  discounted_price: number;
   buying_price: number;
-  quantity: number;
-  currency_code: string;
-  sku?: string;
-  buying_date?: string;
-  product_id?: string;
-  status?: string;
-  user_id?: string;
-  date_created?: string;
-  original_quantity?: number;
-  supplier?: null | any;
-  timeslots?: any[];
-  image?: { id: string; src: string } | null;
-  images?: { id: string; src: string }[];
-};
+  photos: [];
+  attributes: {};
+  };
 
 const Page = () => {
-
+  const { organizationId, organizationName, organizationInitial } =
+    useStore();
+  
   const { tableAreaRef, tableAreaHeight } = useTableAreaHeight();
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -81,6 +115,7 @@ const Page = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [stockItems, setStockItems] = useState<StockItem[]>([]);
+  const [productItems, setProductItems] = useState<ProductItem[]>([]);
   const [searchText, setSearchText] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [isEditingTransition, setIsEditingTransition] = useState<string | null>(null);
@@ -89,10 +124,8 @@ const Page = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const priceInputRef = useRef<HTMLInputElement>(null);
   const quantityInputRef = useRef<HTMLInputElement>(null);
-  const filteredItems = stockItems.filter(
-    (item) =>
-      item.name.toLowerCase().includes(searchText.toLowerCase()) ||
-      (item.sku && item.sku.toLowerCase().includes(searchText.toLowerCase()))
+  const filteredItems = stockItems.filter((item) =>   
+      item.name.toLowerCase().includes(searchText.toLowerCase()) || (item.sku && item.sku.toLowerCase().includes(searchText.toLowerCase()))         
   );
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
@@ -146,21 +179,52 @@ const Page = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    GetStock()
-      .then((data) => {
-        setStockItems(
-          data.items.map((item: any) => ({
-            ...item,
-            sku: item.id.slice(0, 8).toUpperCase() || "N/A",
-          }))
-        );
-        setIsLoading(false);
+    GetProduct()
+    .then((data) => {
+      setProductItems(data.items.map((item: any) => ({
+        ...item, 
+      })));
+        
       })
       .catch((error) => {
         console.error("Error fetching stock:", error);
-        setIsLoading(false);
       });
-  }, [router, stockItems.length]);
+  }, [router, productItems.length]);
+  
+  useEffect(() => {
+    if (productItems.length === 0) return; 
+    setIsLoading(true);
+  
+    const fetchStocks = async () => {
+      try {
+        const stockData = await Promise.all(
+          productItems.map((product) => GetStock(product.id))
+        );
+  
+        const formattedStockItems = stockData.flatMap((data) =>
+          data.items.map((stock: any) => {
+           
+            const matchingProduct = productItems.find(
+              (product) => product.id === stock.product_id
+            );
+  
+            return {
+              ...stock,
+              sku: matchingProduct?.unique_id,
+            };
+          })
+        );
+  
+        setStockItems(formattedStockItems);
+      } catch (error) {
+        console.error("Error fetching stock:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    fetchStocks();
+  }, [productItems]); 
 
   const handleEditClick = (item: StockItem) => {
     setSelectedItem(item);
@@ -240,7 +304,8 @@ const Page = () => {
 
   const handleSaveInline = async () => {
     if (!editedItem) return;
-
+    
+    const organization_id = useStore.getState().organizationId;
     try {
       const token = await getAccessToken();
       setIsEditingTransition(editedItem.id);
@@ -252,6 +317,7 @@ const Page = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
+          organization_id: organization_id,
           stock_id: editedItem.id,
           name: editedItem.name,
           buying_price: editedItem.buying_price,
@@ -389,7 +455,7 @@ const Page = () => {
               {isTransitioning ? (
                 <Loader2 className="w-4 h-4 animate-spin mx-auto" />
               ) : isEditingThisRow ? (
-                <span className="block truncate">{row.original.id.slice(0, 8).toUpperCase()}</span>
+                <span className="block truncate">{row.original.sku}</span>
               ) :(
                 <span className="block truncate">{row.original.sku}</span>
               )}
@@ -556,11 +622,15 @@ const Page = () => {
           </div>
           <div className="">
             <DropdownMenu modal>
-              <DropdownMenuTrigger disabled className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white">
+            <DropdownMenuTrigger
+                disabled
+                className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white"
+              >
                 <span className="py-2 px-4 rounded-lg bg-white text-black">
-                  SL
+                  {organizationInitial}
                 </span>
-                Sodiq LTD<ChevronDown strokeWidth={1.5} color="white" />
+                {organizationName}
+                <ChevronDown strokeWidth={1.5} color="white" />
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem
@@ -602,21 +672,19 @@ const Page = () => {
                   +
                 </button>
 
-                <div className="relative max-[800px]:w-full">
-                  <input
-                    type="text"
-                    className="h-12 border w-[327px] max-[800px]:w-full rounded-md focus:outline-2 focus:outline-[#009A49] px-10"
-                    onChange={(event) => {
-                      setIsSearching(true);
-                      setSearchText(event.target.value);
-                      if (!event.target.value) {
-                        setIsSearching(false);
-                      }
-                    }}
-                  />
+              <div className="relative max-[800px]:w-full">
+                <input type="text" 
+                className="h-12 border w-[327px] max-[800px]:w-full rounded-md focus:outline-2 focus:outline-[#009A49] px-10"
+                onChange={(event)=>{
+                  setIsSearching(true);
+                  setSearchText(event.target.value);
+                  if(!event.target.value){
+                    setIsSearching(false);
+                  }
+                }}/>
 
-                  <Search className="text-[#667085] absolute top-3 left-3 " />
-                </div>
+                <Search className="text-[#667085] absolute top-3 left-3 " />
+              </div>
 
                 <div className="z-10">
                   <AddItemModal
@@ -627,19 +695,17 @@ const Page = () => {
 
                       closeModal();
                     }}
-                  />
+                  />                  
                 </div>
-              </div>
+                
+            </div>
             )}
           </div>
           <div className="flex w-full overflow-hidden mx-auto">
-            <div
-              className={`border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg flex-1 overflow-auto w-full transition-all duration-300 ease-in-out ${
-                isSidebarOpen ? "md:w-[calc(100%-360px)] mr-1" : "w-full"
-              }`}
-            >
-              {stockItems.length === 0 ||
-              (isSearching && filteredItems.length === 0) ? (
+            <div className={`border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg flex-1 overflow-auto w-full transition-all duration-300 ease-in-out ${
+              isSidebarOpen ? "w-full max-w-[989px] mr-1" : "w-full"
+            }`}>
+            {(stockItems.length === 0 || (isSearching && filteredItems.length === 0)) ? (
                 <div className="relative">
                   <Table>
                     <TableHeader>
@@ -712,103 +778,72 @@ const Page = () => {
                     </div>
                   </div>
                 </div>
-              ) : (
-                <>
-                  <Table className="border-collapse border-b min-w-[590px] table-fixed">
-                    <TableHeader>
-                      {table.getHeaderGroups().map((headerGroup) => (
-                        <TableRow key={headerGroup.id} className="h-[50px]">
-                          {headerGroup.headers.map((header) => (
-                            <TableHead
-                              key={header.id}
-                              className={`text-[#090F1C] font-circular-medium px-4 py-2 text-center border-b border-r min-w-[100px] ${
-                                header.column.id === "name"
-                                  ? "text-left w-2/7 max-[750px]:w-1/7"
-                                  : "w-1/7"
-                              } ${
-                                header.column.columnDef.meta?.className || ""
-                              }`}
-                            >
-                              {flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                            </TableHead>
-                          ))}
-                        </TableRow>
-                      ))}
-                    </TableHeader>
-                    <TableBody>
-                      {Array.from({ length: rowsPerPage }).map((_, index) => {
-                        const row = table.getRowModel().rows[index] || null; // Get row or null if not available
-
-                        return (
-                          <TableRow
-                            key={index}
-                            className="h-[50px] cursor-pointer"
-                            onClick={() => row && handleRowClick(row.original)}
+                ) : (
+              <>
+                <Table className="border-collapse border-b min-w-[590px] table-fixed">
+                  <TableHeader>
+                    {table.getHeaderGroups().map((headerGroup) => (
+                      <TableRow key={headerGroup.id} className="h-[50px]">
+                        {headerGroup.headers.map((header) => (
+                          <TableHead
+                            key={header.id}
+                            className={`text-[#090F1C] font-circular-medium text-center border-b border-r min-w-[100px] ${
+                              header.column.id === "name" ? "text-left w-2/7 max-[750px]:w-1/7" : "w-1/7"
+                            } ${header.column.columnDef.meta?.className || ""}`}
                           >
-                            {row
-                              ? row.getVisibleCells().map((cell) => (
-                                  <TableCell
-                                    key={cell.id}
-                                    className={`h-[50px] p-0 text-center border-r ${
-                                      cell.column.id === "name"
-                                        ? "text-left overflow-hidden"
-                                        : ""
-                                    } ${
-                                      cell.column.columnDef.meta?.className ||
-                                      ""
-                                    }`}
-                                  >
-                                    {flexRender(
-                                      cell.column.columnDef.cell,
-                                      cell.getContext()
-                                    )}
-                                  </TableCell>
-                                ))
-                              : columns.map((column) => (
-                                  <TableCell
-                                    key={column.id}
-                                    className="text-center border-r text-gray-400"
-                                  >
-                                    {""} {/* Placeholder for missing row */}
-                                  </TableCell>
-                                ))}
-                          </TableRow>
-                        );
-                      })}
-
-                      {/* Pagination */}
-                    </TableBody>
-                  </Table>
-                  <Table>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell colSpan={columns.length} className="py-4">
-                          <div className="flex justify-center w-full">
-                            <PaginationFeature
-                              totalItems={
-                                isSearching
-                                  ? filteredItems.length
-                                  : stockItems.length
-                              }
-                              currentPage={currentPage}
-                              itemsPerPage={rowsPerPage}
-                              totalPages={totalPages}
-                              onPageChange={handlePageChange}
-                              onItemsPerPageChange={handleItemsPerPageChange}
-                            />
-                          </div>
-                          
-                        </TableCell>
+                            {flexRender(header.column.columnDef.header, header.getContext())}
+                          </TableHead>
+                        ))}
                       </TableRow>
-                    </TableBody>
-                  </Table>
-                </>
-              )}
+                    ))}
+                  </TableHeader>        
+                  <TableBody>
+                    {Array.from({ length: rowsPerPage }).map((_, index) => {
+                      const row = table.getRowModel().rows[index] || null; // Get row or null if not available
+                      return (
+                        <TableRow key={index} className="h-[50px] cursor-pointer" onClick={() => row && handleRowClick(row.original)}>
+                          {row
+                            ? row.getVisibleCells().map((cell) => (
+                                <TableCell
+                                  key={cell.id}
+                                  className={`p-0 py-0 align-middle h-[50px] text-center border-r ${
+                                    cell.column.id === "name" ? "text-left overflow-hidden" : ""
+                                  } ${cell.column.columnDef.meta?.className || ""}`}
+                                >
+                                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                </TableCell>
+                              ))
+                            : columns.map((column) => (
+                                <TableCell key={column.id} className="text-center border-r text-gray-400">
+                                  {""} {/* Placeholder for missing row */}
+                                </TableCell>
+                              ))}
+                        </TableRow>
+                      );
+                    })}
+
+                  </TableBody>
+                </Table>
+                <Table>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell colSpan={columns.length} className="">
+                        <PaginationFeature
+                          totalItems={isSearching ? filteredItems.length : stockItems.length}
+                          currentPage={currentPage}
+                          itemsPerPage={rowsPerPage}
+                          totalPages={totalPages}
+                          onPageChange={handlePageChange}
+                          onItemsPerPageChange={handleItemsPerPageChange}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>        
+                </Table>                     
+              </>
+            )}                                                                
             </div>
-            {isSidebarOpen && (
+              {isSidebarOpen && (
               <Sidebar
                 key={
                   selectedItem?.id + "-" + (selectedItem?.images?.length || 0)

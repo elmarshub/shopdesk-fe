@@ -1,16 +1,22 @@
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request) {
-  try {
-    const url = new URL(req.url);
-    const token = req.headers.get("authorization");
-    const organization_id = url.searchParams.get("organization_id");
-    const product_id = url.searchParams.get("product_id");
 
+
+
+export async function GET(req: Request) {
+ 
+  try {
+    const { searchParams } = new URL(req.url);
+    const organization_id = searchParams.get("organization_id"); 
+    if (!organization_id) {
+      return NextResponse.json({ error: "organization_id is required" }, { status: 400 });
+    }
+
+    const token = req.headers.get("authorization");
 
     const response = await fetch(
-      `https://api.timbu.cloud/stocks?product_id=${product_id}&organization_id=${organization_id}`,
-      { 
+      `https://api.timbu.cloud/products?organization_id=${organization_id}`,
+      {
         method: "GET",
         headers: {
           Accept: "application/json",
