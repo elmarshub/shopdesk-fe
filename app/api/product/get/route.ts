@@ -1,14 +1,18 @@
-import { NextResponse } from "next/server";import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
 
 
 
 export async function GET(req: Request) {
+ 
   try {
+    const { searchParams } = new URL(req.url);
+    const organization_id = searchParams.get("organization_id"); 
+    if (!organization_id) {
+      return NextResponse.json({ error: "organization_id is required" }, { status: 400 });
+    }
+
     const token = req.headers.get("authorization");
-    const cookieStore = await cookies();
-    const organization_id = cookieStore.get("organizationId")?.value;
-     //const organization_id = "160db8736a9d47989381e01a987e4413";
 
     const response = await fetch(
       `https://api.timbu.cloud/products?organization_id=${organization_id}`,

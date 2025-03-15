@@ -1,10 +1,6 @@
 import { getAccessToken } from "@/app/api/token";
+import { useStore } from "@/store/useStore";
 
-
-// const cookieStore =  cookies();
-//     const organization_id = cookieStore.get("organizationId")?.value;
-
-// const organization_id = "160db8736a9d47989381e01a987e4413";
 
 type Stock = {
   id: string;
@@ -69,19 +65,13 @@ type ProductResponse = {
 
 export async function CreateProduct(
   productName: string,
- unique_id:string
+  unique_id:string,
+  token: string | null
 ): Promise<Product> {
 
-
-  
-
+  const organization_id = useStore.getState().organizationId;  
   try {
-    const organization_id = sessionStorage.getItem("organizationId");
-    if (!organization_id) {
-      throw new Error("Organization ID is missing from sessionStorage");
-    }
-    const token = await getAccessToken();
-    console.log("Token:", token);
+  
     const formData = new FormData();
     formData.append("organization_id", organization_id);
     formData.append("name", productName);
@@ -118,14 +108,16 @@ export async function AddStock(
   quantity: number,
   product_id: string,
   currency_code: string,
-  organization_id: string,
+  organizatiohn_id: string,
   date_created: string,
   selectedSellingCurrency: { code: string; name: string }
 ): Promise<Stock> {
+  const organization_id = useStore.getState().organizationId;
   try {
-    const product_id = await CreateProduct(productName, "")
     const token = await getAccessToken();
-    console.log("Token:", token);
+    const product_id = await CreateProduct(productName, "", token)
+    
+    
 
     const response = await fetch("/api/stocks/create", {
       method: "POST",
@@ -158,10 +150,11 @@ export async function AddStock(
   }
 }
 export async function GetProduct(): Promise<StockResponse> {
+  const organization_id = useStore.getState().organizationId;
   try {
     const token = await getAccessToken();
 
-    const response = await fetch(`/api/product/get`, {
+    const response = await fetch(`/api/product/get?organization_id=${organization_id}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -181,14 +174,13 @@ export async function GetProduct(): Promise<StockResponse> {
     throw error;
   }
 }
-const data2 = GetProduct();
-console.log(data2);
 
 export async function GetStock(product_id:string): Promise<StockResponse> {
+  const organization_id = useStore.getState().organizationId;
   try {
     const token = await getAccessToken();
 
-    const response = await fetch(`/api/stocks/get?product_id=${product_id}`, {
+    const response = await fetch(`/api/stocks/get?organization_id=${organization_id}&product_id=${product_id}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
@@ -210,6 +202,7 @@ export async function GetStock(product_id:string): Promise<StockResponse> {
 }
 
 export async function deleteStock(stockId: string): Promise<void> {
+  const organization_id = useStore.getState().organizationId;
   try {
     const token = await getAccessToken();
 
@@ -220,7 +213,7 @@ export async function deleteStock(stockId: string): Promise<void> {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ stock_id: stockId }), // Pass the ID in the request body
+      body: JSON.stringify({ stock_id: stockId, organization_id: organization_id })
     });
 
     if (!response.ok) {
@@ -243,6 +236,7 @@ export async function editStock(
     currency_code: string;
   }
 ): Promise<void> {
+  const organization_id = useStore.getState().organizationId;
   try {
     const token = await getAccessToken();
 
@@ -253,6 +247,7 @@ export async function editStock(
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
+        organization_id: organization_id,
         stock_id: stockId,
         ...stockData,
       }),
@@ -275,6 +270,7 @@ export async function editStockv3(
   
   }
 ): Promise<void> {
+  const organization_id = useStore.getState().organizationId;
   try {
     const token = await getAccessToken();
 
@@ -286,6 +282,7 @@ export async function editStockv3(
       },
       body: JSON.stringify({
         stock_id: stockId,
+        organization_id: organization_id,
         ...stockData,
       }),
     });
@@ -306,6 +303,7 @@ export async function editPrice(
     currency_code: string;
   }
 ): Promise<void> {
+  const organization_id = useStore.getState().organizationId;
   try {
     const token = await getAccessToken();
 
@@ -317,6 +315,7 @@ export async function editPrice(
       },
       body: JSON.stringify({
         stock_id: stockId,
+        organization_id: organization_id,
         ...stockData,
       }),
     });
@@ -337,6 +336,7 @@ export async function editQuantity(
   
   }
 ): Promise<void> {
+  const organization_id = useStore.getState().organizationId;
   try {
     const token = await getAccessToken();
 
@@ -348,6 +348,7 @@ export async function editQuantity(
       },
       body: JSON.stringify({
         stock_id: stockId,
+        organization_id: organization_id,
         ...stockData,
       }),
     });
@@ -369,6 +370,7 @@ export async function editName(
   
   }
 ): Promise<void> {
+  const organization_id = useStore.getState().organizationId;
   try {
     const token = await getAccessToken();
 
@@ -380,6 +382,7 @@ export async function editName(
       },
       body: JSON.stringify({
         stock_id: stockId,
+        organization_id: organization_id,
         ...stockData,
       }),
     });

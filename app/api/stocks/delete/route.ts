@@ -6,12 +6,11 @@ import { cookies } from "next/headers";
 export async function DELETE(req: Request) {
   try {
     const token = req.headers.get("authorization");
-    const cookieStore = await cookies();
-    const organization_id = cookieStore.get("organizationId")?.value;
+    
     
         const body = await req.json();
     const stock_id = body.stock_id;
-
+    const organization_id = body.organization_id
     if (!stock_id) {
       return NextResponse.json({ message: "Stock ID is required" }, { status: 400 });
     }

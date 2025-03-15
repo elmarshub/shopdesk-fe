@@ -1,19 +1,12 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-
-
-
 
 export async function GET(req: Request) {
   try {
     const url = new URL(req.url);
     const token = req.headers.get("authorization");
-    const cookieStore = await cookies();
-    const organization_id = cookieStore.get("organizationId")?.value;
-    console.log(organization_id);
 
     const product_id = url.searchParams.get("product_id");
-    // const organization_id = "160db8736a9d47989381e01a987e4413";
+    const organization_id = url.searchParams.get("organization_id");
 
     const response = await fetch(
       `https://api.timbu.cloud/stocks?product_id=${product_id}&organization_id=${organization_id}`,
