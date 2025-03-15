@@ -1,26 +1,33 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { refreshAccessToken } from "@/lib/refresh";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
+  const apiUrl = "https://api.timbu.cloud/organizations";
+  let accessToken = (await cookies()).get("access_token")?.value;
+  if (!accessToken) {
+    accessToken = await refreshAccessToken();
+  }
   try {
-    const token = req.headers.get("authorization");
-
-    const response = await fetch(
-      `https://api.timbu.cloud/organizations`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `${token}`,
-        },
-      }
-    );
-
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + accessToken,
+      },
+    });
+    if (!response.ok)
+      return NextResponse.json(
+        { error: "Request failed with Status: " + response.status },
+        { status: response.status }
+      );
     const data = await response.json();
-    return NextResponse.json(data, { status: response.status });
+    return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json(
-      { message: "Internal Server Error", error },
+      {
+        error: error instanceof Error ? error.message : "Internal server error",
+      },
       { status: 500 }
     );
   }
