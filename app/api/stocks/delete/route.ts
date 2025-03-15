@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function DELETE(req: Request) {
   try {
     const token = req.headers.get("authorization");
-    const organization_id = "160db8736a9d47989381e01a987e4413";
+    const organization_id = "b66c4c205e2e44d496217b250fa8a4f5";
     
         const body = await req.json();
     const stock_id = body.stock_id;

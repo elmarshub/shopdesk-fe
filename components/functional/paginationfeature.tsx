@@ -153,7 +153,7 @@ const PaginationFeature = ({
                 <PaginationItem>
                   <PaginationNext
                     className="border border-[#DEE5ED] py-2"
-                    pageNum={currentPage}
+                    pageNum = {currentPage}
                     onClick={(e) => handlePageClick(e, currentPage + 1)}
                   />
                 </PaginationItem>
