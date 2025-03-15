@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 export async function DELETE(req: Request) {
   try {
     const token = req.headers.get("authorization");
-    
+
     
         const body = await req.json();
     const stock_id = body.stock_id;
