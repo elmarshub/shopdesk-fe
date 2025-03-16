@@ -1,18 +1,37 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 type State = {
   organizationId: string;
   organizationName: string;
+  organizationInitial: string;
   setOrganizationId: (organizationId: string) => void;
   setOrganizationName: (organizationName: string) => void;
+  setOrganizationInitial: (organizationName: string) => void;
 };
 
-export const useStore = create<State>((set) => ({
-  organizationId: "",
-  organizationName: "",
-  setOrganizationId: (organizationId) => set({ organizationId }),
-  setOrganizationName: (organizationName) => set({ organizationName }),
-}));
+const getInitials = (name: string): string => {
+  return name
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase())
+    .join("");
+};
+
+export const useStore = create<State>()(
+  persist(
+    (set) => ({
+      organizationId: "",
+      organizationName: "",
+      organizationInitial: "",
+      setOrganizationId: (organizationId) => set({ organizationId }),
+      setOrganizationName: (organizationName) => set({ organizationName }),
+      setOrganizationInitial: (organizationName) => set({ organizationInitial: getInitials(organizationName) }),
+    }),
+    {
+      name: "organization-store",
+    }
+  )
+);
 
 
 /*
