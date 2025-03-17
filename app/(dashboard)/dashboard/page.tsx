@@ -438,27 +438,7 @@ const Page = () => {
                   className="no-spinner w-full h-full min-w-0 border text-left box-border p-2 focus:outline-[#009A49]"
                 />
               ) : (
-                <span className="block text-balance p-2">{row.original.name}</span>
-              )}
-            </div>
-          );
-        },
-      },
-      {
-        accessorKey: "sku",
-        header: "SKU",
-        cell: ({ row }) => {
-          const isEditingThisRow = editedItem?.id === row.original.id;
-          const isTransitioning = isEditingTransition === row.original.id;
-
-          return (
-            <div className="inline-block w-full overflow-hidden">
-              {isTransitioning ? (
-                <Loader2 className="w-4 h-4 animate-spin mx-auto" />
-              ) : isEditingThisRow ? (
-                <span className="block truncate">{row.original.sku}</span>
-              ) :(
-                <span className="block truncate">{row.original.sku}</span>
+                <span className="block text-wrap p-2">{row.original.name}</span>
               )}
             </div>
           );
@@ -567,7 +547,7 @@ const Page = () => {
         meta: { className: "" },
       },
     ],
-    [editedItem, isEditingTransition, handleInlineEdit, handleSaveInline]
+    [editedItem, isEditingTransition]
   );
   const paginatedData = isSearching
   ? filteredItems.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
@@ -715,9 +695,6 @@ const Page = () => {
                           ITEM NAME
                         </TableHead>
                         <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] max-[400px]:w-1/3 max-[400px]:px-1 text-center border-b border-r">
-                          SKU CODE
-                        </TableHead>
-                        <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] max-[400px]:w-1/3 max-[400px]:px-1 text-center border-b border-r">
                           PRICE
                         </TableHead>
                         <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] text-center border-b border-r ">
@@ -788,8 +765,8 @@ const Page = () => {
                         {headerGroup.headers.map((header) => (
                           <TableHead
                             key={header.id}
-                            className={`text-[#090F1C] font-circular-medium text-center border-b border-r min-w-[100px] ${
-                              header.column.id === "name" ? "text-left w-2/7 max-[750px]:w-1/7" : "w-1/7"
+                            className={`text-[#090F1C] font-circular-medium text-center border-b border-r min-w-[100px] max-w-[200px] ${
+                              header.column.id === "name" ? "text-left w-2/7 max-[750px]:w=1/7" : "w-1/7"
                             } ${header.column.columnDef.meta?.className || ""}`}
                           >
                             {flexRender(header.column.columnDef.header, header.getContext())}
