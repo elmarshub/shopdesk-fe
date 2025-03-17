@@ -19,6 +19,8 @@ import Image from "next/image";
 import { Loader2 } from "lucide-react";
 import PaginationFeature from "./paginationfeature";
 
+import SalesModal from "@/components/modal/sales-modal";
+
 // Define the SalesItem type outside the component
 export type SalesItem = {
   id: string;
