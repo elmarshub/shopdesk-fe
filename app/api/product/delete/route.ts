@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 
-export async function DELETE(req: Request, { params }: { params: { product_id: string } }) {
+export async function DELETE(req: Request) {
   try {
-    const { product_id } = params;
 
     const url = new URL(req.url);
     const organization_id = url.searchParams.get("organization_id");
+    const product_id = url.searchParams.get("product_id");
 
     if (!organization_id) {
       return NextResponse.json({ message: "Missing organization_id" }, { status: 400 });
