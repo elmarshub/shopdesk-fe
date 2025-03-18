@@ -182,54 +182,44 @@ const Page = () => {
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    GetProduct()
-    .then((data) => {
-      setIsLoading(false);
-      setProductItems(data.items.map((item: any) => ({
-        ...item, 
-      })));
-        
-      })
-      .catch((error) => {
-        console.error("Error fetching stock:", error);
-      });
-  }, [router]);
-  
-  useEffect(() => {
-    if (productItems.length === 0) return; 
-    setIsLoading(true);
-  
-    const fetchStocks = async () => {
-      try {
-        const stockData = await Promise.all(
-          productItems.map((product) => GetStock(product.id))
-        );
-  
-        const formattedStockItems = stockData.flatMap((data) =>
-          data.items.map((stock: any) => {
-           
-            const matchingProduct = productItems.find(
-              (product) => product.id === stock.product_id
-            );
-  
-            return {
-              ...stock,
-              sku: matchingProduct?.unique_id,
-            };
-          })
-        );
-  
-        setStockItems(formattedStockItems);
-      } catch (error) {
-        console.error("Error fetching stock:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-  
-    fetchStocks();
-  }, [productItems.length]); 
+  let isMounted = true; // Prevents state updates if component unmounts
+  setIsLoading(true);
+
+  const fetchProductsAndStocks = async () => {
+    try {
+      // Fetch products
+      const productData: any = await GetProduct();
+      if (!isMounted) return; // Prevent state update if unmounted
+      setProductItems(productData.items);
+
+      // Fetch stock for each product
+      const stockData = await Promise.all(
+        productData.items.map((product: any) => GetStock(product.id))
+      );
+
+      if (!isMounted) return;
+      const formattedStockItems = stockData.flatMap((data, index) =>
+        data.items.map((stock: any) => ({
+          ...stock,
+          sku: productData.items[index]?.unique_id, 
+        }))
+      );
+
+      setStockItems(formattedStockItems);
+    } catch (error) {
+      console.error("Error fetching products or stocks:", error);
+    } finally {
+      if (isMounted) setIsLoading(false);
+    }
+  };
+
+  fetchProductsAndStocks();
+
+  return () => {
+    isMounted = false;
+  };
+}, [router]);
+
 
   const handleEditClick = (item: StockItem) => {
     setSelectedItem(item);
@@ -442,27 +432,7 @@ const Page = () => {
                   className="no-spinner w-full h-full min-w-0 border text-left box-border p-2 focus:outline-[#009A49]"
                 />
               ) : (
-                <span className="block text-balance p-2">{row.original.name}</span>
-              )}
-            </div>
-          );
-        },
-      },
-      {
-        accessorKey: "sku",
-        header: "SKU",
-        cell: ({ row }) => {
-          const isEditingThisRow = editedItem?.id === row.original.id;
-          const isTransitioning = isEditingTransition === row.original.id;
-
-          return (
-            <div className="inline-block w-full overflow-hidden">
-              {isTransitioning ? (
-                <Loader2 className="w-4 h-4 animate-spin mx-auto" />
-              ) : isEditingThisRow ? (
-                <span className="block truncate">{row.original.sku}</span>
-              ) :(
-                <span className="block truncate">{row.original.sku}</span>
+                <span className="block text-wrap p-2">{row.original.name}</span>
               )}
             </div>
           );
@@ -571,7 +541,7 @@ const Page = () => {
         meta: { className: "" },
       },
     ],
-    [editedItem, isEditingTransition, handleInlineEdit, handleSaveInline]
+    [editedItem, isEditingTransition]
   );
   const paginatedData = isSearching
   ? filteredItems.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
@@ -764,9 +734,6 @@ const Page = () => {
                       <TableRow className="h-[50px]">
                         <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-2/7 min-w-[120px] max-[400px]:w-1/3 max-[400px]:px-1 text-left border-b border-r">
                           ITEM NAME
-                        </TableHead>
-                        <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] max-[400px]:w-1/3 max-[400px]:px-1 text-center border-b border-r">
-                          SKU CODE
                         </TableHead>
                         <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] max-[400px]:w-1/3 max-[400px]:px-1 text-center border-b border-r">
                           PRICE
