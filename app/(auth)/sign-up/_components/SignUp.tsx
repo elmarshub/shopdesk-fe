@@ -170,7 +170,7 @@ export default function SignUp() {
       setOrganizationId("new-org-id");
       setOrganizationName("New Organization");
 
-      router.push("/dashboard");
+      // router.push("/dashboard");
     } catch (err: any) {
       setError(err.message || "Something went wrong. Please try again.");
     } finally {

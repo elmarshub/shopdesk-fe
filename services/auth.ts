@@ -2,17 +2,14 @@ export async function loginUser(email: string, password: string) {
     try {
         const response = await fetch("/api/auth/login", { 
             method: "POST",
-            
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password }),
         });
 
-
-
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.message || "Login failed");
+            throw new Error(data.detail || "Login failed");
         }
 
         return data;
@@ -30,7 +27,7 @@ export async function signUpUser(userData: {
     phone_number: string;
     phone_country_code: string;
 }) {
-    
+  
 
     try {
         const response = await fetch("/api/auth/signup", {
@@ -41,9 +38,11 @@ export async function signUpUser(userData: {
 
         const data = await response.json();
 
+
         if (!response.ok) {
-            throw new Error(data.message || "Sign-up failed");
+            throw new Error(`${data.message}: ${data.error?.detail || "Sign-up failed"}`);
         }
+       
 
         return data;
     } catch (error) {
