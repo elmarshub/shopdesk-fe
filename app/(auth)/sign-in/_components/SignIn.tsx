@@ -297,7 +297,7 @@ export default function SignIn() {
 
               <motion.button
                 type="submit"
-                className="w-full bg-[#2A2A2A] text-white p-3 rounded-lg font-medium hover:bg-black transition duration-200 flex justify-center items-center gap-2"
+                className="w-1/2 bg-[#2A2A2A] text-white p-3 rounded-lg font-medium hover:bg-black transition duration-200 flex justify-center items-center gap-2 mt-8"
                 disabled={loading}
                 variants={buttonVariants}
                 whileHover="hover"
