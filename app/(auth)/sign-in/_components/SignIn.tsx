@@ -26,7 +26,7 @@ export default function SignIn() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    console.log({ email, password });
+    
 
     setTouched({ email: true, password: true });
 
