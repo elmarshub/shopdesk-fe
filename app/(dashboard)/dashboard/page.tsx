@@ -693,6 +693,7 @@ const Page = () => {
               <div className="relative max-[800px]:w-full">
                 <input type="text" 
                 className="h-12 border w-[327px] max-[800px]:w-full rounded-md focus:outline-2 focus:outline-[#009A49] px-10"
+                placeholder="Search by item name, SKU code"
                 onChange={(event)=>{
                   setIsSearching(true);
                   setSearchText(event.target.value);
@@ -701,7 +702,12 @@ const Page = () => {
                   }
                 }}/>
 
-                <Search className="text-[#667085] absolute top-3 left-3 " />
+                <img
+                   src='/icons/search_Icon.svg'
+                   alt="Search Icon"
+                   className="absolute top-3 left-3 w-5 h-5"
+                 />
+
               </div>
 
                 <div className="z-10">
