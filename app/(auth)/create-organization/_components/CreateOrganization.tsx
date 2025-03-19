@@ -1,6 +1,8 @@
 "use client";
 import closeIcon from "@/public/icons/close.svg";
 import logo from "@/public/shopdesk-logo.svg";
+import { createOrg } from "@/services/auth";
+import { getOrganization } from "@/services/getOrganization";
 import { useStore } from "@/store/useStore";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -251,11 +253,30 @@ const CreateOrganization = () => {
 
     setLoading(true);
 
+    const orgData = {
+      name: formData.orgName,
+      currency_code: formData.currency,
+      business_type: formData.businessType,
+      locations: [
+        {
+          country: formData.country,
+          state: formData.state,
+          full_address: `${formData.state} ${formData.country}`,
+        },
+      ],
+    };
+
     try {
       await new Promise((resolve) => setTimeout(resolve, 1500));
+      const data = await createOrg(orgData);
+            const organization = await getOrganization();
+            await setOrganizationId(organization?.[0].id || "");
+            await setOrganizationName(organization?.[0].name || "");
 
-      setOrganizationId("new-org-id");
-      setOrganizationName("New Organization");
+            if (!data || data.error) {
+              throw new Error(data?.message || "Unable to create organization.");
+            }
+
       router.push("/dashboard");
     } catch (err: any) {
       setError(err.message || "Something went wrong. Please try again.");
