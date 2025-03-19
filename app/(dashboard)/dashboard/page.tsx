@@ -1,80 +1,76 @@
 "use client";
 
-import { useEffect, useState,useCallback,useRef,useMemo } from "react";
-import { ChevronDown, Edit, Loader2, MoreVertical, SaveAll, Trash2, Plus,X } from "lucide-react";
-import { useRouter } from "next/navigation";
-import EditItemModal from "@/components/modal/edit-stock";
+import { getAccessToken } from "@/app/api/token";
+import LoadingAnimation from "@/components/functional/loading";
+import Logo from "@/components/functional/logo";
+import PaginationFeature from "@/components/functional/paginationfeature";
+import Sidebar from "@/components/functional/sidebar";
+import ImageUploader from "@/components/modal/add-image";
 import AddItemModal from "@/components/modal/add-item";
 import DeleteItem from "@/components/modal/delete-item";
-import ImageUploader from "@/components/modal/add-image";
-import PaginationFeature from "@/components/functional/paginationfeature";
-import { useOrganization } from "@/app/api/useOrganization";
-import { useStore } from "@/store/useStore";
-import { FaSortDown } from 'react-icons/fa'
+import EditItemModal from "@/components/modal/edit-stock";
+import LogoutConfirmModal from "@/components/modal/logoutConfirmationModal";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import LogoutConfirmModal from "@/components/modal/logoutConfirmationModal";
-import Image from "next/image";
-import Logo from "@/components/functional/logo";
-import LoadingAnimation from "@/components/functional/loading";
 import {
   Table,
-  TableHeader,
   TableBody,
-  TableRow,
-  TableHead,
   TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
-import useTableAreaHeight from "./hooks/useTableAreaHeight";
-import { deleteStock,GetProduct, GetStock } from "@/services/stock";
-import { Search } from "lucide-react";
-import box from "@/public/icons/box.svg"
+import logout from "@/public/icons/_ui-log-out-02.svg";
+import settings from "@/public/icons/_ui-settings-01.svg";
+import viewDeleted from "@/public/icons/_ui-trash-03.svg";
+import box from "@/public/icons/box.svg";
+import { deleteStock, GetProduct, GetStock } from "@/services/stock";
+import { useStore } from "@/store/useStore";
 import {
   ColumnDef,
+  flexRender,
   getCoreRowModel,
   useReactTable,
-  flexRender,
 } from "@tanstack/react-table";
-import { getAccessToken } from "@/app/api/token";
-import Sidebar from "@/components/functional/sidebar";
+import { ChevronDown, Loader2, Plus, Search, X } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FaSortDown } from "react-icons/fa";
+import useTableAreaHeight from "./hooks/useTableAreaHeight";
 
-import { Separator } from "@radix-ui/react-dropdown-menu";
-
-import SalesTab from "@/components/functional/salestab";
-
-
-declare module '@tanstack/react-table' {
+declare module "@tanstack/react-table" {
   interface ColumnMeta<TData, TValue> {
-    className?: string
-    updateData?: (rowIndex: number, key: string, value: string) => void
+    className?: string;
+    updateData?: (rowIndex: number, key: string, value: string) => void;
   }
 }
 
-  export type StockItem = {
-    id: string;
-    name: string;
-    buying_price: number;
-    quantity: number;
-    currency_code: string;
-    sku?: string;
-    buying_date?: string;
-    product_id?: string;
-    status?: string;
-    user_id?: string;
-    date_created?: string;
-    original_quantity?: number;
-    supplier?: null | any;
-    timeslots?: any[];
-    image?: { id: string; src: string } | null;
-    images?: { id: string; src: string }[];
-  };
+export type StockItem = {
+  id: string;
+  name: string;
+  buying_price: number;
+  quantity: number;
+  currency_code: string;
+  sku?: string;
+  buying_date?: string;
+  product_id?: string;
+  status?: string;
+  user_id?: string;
+  date_created?: string;
+  original_quantity?: number;
+  supplier?: null | any;
+  timeslots?: any[];
+  image?: { id: string; src: string } | null;
+  images?: { id: string; src: string }[];
+};
 
 export type ProductItem = {
-    name: string;
+  name: string;
   description: string;
   unique_id: string;
   url_slug: string;
@@ -101,12 +97,11 @@ export type ProductItem = {
   buying_price: number;
   photos: [];
   attributes: {};
-  };
+};
 
 const Page = () => {
-  const { organizationId, organizationName, organizationInitial } =
-    useStore();
-   
+  const { organizationId, organizationName, organizationInitial } = useStore();
+
   const { tableAreaRef, tableAreaHeight } = useTableAreaHeight();
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -129,14 +124,18 @@ const Page = () => {
   const [productItems, setProductItems] = useState<ProductItem[]>([]);
   const [searchText, setSearchText] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const [isEditingTransition, setIsEditingTransition] = useState<string | null>(null);
+  const [isEditingTransition, setIsEditingTransition] = useState<string | null>(
+    null
+  );
   const [editedItem, setEditedItem] = useState<StockItem | null>(null);
   const [activeField, setActiveField] = useState<keyof StockItem | null>(null);
   const nameInputRef = useRef<HTMLInputElement>(null);
   const priceInputRef = useRef<HTMLInputElement>(null);
   const quantityInputRef = useRef<HTMLInputElement>(null);
-  const filteredItems = stockItems.filter((item) =>   
-      item.name.toLowerCase().includes(searchText.toLowerCase()) || (item.sku && item.sku.toLowerCase().includes(searchText.toLowerCase()))         
+  const filteredItems = stockItems.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchText.toLowerCase()) ||
+      (item.sku && item.sku.toLowerCase().includes(searchText.toLowerCase()))
   );
   const [isLoading, setIsLoading] = useState(true);
   const [showSales, setShowSales] = useState(false);
@@ -151,7 +150,7 @@ const Page = () => {
     }
     setShowSales((prev) => !prev);
   };
-  
+
   const toggleProfit = () => {
     if (isSidebarOpen) {
       alert("First close the sidebar to view Profit.");
@@ -160,14 +159,10 @@ const Page = () => {
     setShowProfit((prev) => !prev);
   };
 
-
-
   const router = useRouter();
 
   const totalItems = stockItems.length;
   const totalPages = Math.ceil(totalItems / rowsPerPage);
-
-  
 
   useEffect(() => {
     if (currentPage > totalPages && totalPages > 0) {
@@ -212,44 +207,43 @@ const Page = () => {
   };
 
   useEffect(() => {
-  let isMounted = true; // Prevents state updates if component unmounts
-  setIsLoading(true);
+    let isMounted = true; // Prevents state updates if component unmounts
+    setIsLoading(true);
 
-  const fetchProductsAndStocks = async () => {
-    try {
-      // Fetch products
-      const productData: any = await GetProduct();
-      if (!isMounted) return; // Prevent state update if unmounted
-      setProductItems(productData.items);
+    const fetchProductsAndStocks = async () => {
+      try {
+        // Fetch products
+        const productData: any = await GetProduct();
+        if (!isMounted) return; // Prevent state update if unmounted
+        setProductItems(productData.items);
 
-      // Fetch stock for each product
-      const stockData = await Promise.all(
-        productData.items.map((product: any) => GetStock(product.id))
-      );
+        // Fetch stock for each product
+        const stockData = await Promise.all(
+          productData.items.map((product: any) => GetStock(product.id))
+        );
 
-      if (!isMounted) return;
-      const formattedStockItems = stockData.flatMap((data, index) =>
-        data.items.map((stock: any) => ({
-          ...stock,
-          sku: productData.items[index]?.unique_id, 
-        }))
-      );
+        if (!isMounted) return;
+        const formattedStockItems = stockData.flatMap((data, index) =>
+          data.items.map((stock: any) => ({
+            ...stock,
+            sku: productData.items[index]?.unique_id,
+          }))
+        );
 
-      setStockItems(formattedStockItems);
-    } catch (error) {
-      console.error("Error fetching products or stocks:", error);
-    } finally {
-      if (isMounted) setIsLoading(false);
-    }
-  };
+        setStockItems(formattedStockItems);
+      } catch (error) {
+        console.error("Error fetching products or stocks:", error);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    };
 
-  fetchProductsAndStocks();
+    fetchProductsAndStocks();
 
-  return () => {
-    isMounted = false;
-  };
-}, [router]);
-
+    return () => {
+      isMounted = false;
+    };
+  }, [router]);
 
   const handleEditClick = (item: StockItem) => {
     setSelectedItem(item);
@@ -284,7 +278,9 @@ const Page = () => {
     try {
       await deleteStock(itemId);
       setIsDeleteModalOpen(false);
-      setStockItems((prev) => prev.filter((item) => item.product_id !== itemId));
+      setStockItems((prev) =>
+        prev.filter((item) => item.product_id !== itemId)
+      );
     } catch (error) {
       console.error("Error deleting stock:", error);
     }
@@ -329,7 +325,7 @@ const Page = () => {
 
   const handleSaveInline = async () => {
     if (!editedItem) return;
-    
+
     const organization_id = useStore.getState().organizationId;
     try {
       const token = await getAccessToken();
@@ -389,21 +385,21 @@ const Page = () => {
   const columns: ColumnDef<StockItem>[] = useMemo(
     () => [
       {
-        accessorKey: 'name',
+        accessorKey: "name",
         header: () => (
           <span className="!px-4 flex flex-start font-circular-medium  text-[18px] leading-[28px] tracking-normal text-center  w-full">
             ITEM NAME
           </span>
         ),
         cell: ({ row }) => {
-          const isEditingThisRow = editedItem?.id === row.original.id
-          const isTransitioning = isEditingTransition === row.original.id
+          const isEditingThisRow = editedItem?.id === row.original.id;
+          const isTransitioning = isEditingTransition === row.original.id;
 
           return (
             <div
               className="w-full h-full flex items-center overflow-hidden"
               onClick={() =>
-                !isEditingThisRow && handleInlineEdit(row.original, 'name')
+                !isEditingThisRow && handleInlineEdit(row.original, "name")
               }
             >
               {isTransitioning ? (
@@ -411,9 +407,9 @@ const Page = () => {
               ) : isEditingThisRow ? (
                 <input
                   ref={nameInputRef}
-                  value={editedItem?.name || ''}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && handleSaveInline()}
+                  value={editedItem?.name || ""}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSaveInline()}
                   className="no-spinner w-full h-full min-w-0 border text-left box-border p-2 focus:outline-[#009A49]"
                 />
               ) : (
@@ -422,26 +418,26 @@ const Page = () => {
                 </span>
               )}
             </div>
-          )
+          );
         },
       },
       {
-        accessorKey: 'sell_price',
+        accessorKey: "sell_price",
         header: () => (
           <span className="!px-4 font-circular-medium text-[18px] leading-[28px] tracking-normal text-center">
             SELL PRICE
           </span>
         ),
         cell: ({ row }) => {
-          const isEditingThisRow = editedItem?.id === row.original.id
-          const isTransitioning = isEditingTransition === row.original.id
+          const isEditingThisRow = editedItem?.id === row.original.id;
+          const isTransitioning = isEditingTransition === row.original.id;
 
           return (
             <div
               className="flex w-full h-full items-center justify-center"
               onClick={() =>
                 !isEditingThisRow &&
-                handleInlineEdit(row.original, 'buying_price')
+                handleInlineEdit(row.original, "buying_price")
               }
             >
               {isTransitioning ? (
@@ -450,11 +446,11 @@ const Page = () => {
                 <input
                   ref={priceInputRef}
                   type="number"
-                  value={editedItem?.buying_price ?? ''}
+                  value={editedItem?.buying_price ?? ""}
                   onChange={(e) =>
-                    handleInputChange('buying_price', e.target.value)
+                    handleInputChange("buying_price", e.target.value)
                   }
-                  onKeyDown={(e) => e.key === 'Enter' && handleSaveInline()}
+                  onKeyDown={(e) => e.key === "Enter" && handleSaveInline()}
                   className="no-spinner w-full h-full border text-center focus:outline-[#009A49]"
                 />
               ) : (
@@ -463,25 +459,25 @@ const Page = () => {
                 } ${row.original.buying_price?.toLocaleString()}`}</span>
               )}
             </div>
-          )
+          );
         },
       },
       {
-        accessorKey: 'available',
+        accessorKey: "available",
         header: () => (
           <span className="!px-4 font-circular-medium text-[18px] leading-[28px] tracking-normal text-center">
             AVAILABLE
           </span>
         ),
         cell: ({ row }) => {
-          const isEditingThisRow = editedItem?.id === row.original.id
-          const isTransitioning = isEditingTransition === row.original.id
+          const isEditingThisRow = editedItem?.id === row.original.id;
+          const isTransitioning = isEditingTransition === row.original.id;
 
           return (
             <div
               className="flex h-full w-full items-center justify-center"
               onClick={() =>
-                !isEditingThisRow && handleInlineEdit(row.original, 'quantity')
+                !isEditingThisRow && handleInlineEdit(row.original, "quantity")
               }
             >
               {isTransitioning ? (
@@ -490,20 +486,20 @@ const Page = () => {
                 <input
                   ref={quantityInputRef}
                   type="number"
-                  value={editedItem?.quantity ?? ''}
+                  value={editedItem?.quantity ?? ""}
                   onChange={(e) =>
-                    handleInputChange('quantity', e.target.value)
+                    handleInputChange("quantity", e.target.value)
                   }
-                  onKeyDown={(e) => e.key === 'Enter' && handleSaveInline()}
+                  onKeyDown={(e) => e.key === "Enter" && handleSaveInline()}
                   className="no-spinner w-full h-full border px-2 py-1 text-center focus:outline-[#009A49]"
                 />
               ) : (
                 row.original.quantity
               )}
             </div>
-          )
+          );
         },
-        meta: { className: '' },
+        meta: { className: "" },
       },
       {
         accessorKey: "sales",
@@ -521,7 +517,7 @@ const Page = () => {
                   <X className="rounded-[6px] py-[4px] px-[8px] bg-white w-full h-full" />
                 </button>
               </div>
-      
+
               <div className="grid grid-cols-5 text-center border-t border-[#B2E1C8]">
                 {["MON", "TUE", "WED", "THU", "FRI"].map((day, index) => (
                   <div
@@ -560,7 +556,7 @@ const Page = () => {
           ) : null,
       },
       {
-        accessorKey: 'profitGroup',
+        accessorKey: "profitGroup",
         header: () =>
           showProfit ? (
             <div className="relative w-full h-full border border-[#CCEAFF]">
@@ -608,8 +604,8 @@ const Page = () => {
                 onBlur={(e) =>
                   column.columnDef.meta?.updateData?.(
                     row.index,
-                    'costPrice',
-                    e.target.value,
+                    "costPrice",
+                    e.target.value
                   )
                 }
                 className="w-1/2 px-2 py-1 border-r border-gray-300 h-full text-center"
@@ -620,8 +616,8 @@ const Page = () => {
                 onBlur={(e) =>
                   column.columnDef.meta?.updateData?.(
                     row.index,
-                    'profit',
-                    e.target.value,
+                    "profit",
+                    e.target.value
                   )
                 }
                 className="w-1/2 px-2 py-1 border-gray-300 h-full text-center"
@@ -632,14 +628,14 @@ const Page = () => {
         meta: {
           updateData: (rowIndex, key, value) => {
             console.log(
-              `Updating row ${rowIndex}, key ${key} with value ${value}`,
-            )
+              `Updating row ${rowIndex}, key ${key} with value ${value}`
+            );
           },
         },
       },
-      
+
       {
-        id: 'actions',
+        id: "actions",
         header: () => (
           <div className="flex justify-center items-center">
             <Plus className="w-[15px] h-[15px] text-[#2A2A2A] self-center" />
@@ -658,40 +654,40 @@ const Page = () => {
       showProfit,
       toggleSales,
       toggleProfit,
-    ],
-  )
+    ]
+  );
   const paginatedData = isSearching
     ? filteredItems.slice(
         (currentPage - 1) * rowsPerPage,
-        currentPage * rowsPerPage,
+        currentPage * rowsPerPage
       )
     : stockItems.slice(
         (currentPage - 1) * rowsPerPage,
-        currentPage * rowsPerPage,
-      )
+        currentPage * rowsPerPage
+      );
 
   const table = useReactTable({
     data: paginatedData,
     columns,
     getCoreRowModel: getCoreRowModel(),
-  })
+  });
 
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
         <LoadingAnimation />
       </div>
-    )
+    );
   }
 
   const handleRowClick = (item: StockItem) => {
-    setSelectedItem(item)
-    setIsSidebarOpen(false)
-  }
+    setSelectedItem(item);
+    setIsSidebarOpen(false);
+  };
 
   const closeSidebar = () => {
-    setIsSidebarOpen(false)
-  }
+    setIsSidebarOpen(false);
+  };
 
   return (
     <main className="px-6 py-4 w-full max-w-7xl mx-auto flex flex-col main-h-svh ">
@@ -709,7 +705,7 @@ const Page = () => {
           onDelete={handleDeleteItem}
           selectedItem={
             selectedItem
-              ? { product_id: selectedItem.product_id ?? '' }
+              ? { product_id: selectedItem.product_id ?? "" }
               : undefined
           }
         />
@@ -722,51 +718,62 @@ const Page = () => {
               The simplest way to manage your shop!
             </small>
           </div>
-          <div className="">
-            <DropdownMenu modal>
-              <DropdownMenuTrigger
-                disabled
-                className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white"
+
+          <DropdownMenu modal>
+            <DropdownMenuTrigger className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white">
+              <span className="py-2 px-4 rounded-lg bg-white text-black">
+                {organizationInitial}
+              </span>
+              {organizationName}
+              <ChevronDown strokeWidth={1.5} color="white" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem
+                className=" p-4  w-[200px] "
+                onClick={() => setIsLogoutModalOpen(true)}
               >
-                <span className="py-2 px-4 rounded-lg bg-white text-black">
-                  {organizationInitial}
-                </span>
-                {organizationName}
-                <ChevronDown strokeWidth={1.5} color="white" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem
-                  className="w-full px-[5rem]"
-                  onClick={() => setIsLogoutModalOpen(true)}
-                >
-                  Log out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+                <Image src={viewDeleted} alt="" width={20} height={20} />
+                View Deleted
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className=" p-4  w-[200px] "
+                onClick={() => setIsLogoutModalOpen(true)}
+              >
+                <Image src={settings} alt="" width={20} height={20} />
+                Settings
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className=" p-4  w-[200px] text-[#ff1925] "
+                onClick={() => setIsLogoutModalOpen(true)}
+              >
+                <Image src={logout} alt="" width={20} height={20} />
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         <div className="space-y-0 w-full ">
           <div className="w-full flex justify-between max-[800px]:flex-col-reverse">
             <div>
-            <div className="flex items-center justify-center gap-2 border border-b-white py-2 rounded-tr-lg rounded-tl-lg w-44 max-[800px]:w-full font-semibold px-9 shadow-inner">
-              Stock
-              <Image
-                src="/icons/ui-box.svg"
-                alt=""
-                width={20}
-                height={20}
-                className="w-5 h-5"
-              />
-            </div>
+              <div className="flex items-center justify-center gap-2 border border-b-white py-2 rounded-tr-lg rounded-tl-lg w-44 max-[800px]:w-full font-semibold px-9 shadow-inner">
+                Stock
+                <Image
+                  src="/icons/ui-box.svg"
+                  alt=""
+                  width={20}
+                  height={20}
+                  className="w-5 h-5"
+                />
+              </div>
 
-            {/*<SalesTab
+              {/*<SalesTab
                // onAddSale={() => {
                 //  console.log("Add sale action triggered");
                  // console.log("Active tab:", activeTab);
                 //}}
              // /> */}
-</div>
+            </div>
             {stockItems.length > 0 && (
               <div className="mb-2 max-[800px]:mb-4 max-[640px]:self-end flex items-center justify-center max-[1000px]:flex-row-reverse max-[800px]:w-full">
                 <button
@@ -787,10 +794,10 @@ const Page = () => {
                     type="text"
                     className="h-12 border w-[327px] max-[800px]:w-full rounded-md focus:outline-2 focus:outline-[#009A49] px-10"
                     onChange={(event) => {
-                      setIsSearching(true)
-                      setSearchText(event.target.value)
+                      setIsSearching(true);
+                      setSearchText(event.target.value);
                       if (!event.target.value) {
-                        setIsSearching(false)
+                        setIsSearching(false);
                       }
                     }}
                   />
@@ -803,9 +810,9 @@ const Page = () => {
                     isOpen={isOpen}
                     onClose={closeModal}
                     onSave={(newItem) => {
-                      setStockItems((prev) => [newItem, ...prev]) // Inserts new items at the top
+                      setStockItems((prev) => [newItem, ...prev]); // Inserts new items at the top
 
-                      closeModal()
+                      closeModal();
                     }}
                   />
                 </div>
@@ -815,7 +822,7 @@ const Page = () => {
           <div className="flex w-full overflow-hidden mx-auto">
             <div
               className={`border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg flex-1 overflow-auto w-full transition-all duration-300 ease-in-out ${
-                isSidebarOpen ? 'w-full max-w-[989px] mr-1' : 'w-full'
+                isSidebarOpen ? "w-full max-w-[989px] mr-1" : "w-full"
               }`}
             >
               {stockItems.length === 0 ||
@@ -873,8 +880,8 @@ const Page = () => {
                             isOpen={isOpen}
                             onClose={closeModal}
                             onSave={(newItem) => {
-                              setStockItems((prev) => [newItem, ...prev])
-                              closeModal()
+                              setStockItems((prev) => [newItem, ...prev]);
+                              closeModal();
                             }}
                           />
                         </div>
@@ -898,71 +905,69 @@ const Page = () => {
                   </div>
                 </div>
               ) : (
-                <div style={{ overflowX: 'auto' }}>
+                <div style={{ overflowX: "auto" }}>
                   <Table
-                    style={{ minWidth: '800px', borderCollapse: 'collapse' }}
+                    style={{ minWidth: "800px", borderCollapse: "collapse" }}
                   >
                     <TableHeader>
                       {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id} className="h-[50px]">
                           {headerGroup.headers.map((header) => {
-                            let widthClass = 'w-auto' // Default width of the header columns
+                            let widthClass = "w-auto"; // Default width of the header columns
 
-                            if (header.column.id === 'name') {
+                            if (header.column.id === "name") {
                               widthClass =
                                 showSales && showProfit
-                                  ? 'max-w-[259px]'
+                                  ? "max-w-[259px]"
                                   : showSales
-                                  ? 'max-w-[292px]'
+                                  ? "max-w-[292px]"
                                   : showProfit
-                                  ? 'max-w-[292px]'
-                                  : 'max-w-[374px] pl-4'
-                            } else if (header.column.id === 'sell_price') {
+                                  ? "max-w-[292px]"
+                                  : "max-w-[374px] pl-4";
+                            } else if (header.column.id === "sell_price") {
                               widthClass =
                                 showSales && showProfit
-                                  ? 'w-auto px-4'
+                                  ? "w-auto px-4"
                                   : showSales || showProfit
-                                  ? 'w-[262px]'
-                                  : 'w-[280px]'
-                            } else if (header.column.id === 'available') {
+                                  ? "w-[262px]"
+                                  : "w-[280px]";
+                            } else if (header.column.id === "available") {
                               widthClass =
                                 showSales && showProfit
-                                  ? 'w-auto px-4'
+                                  ? "w-auto px-4"
                                   : showSales || showProfit
-                                  ? 'w-[206px]'
-                                  : 'w-[198px]'
-                            } else if (header.column.id === 'sales') {
-                              widthClass = showSales ? 'w-[30px]' : 'w-auto '
-                            } else if (header.column.id === 'profitGroup') {
-                              widthClass = showProfit ? 'w-[350px]' : 'w-auto '
+                                  ? "w-[206px]"
+                                  : "w-[198px]";
+                            } else if (header.column.id === "sales") {
+                              widthClass = showSales ? "w-[30px]" : "w-auto ";
+                            } else if (header.column.id === "profitGroup") {
+                              widthClass = showProfit ? "w-[350px]" : "w-auto ";
                             }
 
                             return (
                               <TableHead
-  key={header.id}
-  className={`text-[#090F1C] font-circular-medium text-center border-b border-r min-w-[100px] 
+                                key={header.id}
+                                className={`text-[#090F1C] font-circular-medium text-center border-b border-r min-w-[100px] 
     ${
       (showSales && !["name", "sales", "actions"].includes(header.id)) ||
-      (showProfit && !["name", "profitGroup","actions"].includes(header.id))
+      (showProfit && !["name", "profitGroup", "actions"].includes(header.id))
         ? "hidden sm:table-cell"
         : ""
     } ${widthClass}`}
-
-                            
                               >
                                 {flexRender(
                                   header.column.columnDef.header,
-                                  header.getContext(),
+                                  header.getContext()
                                 )}
                               </TableHead>
-                            )
+                            );
                           })}
                         </TableRow>
                       ))}
                     </TableHeader>
                     <TableBody>
                       {Array.from({ length: rowsPerPage }).map((_, index) => {
-                        const row = table.getRowModel().rows[index] || null
+                        const row = table.getRowModel().rows[index] || null;
                         return (
                           <TableRow
                             key={index}
@@ -971,65 +976,74 @@ const Page = () => {
                           >
                             {row
                               ? row.getVisibleCells().map((cell) => {
-                                  let cellWidthClass = 'w-auto' // Default width
+                                  let cellWidthClass = "w-auto"; // Default width
 
-                                  if (cell.column.id === 'name') {
+                                  if (cell.column.id === "name") {
                                     cellWidthClass =
                                       showSales && showProfit
-                                        ? 'w-[259px]'
+                                        ? "w-[259px]"
                                         : showSales
-                                        ? 'w-[292px]'
+                                        ? "w-[292px]"
                                         : showProfit
-                                        ? 'w-[292px]'
-                                        : 'w-[374px]'
+                                        ? "w-[292px]"
+                                        : "w-[374px]";
                                   } else if (
-                                    cell.column.id === 'price' ||
-                                    cell.column.id === 'available'
+                                    cell.column.id === "price" ||
+                                    cell.column.id === "available"
                                   ) {
                                     cellWidthClass =
                                       showSales && showProfit
-                                        ? 'w-auto px-4'
+                                        ? "w-auto px-4"
                                         : showSales || showProfit
-                                        ? 'w-[262px]'
-                                        : 'w-[280px]'
-                                  } else if (cell.column.id === 'sales') {
+                                        ? "w-[262px]"
+                                        : "w-[280px]";
+                                  } else if (cell.column.id === "sales") {
                                     cellWidthClass = showSales
-                                      ? 'w-[356px]'
-                                      : 'w-auto px-3'
-                                  } else if (cell.column.id === 'profit') {
+                                      ? "w-[356px]"
+                                      : "w-auto px-3";
+                                  } else if (cell.column.id === "profit") {
                                     cellWidthClass = showProfit
-                                      ? 'w-[362px]'
-                                      : 'w-auto px-3'
+                                      ? "w-[362px]"
+                                      : "w-auto px-3";
                                   }
 
                                   return (
                                     <TableCell
-  key={cell.id}
-  className={`p-0 py-0 align-middle h-[50px] text-center border-r ${
-    (showSales && !["name", "sales","actions"].includes(cell.column.id)) ||
-    (showProfit && !["name", "profitGroup","actions"].includes(cell.column.id))
-      ? "hidden sm:table-cell"
-      : ""
-  } ${cellWidthClass}`}
->
-                                  
+                                      key={cell.id}
+                                      className={`p-0 py-0 align-middle h-[50px] text-center border-r ${
+                                        (showSales &&
+                                          ![
+                                            "name",
+                                            "sales",
+                                            "actions",
+                                          ].includes(cell.column.id)) ||
+                                        (showProfit &&
+                                          ![
+                                            "name",
+                                            "profitGroup",
+                                            "actions",
+                                          ].includes(cell.column.id))
+                                          ? "hidden sm:table-cell"
+                                          : ""
+                                      } ${cellWidthClass}`}
+                                    >
                                       {flexRender(
                                         cell.column.columnDef.cell,
-                                        cell.getContext(),
+                                        cell.getContext()
                                       )}
                                     </TableCell>
-                                  )
+                                  );
                                 })
                               : columns.map((column) => (
                                   <TableCell
                                     key={column.id}
                                     className="text-center border-r text-gray-400"
                                   >
-                                    {''} {/* Placeholder for missing row */}
+                                    {""} {/* Placeholder for missing row */}
                                   </TableCell>
                                 ))}
                           </TableRow>
-                        )
+                        );
                       })}
                     </TableBody>
                   </Table>
@@ -1054,14 +1068,13 @@ const Page = () => {
                       </TableRow>
                     </TableBody>
                   </Table>
-                  
                 </div>
               )}
             </div>
             {isSidebarOpen && (
               <Sidebar
                 key={
-                  selectedItem?.id + '-' + (selectedItem?.images?.length || 0)
+                  selectedItem?.id + "-" + (selectedItem?.images?.length || 0)
                 }
                 isOpen={isSidebarOpen}
                 onClose={closeSidebar}
@@ -1072,7 +1085,7 @@ const Page = () => {
             {/*Image Upload Modal */}
             {imageModalOpen && (
               <ImageUploader
-                itemName={currentItem?.name || ''}
+                itemName={currentItem?.name || ""}
                 existingImages={currentItem?.images || []}
                 onSave={handleSaveImages}
                 onCancel={() => setImageModalOpen(false)}
@@ -1096,6 +1109,6 @@ const Page = () => {
         </p>
       </div>
     </main>
-  )
-}
+  );
+};
 export default Page;
