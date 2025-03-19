@@ -13,6 +13,7 @@ import Logo from "@/components/functional/logo";
 import { loginUser } from "@/services/auth";
 import { useStore } from "@/store/useStore";
 
+
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,7 +27,7 @@ export default function SignIn() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    console.log({ email, password });
+    
 
     setTouched({ email: true, password: true });
 
