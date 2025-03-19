@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import Illustration from "@/public/auth/illustration.svg";
 import Cube from "@/public/auth/cube.svg";
 import Logo from "@/components/functional/logo";
-import { useStore } from "@/store/useStore";
+// import { useStore } from "@/store/useStore";
 import { signUpUser } from "@/services/auth";
 import {
   DropdownMenu,
@@ -27,6 +27,9 @@ const countryCodes = [
 ];
 
 export default function SignUp() {
+
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -36,7 +39,7 @@ export default function SignUp() {
     phoneCountryCode: countryCodes[0].code,
     confirmPassword: "",
   });
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState({
     email: "",
@@ -52,9 +55,9 @@ export default function SignUp() {
     confirmPassword: false,
     phoneNumber: false,
   });
-  const { setOrganizationId, setOrganizationName } = useStore();
+  // const { setOrganizationId, setOrganizationName } = useStore();
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -168,10 +171,9 @@ export default function SignUp() {
       };
       await signUpUser(formattedData);
 
-      setOrganizationId("new-org-id");
-      setOrganizationName("New Organization");
+    
       setIsModalOpen(true);
-      // router.push("/dashboard");
+       router.push("/create-organization");
     } catch (err: any) {
       setError(err.message || "Something went wrong. Please try again.");
     } finally {
