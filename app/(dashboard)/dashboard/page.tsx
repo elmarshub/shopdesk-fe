@@ -625,11 +625,6 @@ const Page = () => {
     setIsSidebarOpen(false);
   };
 
-  // const handleAddSale = (newSales) => {
-  //   setSalesItems((prevItems) => [...prevItems, ...newSales]);
-  //   setIsModalOpen(false); // Close the modal after completing the sale
-  // };
-
   return (
     <main className="px-6 py-4 w-full max-w-7xl mx-auto flex flex-col main-h-svh ">
       <div ref={tableAreaRef} className="space-y-8 w-full h-full ">
@@ -767,8 +762,7 @@ const Page = () => {
                     isOpen={isOpen}
                     onClose={closeModal}
                     onSave={(newItem) => {
-                      setStockItems((prev) => [newItem, ...prev]); // Inserts new items at the top
-
+                      setStockItems((prev) => [newItem, ...prev]); 
                       closeModal();
                     }}
                   />
@@ -968,7 +962,6 @@ const Page = () => {
                 onSave={handleSaveEdit}
               />
             )}
-            {/*Image Upload Modal */}
             {imageModalOpen && (
               <ImageUploader
                 itemName={currentItem?.name || ""}
