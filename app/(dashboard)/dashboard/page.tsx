@@ -686,7 +686,7 @@ const Page = () => {
 
   const handleRowClick = (item: StockItem) => {
     setSelectedItem(item)
-    setIsSidebarOpen(true)
+    setIsSidebarOpen(false)
   }
 
   const closeSidebar = () => {
