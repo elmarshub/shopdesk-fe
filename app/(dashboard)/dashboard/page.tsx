@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState,useCallback,useRef,useMemo } from "react";
+import { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import { ChevronDown, Edit, Loader2, MoreVertical, SaveAll, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import EditItemModal from "@/components/modal/edit-stock";
@@ -29,7 +29,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import useTableAreaHeight from "./hooks/useTableAreaHeight";
-import { deleteStock,GetProduct, GetStock } from "@/services/stock";
+import { deleteStock, GetProduct, GetStock } from "@/services/stock";
 import { Search } from "lucide-react";
 import box from "@/public/icons/box.svg";
 import {
@@ -41,33 +41,36 @@ import {
 import { getAccessToken } from "@/app/api/token";
 import Sidebar from "@/components/functional/sidebar";
 import SalesTab from "@/components/functional/salestab";
+import SalesModal from "@/components/modal/sales-modal";
 
 declare module "@tanstack/react-table" {
   interface ColumnMeta<TData, TValue> {
     className?: string;
   }
 }
-  export type StockItem = {
-    id: string;
-    name: string;
-    buying_price: number;
-    quantity: number;
-    currency_code: string;
-    sku?: string;
-    buying_date?: string;
-    product_id?: string;
-    status?: string;
-    user_id?: string;
-    date_created?: string;
-    original_quantity?: number;
-    supplier?: null | any;
-    timeslots?: any[];
-    image?: { id: string; src: string } | null;
-    images?: { id: string; src: string }[];
-  };
+export type StockItem = {
+  id: string;
+  name: string;
+  buying_price: number;
+  quantity: number;
+  currency_code: string;
+  sku?: string;
+  buying_date?: string;
+  product_id?: string;
+  status?: string;
+  user_id?: string;
+  date_created?: string;
+  original_quantity?: number;
+  supplier?: null | any;
+  timeslots?: any[];
+  image?: { id: string; src: string } | null;
+  images?: { id: string; src: string }[];
+  remaining: number;
+  
+};
 
 export type ProductItem = {
-    name: string;
+  name: string;
   description: string;
   unique_id: string;
   url_slug: string;
@@ -94,12 +97,12 @@ export type ProductItem = {
   buying_price: number;
   photos: [];
   attributes: {};
-  };
+};
 
 const Page = () => {
   const { organizationId, organizationName, organizationInitial } =
     useStore();
-   
+
   const { tableAreaRef, tableAreaHeight } = useTableAreaHeight();
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -128,8 +131,8 @@ const Page = () => {
   const nameInputRef = useRef<HTMLInputElement>(null);
   const priceInputRef = useRef<HTMLInputElement>(null);
   const quantityInputRef = useRef<HTMLInputElement>(null);
-  const filteredItems = stockItems.filter((item) =>   
-      item.name.toLowerCase().includes(searchText.toLowerCase()) || (item.sku && item.sku.toLowerCase().includes(searchText.toLowerCase()))         
+  const filteredItems = stockItems.filter((item) =>
+    item.name.toLowerCase().includes(searchText.toLowerCase()) || (item.sku && item.sku.toLowerCase().includes(searchText.toLowerCase()))
   );
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
@@ -138,6 +141,9 @@ const Page = () => {
   const totalPages = Math.ceil(totalItems / rowsPerPage);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [salesItems, setSalesItems] = useState<SalesItem[]>([]); 
 
   useEffect(() => {
     if (currentPage > totalPages && totalPages > 0) {
@@ -182,44 +188,73 @@ const Page = () => {
   };
 
   useEffect(() => {
-  let isMounted = true; // Prevents state updates if component unmounts
-  setIsLoading(true);
+    setIsLoading(true);
+    GetProduct()
+      .then((data) => {
+        setIsLoading(false);
+        setProductItems(data.items.map((item: any) => ({
+          ...item,
+        })));
 
-  const fetchProductsAndStocks = async () => {
-    try {
-      // Fetch products
-      const productData: any = await GetProduct();
-      if (!isMounted) return; // Prevent state update if unmounted
-      setProductItems(productData.items);
+      })
+      .catch((error) => {
+        console.error("Error fetching stock:", error);
+      });
+  }, [router]);
 
-      // Fetch stock for each product
-      const stockData = await Promise.all(
-        productData.items.map((product: any) => GetStock(product.id))
-      );
+  useEffect(() => {
+    if (productItems.length === 0) return;
+    setIsLoading(true);
 
-      if (!isMounted) return;
-      const formattedStockItems = stockData.flatMap((data, index) =>
-        data.items.map((stock: any) => ({
-          ...stock,
-          sku: productData.items[index]?.unique_id, 
-        }))
-      );
+    const fetchStocks = async () => {
+      try {
+        const stockData = await Promise.all(
+          productItems.map((product) => GetStock(product.id))
+        );
 
-      setStockItems(formattedStockItems);
-    } catch (error) {
-      console.error("Error fetching products or stocks:", error);
-    } finally {
-      if (isMounted) setIsLoading(false);
-    }
+        const formattedStockItems = stockData.flatMap((data) =>
+          data.items.map((stock: any) => {
+
+            const matchingProduct = productItems.find(
+              (product) => product.id === stock.product_id
+            );
+
+            return {
+              ...stock,
+              sku: matchingProduct?.unique_id,
+            };
+          })
+        );
+
+        setStockItems(formattedStockItems);
+      } catch (error) {
+        console.error("Error fetching stock:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchStocks();
+  }, [productItems.length]);
+
+  const handleAddSale = (selectedItems: { id: number; quantity: number }[]) => {
+    const newSalesItems = selectedItems.map((item) => {
+      const stockItem = stockItems.find((stock) => stock.id === item.id);
+      if (!stockItem) return null;
+
+      return {
+        id: stockItem.id,
+        item_name: stockItem.name,
+        price: stockItem.buying_price || 0,
+        quantity: item.quantity,
+        total: (stockItem.buying_price || 0) * item.quantity,
+        date: new Date().toLocaleDateString(),
+      };
+    }).filter(Boolean) as SalesItem[];
+
+    setSalesItems((prevItems) => [...prevItems, ...newSalesItems]);
+    setIsModalOpen(false);
   };
-
-  fetchProductsAndStocks();
-
-  return () => {
-    isMounted = false;
-  };
-}, [router]);
-
 
   const handleEditClick = (item: StockItem) => {
     setSelectedItem(item);
@@ -299,7 +334,7 @@ const Page = () => {
 
   const handleSaveInline = async () => {
     if (!editedItem) return;
-    
+
     const organization_id = useStore.getState().organizationId;
     try {
       const token = await getAccessToken();
@@ -394,11 +429,11 @@ const Page = () => {
                   className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center text-gray-400 hover:bg-gray-200"
                 >
                   <span className="text-xs">
-                    <Image 
-                    src="/icons/column-img.svg"
-                    alt="Add Image"
-                    width={20}
-                    height={20}
+                    <Image
+                      src="/icons/column-img.svg"
+                      alt="Add Image"
+                      width={20}
+                      height={20}
                     />
                   </span>
                 </button>
@@ -417,7 +452,7 @@ const Page = () => {
           const isTransitioning = isEditingTransition === row.original.id;
 
           return (
-            <div 
+            <div
               className="w-full h-full flex items-center overflow-hidden"
               onClick={() => !isEditingThisRow && handleInlineEdit(row.original, "name")}
             >
@@ -432,7 +467,27 @@ const Page = () => {
                   className="no-spinner w-full h-full min-w-0 border text-left box-border p-2 focus:outline-[#009A49]"
                 />
               ) : (
-                <span className="block text-wrap p-2">{row.original.name}</span>
+                <span className="block text-balance p-2">{row.original.name}</span>
+              )}
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: "sku",
+        header: "SKU",
+        cell: ({ row }) => {
+          const isEditingThisRow = editedItem?.id === row.original.id;
+          const isTransitioning = isEditingTransition === row.original.id;
+
+          return (
+            <div className="inline-block w-full overflow-hidden">
+              {isTransitioning ? (
+                <Loader2 className="w-4 h-4 animate-spin mx-auto" />
+              ) : isEditingThisRow ? (
+                <span className="block truncate">{row.original.sku}</span>
+              ) : (
+                <span className="block truncate">{row.original.sku}</span>
               )}
             </div>
           );
@@ -463,7 +518,7 @@ const Page = () => {
                 />
               ) : (
                 <span className="block w-full overflow-x-clip">{`${row.original.currency_code} ${row.original.buying_price?.toLocaleString()}`}</span>
-                
+
               )}
             </div>
           );
@@ -513,10 +568,10 @@ const Page = () => {
                 <Loader2 className="w-4 h-4 animate-spin mx-auto" />
               ) : isEditingThisRow ? (
                 <div className="flex justify-center items-center gap-2 cursor-pointer"
-                onClick={handleSaveInline}>
+                  onClick={handleSaveInline}>
                   <div className="flex justify-center items-center gap-2 text-[20px]">
                     <SaveAll
-                      className="cursor-pointer text-black w-[16px] h-[16px]"                      
+                      className="cursor-pointer text-black w-[16px] h-[16px]"
                     />
                   </div>
                   <p>Save</p>
@@ -541,11 +596,11 @@ const Page = () => {
         meta: { className: "" },
       },
     ],
-    [editedItem, isEditingTransition]
+    [editedItem, isEditingTransition, handleInlineEdit, handleSaveInline]
   );
   const paginatedData = isSearching
-  ? filteredItems.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
-  : stockItems.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
+    ? filteredItems.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
+    : stockItems.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
 
   const table = useReactTable({
     data: paginatedData,
@@ -569,6 +624,11 @@ const Page = () => {
   const closeSidebar = () => {
     setIsSidebarOpen(false);
   };
+
+  // const handleAddSale = (newSales) => {
+  //   setSalesItems((prevItems) => [...prevItems, ...newSales]);
+  //   setIsModalOpen(false); // Close the modal after completing the sale
+  // };
 
   return (
     <main className="px-6 py-4 w-full max-w-7xl mx-auto flex flex-col main-h-svh ">
@@ -597,7 +657,7 @@ const Page = () => {
           </div>
           <div className="">
             <DropdownMenu modal>
-            <DropdownMenuTrigger
+              <DropdownMenuTrigger
                 disabled
                 className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white"
               >
@@ -620,8 +680,8 @@ const Page = () => {
         </div>
 
         <div className="space-y-0 w-full ">
-        <div className="w-full flex justify-between max-[800px]:flex-col-reverse">
-        <div className="flex">
+          <div className="w-full flex justify-between max-[800px]:flex-col-reverse">
+            <div className="flex">
               <div
                 className={`flex items-center justify-center gap-2 rounded-tl-lg border-x-2 border-t-2 border-gray-100 px-4 py-3 ${
                   activeTab === "stock" ? "bg-white" : "bg-gray-100"
@@ -632,9 +692,9 @@ const Page = () => {
               >
                 <span
                   className={
-                    activeTab === "stock" 
-                    ? "text-black bg-white" 
-                    : "bg-gray-100 text-gray-400"
+                    activeTab === "stock"
+                      ? "text-black bg-white"
+                      : "bg-gray-100 text-gray-400"
                   }
                 >
                   Stock
@@ -654,13 +714,13 @@ const Page = () => {
                 }`}
                 onClick={() => setActiveTab("sales")}
                 role="button"
-                style={{ cursor:"pointer", width: "160px" }}
+                style={{ cursor: "pointer", width: "160px" }}
               >
                 <span
                   className={
-                    activeTab === "sales" ? 
-                    "text-black bg-white" 
-                    : "text-gray-400 bg-gray-100"
+                    activeTab === "sales" ?
+                      "text-black bg-white"
+                      : "text-gray-400 bg-gray-100"
                   }
                 >
                   Sales
@@ -690,25 +750,19 @@ const Page = () => {
                   +
                 </button>
 
-              <div className="relative max-[800px]:w-full">
-                <input type="text" 
-                className="h-12 border w-[327px] max-[800px]:w-full rounded-md focus:outline-2 focus:outline-[#009A49] px-10"
-                placeholder="Search by item name, SKU code"
-                onChange={(event)=>{
-                  setIsSearching(true);
-                  setSearchText(event.target.value);
-                  if(!event.target.value){
-                    setIsSearching(false);
-                  }
-                }}/>
+                <div className="relative max-[800px]:w-full">
+                  <input type="text"
+                    className="h-12 border w-[327px] max-[800px]:w-full rounded-md focus:outline-2 focus:outline-[#009A49] px-10"
+                    onChange={(event) => {
+                      setIsSearching(true);
+                      setSearchText(event.target.value);
+                      if (!event.target.value) {
+                        setIsSearching(false);
+                      }
+                    }} />
 
-                <img
-                   src='/icons/search_Icon.svg'
-                   alt="Search Icon"
-                   className="absolute top-3 left-3 w-5 h-5"
-                 />
-
-              </div>
+                  <Search className="text-[#667085] absolute top-3 left-3 " />
+                </div>
 
                 <div className="z-10">
                   <AddItemModal
@@ -719,10 +773,10 @@ const Page = () => {
 
                       closeModal();
                     }}
-                  />                  
+                  />
                 </div>
-                
-            </div>
+
+              </div>
             )}
           </div>
           <div className="flex w-full overflow-hidden mx-auto">
@@ -863,34 +917,42 @@ const Page = () => {
 })}
 
 
-                  </TableBody>
-                </Table>
-                <Table>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell colSpan={columns.length} className="">
-                        <PaginationFeature
-                          totalItems={isSearching ? filteredItems.length : stockItems.length}
-                          currentPage={currentPage}
-                          itemsPerPage={rowsPerPage}
-                          totalPages={totalPages}
-                          onPageChange={handlePageChange}
-                          onItemsPerPageChange={handleItemsPerPageChange}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>        
-                </Table>                     
-              </>
-            )}                                                                
-            </div>
-           ) : (
-              <SalesTab
-                onAddSale={() => {
-                  console.log("Add sale action triggered");
-                  console.log("Active tab:", activeTab);
-                }}
-              />
+                      </TableBody>
+                    </Table>
+                    <Table>
+                      <TableBody>
+                        <TableRow>
+                          <TableCell colSpan={columns.length} className="">
+                            <PaginationFeature
+                              totalItems={isSearching ? filteredItems.length : stockItems.length}
+                              currentPage={currentPage}
+                              itemsPerPage={rowsPerPage}
+                              totalPages={totalPages}
+                              onPageChange={handlePageChange}
+                              onItemsPerPageChange={handleItemsPerPageChange}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div className="w-full">
+                <SalesTab
+                  onAddSale={() => setIsModalOpen(true)} 
+                  salesItems={salesItems}
+                  />
+
+                <SalesModal
+                  isOpen={isModalOpen}
+                  onClose={() => setIsModalOpen(false)}
+                  stockItems={stockItems}
+                  productItems={productItems}
+                  onCompleteSale={handleAddSale}
+                />
+              </div>
             )}
             {isSidebarOpen && (
               <Sidebar
