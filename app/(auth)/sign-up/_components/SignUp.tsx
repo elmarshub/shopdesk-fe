@@ -15,6 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import SignUpSuccess from "@/components/modal/signUpSucccess";
 
 const countryCodes = [
   { code: "+234", name: "Nigeria", flag: "/modal-images/nigeria-flag.svg" },
@@ -35,7 +36,7 @@ export default function SignUp() {
     phoneCountryCode: countryCodes[0].code,
     confirmPassword: "",
   });
-
+  const [isModalOpen, setIsModalOpen] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [errors, setErrors] = useState({
     email: "",
@@ -169,7 +170,7 @@ export default function SignUp() {
 
       setOrganizationId("new-org-id");
       setOrganizationName("New Organization");
-
+      setIsModalOpen(true);
       // router.push("/dashboard");
     } catch (err: any) {
       setError(err.message || "Something went wrong. Please try again.");
@@ -669,7 +670,7 @@ export default function SignUp() {
               {/* Sign Up Button*/}
               <motion.button
                 type="submit"
-                className="w-1/2 mx-auto bg-[#2A2A2A] hover:bg-[#B8B8B8] active:bg-[#B8B8B8] text-white p-2.5 rounded-lg font-medium transition duration-200 flex justify-center items-center gap-2 text-sm cursor-pointer"
+                className="w-full md:w-1/2 mx-auto bg-[#2A2A2A] hover:bg-[#B8B8B8] active:bg-[#B8B8B8] text-white p-2.5 rounded-lg font-medium transition duration-200 flex justify-center items-center gap-2 text-sm cursor-pointer"
                 disabled={loading}
                 variants={buttonVariants}
                 whileHover="hover"
@@ -703,7 +704,13 @@ export default function SignUp() {
           </motion.div>
         </motion.div>
       </main>
-
+      {isModalOpen && (
+        <SignUpSuccess 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          email={formData.email} 
+        />
+      )}
       <motion.div
         className="py-2"
         initial={{ opacity: 0, y: 20 }}
