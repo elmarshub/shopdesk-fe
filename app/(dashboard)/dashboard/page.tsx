@@ -617,10 +617,10 @@ const Page = () => {
   }
 
   const handleRowClick = (item: StockItem) => {
+    if (selectedItem?.id === item.id && isSidebarOpen) return; 
     setSelectedItem(item);
     setIsSidebarOpen(true);
   };
-
   const closeSidebar = () => {
     setIsSidebarOpen(false);
   };
@@ -683,8 +683,9 @@ const Page = () => {
           <div className="w-full flex justify-between max-[800px]:flex-col-reverse">
             <div className="flex">
               <div
-                className={`flex items-center justify-center gap-2 rounded-tl-lg border-2 border-gray-100 px-4 py-3 ${activeTab === "stock" ? "bg-white" : "bg-gray-100"
-                  }`}
+                className={`flex items-center justify-center gap-2 rounded-tl-lg border-x-2 border-t-2 border-gray-100 px-4 py-3 ${
+                  activeTab === "stock" ? "bg-white" : "bg-gray-100"
+                }`}
                 onClick={() => setActiveTab("stock")}
                 role="button"
                 style={{ cursor: "pointer", width: "160px" }}
@@ -708,8 +709,9 @@ const Page = () => {
               </div>
 
               <div
-                className={`flex items-center justify-center gap-2 border-2 border-gray-100 px-4 py-3 rounded-tr-lg ${activeTab === "sales" ? "bg-white" : "bg-gray-100"
-                  }`}
+                className={`flex items-center justify-center gap-2 border-x-2 border-t-2 border-gray-100 px-4 py-3 rounded-tr-lg ${
+                  activeTab === "sales" ? "bg-white" : "bg-gray-100"
+                }`}
                 onClick={() => setActiveTab("sales")}
                 role="button"
                 style={{ cursor: "pointer", width: "160px" }}
@@ -778,147 +780,142 @@ const Page = () => {
             )}
           </div>
           <div className="flex w-full overflow-hidden mx-auto">
-            {activeTab === "stock" ? (
-              <div
-                className={`border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg flex-1 overflow-auto w-full transition-all duration-300 ease-in-out ${isSidebarOpen ? "w-full max-w-[989px] mr-1" : "w-full"
-                  }`}
-              >
-                {stockItems.length === 0 ||
-                  (isSearching && filteredItems.length === 0) ? (
-                  <div className="relative">
-                    <Table>
-                      <TableHeader>
-                        <TableRow className="h-[50px]">
-                          <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-2/7 min-w-[120px] max-[400px]:w-1/3 max-[400px]:px-1 text-left border-b border-r">
-                            ITEM NAME
-                          </TableHead>
-                          <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] max-[400px]:w-1/3 max-[400px]:px-1 text-center border-b border-r">
-                            SKU CODE
-                          </TableHead>
-                          <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] max-[400px]:w-1/3 max-[400px]:px-1 text-center border-b border-r">
-                            PRICE
-                          </TableHead>
-                          <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] text-center border-b border-r ">
-                            QUANTITY
-                          </TableHead>
-                          <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] text-center border-b ">
-                            ACTION
-                          </TableHead>
-                        </TableRow>
-                      </TableHeader>
-                    </Table>
-                    <div className="w-full overflow-x-auto">
-                      <span className="w-full h-px bg-[#DEDEDE] block"></span>
-                      <div className="relative h-[80vh] w-full">
-                        {!(isSearching && filteredItems.length === 0) ? (
-                          <div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
+          {activeTab === "stock" ? (
+            <div
+              className={`border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg flex-1 overflow-auto w-full transition-all duration-300 ease-in-out ${
+                isSidebarOpen ? "w-full max-w-[989px] mr-1" : "w-full"
+              }`}
+            >
+              {stockItems.length === 0 ||
+              (isSearching && filteredItems.length === 0) ? (
+                <div className="relative">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="h-[50px]">
+                        <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-2/7 min-w-[120px] max-[400px]:w-1/3 max-[400px]:px-1 text-left border-b border-r">
+                          ITEM NAME
+                        </TableHead>
+                        <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] max-[400px]:w-1/3 max-[400px]:px-1 text-center border-b border-r">
+                          PRICE
+                        </TableHead>
+                        <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] text-center border-b border-r ">
+                          QUANTITY
+                        </TableHead>
+                        <TableHead className="text-[#090F1C] font-circular-medium px-4 py-2 w-1/7 min-w-[120px] text-center border-b ">
+                          ACTION
+                        </TableHead>
+                      </TableRow>
+                    </TableHeader>
+                  </Table>
+                  <div className="w-full overflow-x-auto">
+                    <span className="w-full h-px bg-[#DEDEDE] block"></span>
+                    <div className="relative h-[80vh] w-full">
+                      {!(isSearching && filteredItems.length === 0) ? (
+                        <div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
+                          <Image
+                            src="/icons/empty-note-pad.svg"
+                            alt=""
+                            width={56}
+                            height={56}
+                            className="mx-auto"
+                          />
+                          <p className="text-[#888888] text-sm">
+                            You have 0 items in stock
+                          </p>
+                          <button
+                            type="button"
+                            onClick={openModal}
+                            className="btn-outline hover:cursor-pointer"
+                          >
+                            + Add New Stock
+                          </button>
+                          <AddItemModal
+                            isOpen={isOpen}
+                            onClose={closeModal}
+                            onSave={(newItem) => {
+                              setStockItems((prev) => [newItem, ...prev]);
+                              closeModal();
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="bg-[#F8FAFB] border border-[#DEDEDE] w-[563px] h-[200px] rounded-lg flex flex-col items-center justify-center gap-3 max-[800px]:w-[343px] max-[800px]:h-[334px]">
                             <Image
-                              src="/icons/empty-note-pad.svg"
+                              src={box}
                               alt=""
                               width={56}
                               height={56}
-                              className="mx-auto"
+                              className="size-8"
                             />
-                            <p className="text-[#888888] text-sm">
-                              You have 0 items in stock
+                            <p className="text-[#2A2A2A] text-sm">
+                              Search Item not found.
                             </p>
-                            <button
-                              type="button"
-                              onClick={openModal}
-                              className="btn-outline hover:cursor-pointer"
-                            >
-                              + Add New Stock
-                            </button>
-                            <AddItemModal
-                              isOpen={isOpen}
-                              onClose={closeModal}
-                              onSave={(newItem) => {
-                                setStockItems((prev) => [newItem, ...prev]);
-                                closeModal();
-                              }}
-                            />
                           </div>
-                        ) : (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="bg-[#F8FAFB] border border-[#DEDEDE] w-[563px] h-[200px] rounded-lg flex flex-col items-center justify-center gap-3 max-[800px]:w-[343px] max-[800px]:h-[334px]">
-                              <Image
-                                src={box}
-                                alt=""
-                                width={56}
-                                height={56}
-                                className="size-8"
-                              />
-                              <p className="text-[#2A2A2A] text-sm">
-                                Search Item not found.
-                              </p>
-                            </div>
-                          </div>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </div>
                   </div>
-                ) : (
-                  <>
-                    <Table className="border-collapse border-b min-w-[590px] table-fixed">
-                      <TableHeader>
-                        {table.getHeaderGroups().map((headerGroup) => (
-                          <TableRow key={headerGroup.id} className="h-[50px]">
-                            {headerGroup.headers.map((header) => (
-                              <TableHead
-                                key={header.id}
-                                className={`text-[#090F1C] font-circular-medium px-4 py-2 text-center border-b border-r min-w-[100px] ${header.column.id === "name"
-                                    ? "text-left w-2/7 max-[750px]:w-1/7"
-                                    : "w-1/7"
-                                  } ${header.column.columnDef.meta?.className || ""
-                                  }`}
-                              >
-                                {flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext()
-                                )}
-                              </TableHead>
-                            ))}
-                          </TableRow>
-                        ))}
-                      </TableHeader>
-                      <TableBody>
-                        {Array.from({ length: rowsPerPage }).map((_, index) => {
-                          const row = table.getRowModel().rows[index] || null;
-
-                          return (
-                            <TableRow
-                              key={index}
-                              className="h-[50px] cursor-pointer"
-                              onClick={() => row && handleRowClick(row.original)}
+                </div>
+              ) : (
+                <>
+                  <Table className="border-collapse border-b min-w-[590px] table-fixed">
+                    <TableHeader>
+                      {table.getHeaderGroups().map((headerGroup) => (
+                        <TableRow key={headerGroup.id} className="h-[50px]">
+                          {headerGroup.headers.map((header) => (
+                            <TableHead
+                              key={header.id}
+                              className={`text-[#090F1C] font-circular-medium px-4 py-2 text-center border-b border-r min-w-[100px] ${
+                                header.column.id === "name"
+                                  ? "text-left w-2/7 max-[750px]:w-1/7"
+                                  : "w-1/7"
+                              } ${
+                                header.column.columnDef.meta?.className || ""
+                              }`}
                             >
-                              {row
-                                ? row.getVisibleCells().map((cell) => (
-                                  <TableCell
-                                    key={cell.id}
-                                    className={`px-4 py-3 text-center border-r ${cell.column.id === "name"
-                                        ? "text-left overflow-hidden"
-                                        : ""
-                                      } ${cell.column.columnDef.meta?.className ||
-                                      ""
-                                      }`}
-                                  >
-                                    {flexRender(
-                                      cell.column.columnDef.cell,
-                                      cell.getContext()
-                                    )}
-                                  </TableCell>
-                                ))
-                                : columns.map((column) => (
-                                  <TableCell
-                                    key={column.id}
-                                    className="px-4 py-3 text-center border-r text-gray-400"
-                                  >
-                                    {""} {/* Placeholder for missing row */}
-                                  </TableCell>
-                                ))}
-                            </TableRow>
-                          );
-                        })}
+                              {flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                            </TableHead>
+                          ))}
+                        </TableRow>
+                      ))}
+                    </TableHeader>
+                    <TableBody>
+                    {Array.from({ length: rowsPerPage }).map((_, index) => {
+  const row = table.getRowModel().rows[index] || null;
+
+  return (
+    <TableRow
+      key={row?.id || `row-placeholder-${index}`} 
+      className="h-[50px] cursor-pointer"
+      onClick={() => row && handleRowClick(row.original)}
+    >
+      {row
+        ? row.getVisibleCells().map((cell, cellIndex) => (
+            <TableCell
+              key={`${row.id}-cell-${cellIndex}`}
+              className={`px-4 py-3 text-center border-r ${
+                cell.column.id === "name" ? "text-left overflow-hidden" : ""
+              } ${cell.column.columnDef.meta?.className || ""}`}
+            >
+              {flexRender(cell.column.columnDef.cell, cell.getContext())}
+            </TableCell>
+          ))
+        : columns.map((column, columnIndex) => (
+            <TableCell
+              key={`placeholder-cell-${columnIndex}`} 
+              className="px-4 py-3 text-center border-r text-gray-400"
+            >
+              {""} {/* Placeholder for missing row */}
+            </TableCell>
+          ))}
+    </TableRow>
+  );
+})}
+
 
                       </TableBody>
                     </Table>
