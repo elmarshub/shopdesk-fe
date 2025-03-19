@@ -760,12 +760,12 @@ const Page = () => {
               />
             </div>
 
-            <SalesTab
-                onAddSale={() => {
-                  console.log("Add sale action triggered");
-                  console.log("Active tab:", activeTab);
-                }}
-              />
+            {/*<SalesTab
+               // onAddSale={() => {
+                //  console.log("Add sale action triggered");
+                 // console.log("Active tab:", activeTab);
+                //}}
+             // /> */}
 </div>
             {stockItems.length > 0 && (
               <div className="mb-2 max-[800px]:mb-4 max-[640px]:self-end flex items-center justify-center max-[1000px]:flex-row-reverse max-[800px]:w-full">
