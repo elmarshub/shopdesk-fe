@@ -143,6 +143,7 @@ const Page = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [salesItems, setSalesItems] = useState<SalesItem[]>([]); 
 
   useEffect(() => {
     if (currentPage > totalPages && totalPages > 0) {
@@ -235,6 +236,25 @@ const Page = () => {
 
     fetchStocks();
   }, [productItems.length]);
+
+  const handleAddSale = (selectedItems: { id: number; quantity: number }[]) => {
+    const newSalesItems = selectedItems.map((item) => {
+      const stockItem = stockItems.find((stock) => stock.id === item.id);
+      if (!stockItem) return null;
+
+      return {
+        id: stockItem.id,
+        item_name: stockItem.name,
+        price: stockItem.buying_price || 0,
+        quantity: item.quantity,
+        total: (stockItem.buying_price || 0) * item.quantity,
+        date: new Date().toLocaleDateString(),
+      };
+    }).filter(Boolean) as SalesItem[];
+
+    setSalesItems((prevItems) => [...prevItems, ...newSalesItems]);
+    setIsModalOpen(false);
+  };
 
   const handleEditClick = (item: StockItem) => {
     setSelectedItem(item);
@@ -605,6 +625,11 @@ const Page = () => {
     setIsSidebarOpen(false);
   };
 
+  // const handleAddSale = (newSales) => {
+  //   setSalesItems((prevItems) => [...prevItems, ...newSales]);
+  //   setIsModalOpen(false); // Close the modal after completing the sale
+  // };
+
   return (
     <main className="px-6 py-4 w-full max-w-7xl mx-auto flex flex-col main-h-svh ">
       <div ref={tableAreaRef} className="space-y-8 w-full h-full ">
@@ -919,12 +944,16 @@ const Page = () => {
             ) : (
               <div className="w-full">
                 <SalesTab
-                  onAddSale={() => setIsModalOpen(true)} />
+                  onAddSale={() => setIsModalOpen(true)} 
+                  salesItems={salesItems}
+                  />
+
                 <SalesModal
                   isOpen={isModalOpen}
                   onClose={() => setIsModalOpen(false)}
                   stockItems={stockItems}
                   productItems={productItems}
+                  onCompleteSale={handleAddSale}
                 />
               </div>
             )}
