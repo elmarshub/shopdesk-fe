@@ -719,8 +719,7 @@ const Page = () => {
                     isOpen={isOpen}
                     onClose={closeModal}
                     onSave={(newItem) => {
-                      setStockItems((prev) => [newItem, ...prev]); // Inserts new items at the top
-
+                      setStockItems((prev) => [newItem, ...prev]); 
                       closeModal();
                     }}
                   />
@@ -918,7 +917,6 @@ const Page = () => {
                 onSave={handleSaveEdit}
               />
             )}
-            {/*Image Upload Modal */}
             {imageModalOpen && (
               <ImageUploader
                 itemName={currentItem?.name || ""}
