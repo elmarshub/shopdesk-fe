@@ -1,44 +1,62 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Features } from "@/components/shared/features";
+import Link from "next/link";
 
 const Page = () => {
   interface PriceCardContentOptions {
     plan: string;
-    price: string;
+    monthlyPrice: string;
+    annualPrice: string;
+    monthlyLink: string;
+    annualLink: string;
     item: string[];
   }
+
+  const [isAnnual, setIsAnnual] = useState(false);
 
   const horizontalRuleStyles: string = "bg-[#d0d0d0] h-[1px] w-full";
   const priceCardContent: PriceCardContentOptions[] = [
     {
       plan: "Free Plan",
-      price: "₦0/Mo",
+      monthlyPrice: "$0/Mo",
+      annualPrice: "$0/year",
+      monthlyLink: "#",
+      annualLink: "#",
       item: [
-        "Track up to 50 items in stock.",
-        "Basic sales and profit tracking.",
-        "Offline mode with local storage.",
-        "Single user (admin role only)",
+        "Users can (add, edit, view and delete) 10 product.",
+        "Users can record only 3 sales daily",
       ],
     },
     {
-      plan: "Pro Plan",
-      price: "₦15,000/Mo",
+      plan: "Basic Plan",
+      monthlyPrice: "$30/Month",
+      annualPrice: "$300/Month",
+      monthlyLink: "https://buy.stripe.com/4gw3gbgEw5644243cQ",
+      annualLink: "https://buy.stripe.com/4gweYTewo7ec7eg6p3",
       item: [
-        "Unlimited items in stock.",
-        "Export daily/weekly reports.",
-        "3 users (admin + 2 staff)",
-        "Priority email support.",
+        "Allows users to add up to 70 products",
+        " Up to 5 users per organization",
+        "Record up to 20 sales daily",
+        "Generate Receipt for only print",
+        "Export for stock can only be viewed.",
       ],
     },
     {
-      plan: "Enterprise Plan",
-      price: "₦55,000/Mo",
+      plan: "Premium Plan",
+      monthlyPrice: "$50/Month",
+      annualPrice: "$500/Month",
+      monthlyLink: "https://buy.stripe.com/eVa2c7cog7ecbuw00G",
+      annualLink: "https://buy.stripe.com/fZe5oj5ZSbus568aFl",
       item: [
-        "Unlimited users and roles",
-        "Bulk import/export for stock",
-        "Compliance audits (GDPR)",
-        "Dedicated account manager",
+        "Unlimited access to add products",
+        "Record an unlimited number of sales daily",
+        "The user can add a discount",
+        " Generate print receipts, receipts can be sent via email and SMS",
+        "Can view and analyze exported CSV and PDF data",
+        "Unlimited users per organization.",
       ],
     },
   ];
@@ -55,14 +73,21 @@ const Page = () => {
             anytime.
           </p>
         </div>
+        {/* Toggle between Monthly and Annually */}
         <div className="flex p-[10px] rounded-[16px] items-center bg-[#f1f1f1] w-[227px] h-[64px]">
           <Button
-            className={`text-white bg-[#2a2a2a] border-[1px] border-[#1b1b1b] w-[102px] `}
+            className={`w-[102px] ${
+              !isAnnual ? "text-white bg-[#2a2a2a] border-[#1b1b1b]" : "bg-transparent text-[#2a2a2a]"
+            }`}
+            onClick={() => setIsAnnual(false)}
           >
             Monthly
           </Button>
           <Button
-            className={` h-[44px] text-[#2a2a2a] bg-transparent shadow-none hover:bg-transparent`}
+            className={`w-[102px] ${
+              isAnnual ? "text-white bg-[#2a2a2a] border-[#1b1b1b]" : "bg-transparent text-[#2a2a2a]"
+            }`}
+            onClick={() => setIsAnnual(true)}
           >
             Annually
           </Button>
@@ -81,7 +106,7 @@ const Page = () => {
                       {cardContent.plan}
                     </p>
                     <p className="text-4xl leading-[56px]">
-                      {cardContent.price}
+                    {isAnnual ? cardContent.annualPrice : cardContent.monthlyPrice}
                     </p>
                   </div>
                   <div className={`${horizontalRuleStyles}`}></div>
@@ -105,9 +130,12 @@ const Page = () => {
                     ))}
                   </div>
                   <div className={`${horizontalRuleStyles}`}></div>
-                  <Button className="w-full py-[10px] px-[18px] rounded-[8px] border-[1px] border-[#1b1b1b] bg-[#2a2a2a] mt-auto">
-                    Get Started
-                  </Button>
+                  <Link href="/sign-up">
+                <Button className="w-full py-[10px] px-[18px] rounded-[8px] border-[1px] border-[#1b1b1b] bg-[#2a2a2a] mt-auto">
+                  Get Started
+                </Button>
+              </Link>
+
                 </div>
               );
             }
