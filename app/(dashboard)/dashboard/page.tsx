@@ -811,7 +811,7 @@ const Page = () => {
   {!isPremium && stockItems.length >= 10 && (
     <div className="z-50 absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-sm rounded-md px-3 py-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
       Upgrade to Premium to add more. 
-      <a href="/pricing" className="text-blue-400 underline ml-1 ">Upgrade now</a>
+      <a href="/dashboard/billing" className="text-blue-400 underline ml-1 ">Upgrade now</a>
     </div>
   )}
 
