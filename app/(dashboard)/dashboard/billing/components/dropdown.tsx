@@ -20,15 +20,14 @@ const Dropdown = () => {
   return (
     <>
       <DropdownMenu modal>
-            <DropdownMenuTrigger className="btn-primary hover:cursor-pointer hidden min-[850px]:flex items-center gap-2 text-white">
-              <span className="py-2 px-4 rounded-lg bg-white text-black">
-                {organizationInitial}
-              </span>
-              {organizationName}
-              <ChevronDown strokeWidth={1.5} color="white" />
-            </DropdownMenuTrigger>
-            
-          </DropdownMenu>
+        <DropdownMenuTrigger className="btn-primary hover:cursor-pointer hidden min-[850px]:flex items-center gap-2 text-white">
+          <span className="py-2 px-4 rounded-lg bg-white text-black">
+            {organizationInitial}
+          </span>
+          {organizationName}
+          <ChevronDown strokeWidth={1.5} color="white" />
+        </DropdownMenuTrigger>            
+      </DropdownMenu>
     </>
   )
 }

@@ -151,11 +151,7 @@ const Page = () => {
                     <div className="flex-1">
 
                     </div>
-                    <Link className="w-full flex flex-col items-stretch" href={isAnnual? cardContent.annualLink : cardContent.monthlyLink}>                  
-                      {/* <Button className="w-full py-[10px] px-[18px] rounded-[8px] border-[1px] border-[#1b1b1b] bg-[#2a2a2a] mt-auto">
-                        Get Started
-                      </Button> */}
-
+                    <Link className="w-full flex flex-col items-stretch" href={isAnnual? cardContent.annualLink : cardContent.monthlyLink} target="_blank">
                       <button className={plan === cardContent.plan? 'btn-primary' : 'btn-outline'}>
                       {plan === cardContent.plan ? 'Current Plan' : 'Upgrade'}
                       </button>
