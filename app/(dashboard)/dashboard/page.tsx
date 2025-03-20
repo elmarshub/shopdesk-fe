@@ -209,8 +209,8 @@ const Page = () => {
   };
 
   useEffect(() => {
-  let isMounted = true; // Prevents state updates if component unmounts
-  //setIsLoading(true);
+    let isMounted = true; // Prevents state updates if component unmounts
+    //setIsLoading(true);
 
     const fetchProductsAndStocks = async () => {
       try {
@@ -371,14 +371,11 @@ const Page = () => {
   useEffect(() => {
     if (organizationId === "160db8736a9d47989381e01a987e4413") {
       setIsPremium(true);
-    }  else {
+    } else {
       setIsPremium(false);
     }
-  }, [])
+  }, []);
 
-  
-  
-  
   // if (organizationId !== "160db8736a9d47989381e01a987e4413" &&  stockItems.length >= 10){
   //   setIsPremium(false)
   // }
@@ -430,7 +427,7 @@ const Page = () => {
                   className="no-spinner w-full h-full min-w-0 border text-left box-border p-2 focus:outline-[#009A49]"
                 />
               ) : (
-                <span className="block text-balance py-2 pl-4">
+                <span className="block text-balance py-2 pl-4 capitalize">
                   {row.original.name}
                 </span>
               )}
@@ -699,7 +696,7 @@ const Page = () => {
 
   const handleRowClick = (item: StockItem) => {
     setSelectedItem(item);
-    setIsSidebarOpen(false);
+    setIsSidebarOpen(true);
   };
 
   const closeSidebar = () => {
@@ -707,7 +704,7 @@ const Page = () => {
   };
 
   return (
-    <main className="px-6 py-4 w-full max-w-7xl mx-auto flex flex-col main-h-svh ">
+    <main className="px-6 py-4 w-full max-w-7xl mx-auto container flex flex-col main-h-svh">
       <div ref={tableAreaRef} className="space-y-8 w-full h-full ">
         <LogoutConfirmModal
           open={isLogoutModalOpen}
@@ -726,6 +723,7 @@ const Page = () => {
               : undefined
           }
         />
+
         <div className="lg:border px-4 py-2 lg:shadow-md rounded-lg lg:flex items-center justify-between mx-auto">
           <div className="flex items-center gap-6">
             <div className="flex justify-center lg:justify-start w-full lg:w-auto">
@@ -807,23 +805,28 @@ const Page = () => {
             {stockItems.length > 0 && (
               <div className="mb-2 max-[800px]:mb-4 max-[640px]:self-end flex items-center justify-center max-[1000px]:flex-row-reverse max-[800px]:w-full">
                 <div className="relative group inline-block">
-  {/* Tooltip */}
-  {!isPremium && stockItems.length >= 10 && (
-    <div className="z-50 absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-sm rounded-md px-3 py-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
-      Upgrade to Premium to add more. 
-      <a href="/pricing" className="text-blue-400 underline ml-1 ">Upgrade now</a>
-    </div>
-  )}
+                  {/* Tooltip */}
+                  {!isPremium && stockItems.length >= 10 && (
+                    <div className="z-50 absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-sm rounded-md px-3 py-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                      Upgrade to Premium to add more.
+                      <a
+                        href="/pricing"
+                        className="text-blue-400 underline ml-1 "
+                      >
+                        Upgrade now
+                      </a>
+                    </div>
+                  )}
 
-  {/* Button */}
-  <button
-    onClick={openModal}
-    className="btn-primary max-[400px]:text-sm text-nowrap max-[1000px]:hidden mr-2 disabled:opacity-50"
-    disabled={!isPremium && stockItems.length >= 10}
-  >
-    + Add New
-  </button>
-</div>
+                  {/* Button */}
+                  <button
+                    onClick={openModal}
+                    className="btn-primary max-[400px]:text-sm text-nowrap max-[1000px]:hidden mr-2 disabled:opacity-50"
+                    disabled={!isPremium && stockItems.length >= 10}
+                  >
+                    + Add New
+                  </button>
+                </div>
                 <button
                   onClick={openModal}
                   className="btn-primary max-[400px]:text-sm text-nowrap min-[1000px]:hidden ml-2"
@@ -869,80 +872,80 @@ const Page = () => {
             >
               {stockItems.length === 0 ||
               (isSearching && filteredItems.length === 0) ? (
-                <div className="relative w-full">
-                  <Table className="bg-white border-0 border-collapse w-full">
-                    <TableHeader>
+                <div className="relative w-full overflow-x-auto">
+                  <div className="min-w-[800px]">
+                    <Table className="bg-white border-0 border-collapse w-full">
                       <TableHeader>
-                        <TableRow className="h-[50px] ">
-                          <TableHead className="text-[#090F1C] font-circular-medium text-left border-b border-r">
+                        <TableRow className="h-[50px]">
+                          <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r px-6 w-[25%] max-w-[300px]">
                             ITEM NAME
                           </TableHead>
-                          <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r px-4">
+                          <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r px-6 w-[15%]">
                             SELLING PRICE
                           </TableHead>
-                          <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r px-4">
+                          <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r px-6 w-[15%]">
                             AVAILABLE
                           </TableHead>
-                          <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r ">
+                          <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r px-6 w-[20%]">
                             SHOW SALES
                           </TableHead>
-                          <TableHead className="text-[#090F1C] font-circular-medium text-center border-b ">
+                          <TableHead className="text-[#090F1C] font-circular-medium text-center border-b px-6 w-[20%]">
                             SHOW PROFIT
                           </TableHead>
-                          <TableHead className="">
+                          <TableHead className="px-4 border-b w-[5%]">
                             <Plus className="w-[16px] h-[16px] self-center" />
                           </TableHead>
                         </TableRow>
                       </TableHeader>
-                    </TableHeader>
-                  </Table>
-                  <div className="w-full overflow-x-auto">
-                    <span className="w-full h-px bg-[#DEDEDE] block"></span>
-                    <div className="relative h-[80vh] w-full">
-                      {!(isSearching && filteredItems.length === 0) ? (
-                        <div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
-                          <Image
-                            src="/icons/empty-note-pad.svg"
-                            alt=""
-                            width={56}
-                            height={56}
-                            className="mx-auto"
-                          />
-                          <p className="text-[#888888] text-sm">
-                            You have 0 items in stock
-                          </p>
-                          <button
-                            type="button"
-                            onClick={openModal}
-                            className="btn-outline hover:cursor-pointer"
-                          >
-                            + Add New Stock
-                          </button>
-                          <AddItemModal
-                            isOpen={isOpen}
-                            onClose={closeModal}
-                            onSave={(newItem) => {
-                              setStockItems((prev) => [newItem, ...prev]);
-                              closeModal();
-                            }}
-                          />
-                        </div>
-                      ) : (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="bg-[#F8FAFB] border border-[#DEDEDE] w-[563px] h-[200px] rounded-lg flex flex-col items-center justify-center gap-3 max-[800px]:w-[343px] max-[800px]:h-[334px]">
+                    </Table>
+                    <div className="w-full overflow-x-auto">
+                      <span className="w-full h-px bg-[#DEDEDE] block"></span>
+                      <div className="relative h-[80vh] w-full">
+                        {!(isSearching && filteredItems.length === 0) ? (
+                          <div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
                             <Image
-                              src={box}
+                              src="/icons/empty-note-pad.svg"
                               alt=""
                               width={56}
                               height={56}
-                              className="size-8"
+                              className="mx-auto"
                             />
-                            <p className="text-[#2A2A2A] text-sm">
-                              Search Item not found.
+                            <p className="text-[#888888] text-sm">
+                              You have 0 items in stock
                             </p>
+                            <button
+                              type="button"
+                              onClick={openModal}
+                              className="btn-outline hover:cursor-pointer"
+                            >
+                              + Add New Stock
+                            </button>
+                            <AddItemModal
+                              isOpen={isOpen}
+                              onClose={closeModal}
+                              onSave={(newItem) => {
+                                setStockItems((prev) => [newItem, ...prev]);
+                                closeModal();
+                              }}
+                            />
                           </div>
-                        </div>
-                      )}
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="bg-[#F8FAFB] border border-[#DEDEDE] w-[563px] h-[200px] rounded-lg flex flex-col items-center justify-center gap-3 max-[800px]:w-[343px] max-[800px]:h-[334px]">
+                              <Image
+                                src={box}
+                                alt=""
+                                width={56}
+                                height={56}
+                                className="size-8"
+                              />
+                              <p className="text-[#2A2A2A] text-sm">
+                                Search Item not found.
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
