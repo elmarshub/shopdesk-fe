@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { sendLoginEmail } from "@/services/loginEmail";
 import { getOrganization } from "@/services/getOrganization";
@@ -13,8 +13,15 @@ import Logo from "@/components/functional/logo";
 import { loginUser } from "@/services/auth";
 import { useStore } from "@/store/useStore";
 
-
 export default function SignIn() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SignInContent />
+    </Suspense>
+  );
+}
+
+function SignInContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -23,11 +30,12 @@ export default function SignIn() {
   const { setOrganizationId, setOrganizationName } = useStore();
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirectTo") || "/dashboard";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    
 
     setTouched({ email: true, password: true });
 
@@ -44,21 +52,20 @@ export default function SignIn() {
       const organization = await getOrganization();
       await setOrganizationId(organization?.[0].id || "");
       await setOrganizationName(organization?.[0].name || "");
-      
+
       sendLoginEmail(email, first_name, last_name);
 
       if (!data || data.error) {
         throw new Error(data?.message || "Invalid email or password.");
       }
       router.refresh();
-      router.push("/dashboard");
+      router.push(redirectTo); 
     } catch (err: any) {
       setError(err.message || "Something went wrong. Please try again.");
       setLoading(false);
     }
-    };
+  };
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -318,14 +325,14 @@ export default function SignIn() {
                 )}
               </motion.button>
                <motion.p
-                              className="text-center text-xs text-gray-600"
-                              variants={itemVariants}
-                            >
-                              Don't have an account?{" "}
-                              <a href="/sign-up" className="text-[#009A49] hover:underline">
-                                Sign up
-                              </a>
-                            </motion.p>
+                  className="text-center text-xs text-gray-600"
+                  variants={itemVariants}
+                >
+                  Don't have an account?{" "}
+                  <a href="/sign-up" className="text-[#009A49] hover:underline">
+                    Sign up
+                  </a>
+                </motion.p>
             </motion.form>
           </motion.div>
         </motion.div>

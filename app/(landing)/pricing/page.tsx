@@ -21,45 +21,46 @@ const Page = () => {
   const priceCardContent: PriceCardContentOptions[] = [
     {
       plan: "Free Plan",
-      monthlyPrice: "$0/Mo",
+      monthlyPrice: "$0/Month",
       annualPrice: "$0/year",
       monthlyLink: "#",
       annualLink: "#",
       item: [
-        "Users can (add, edit, view and delete) 10 product.",
-        "Users can record only 3 sales daily",
+        "Manage up to 10 products (add, edit, view, and delete).",
+        "Record up to 3 sales transactions per day.",
       ],
     },
     {
       plan: "Basic Plan",
       monthlyPrice: "$30/Month",
-      annualPrice: "$300/Month",
+      annualPrice: "$300/Year",
       monthlyLink: "https://buy.stripe.com/4gw3gbgEw5644243cQ",
       annualLink: "https://buy.stripe.com/4gweYTewo7ec7eg6p3",
       item: [
-        "Allows users to add up to 70 products",
-        " Up to 5 users per organization",
-        "Record up to 20 sales daily",
-        "Generate Receipt for only print",
-        "Export for stock can only be viewed.",
+        "Add up to 70 products.",
+        "Support for up to 5 users per organization.",
+        "Record up to 20 sales transactions per day.",
+        "Generate receipts for printing.",
+        "Stock export is available in view-only mode.",
       ],
     },
     {
       plan: "Premium Plan",
       monthlyPrice: "$50/Month",
-      annualPrice: "$500/Month",
+      annualPrice: "$500/Year",
       monthlyLink: "https://buy.stripe.com/eVa2c7cog7ecbuw00G",
       annualLink: "https://buy.stripe.com/fZe5oj5ZSbus568aFl",
       item: [
-        "Unlimited access to add products",
-        "Record an unlimited number of sales daily",
-        "The user can add a discount",
-        " Generate print receipts, receipts can be sent via email and SMS",
-        "Can view and analyze exported CSV and PDF data",
+        "Unlimited product management.",
+        "Record an unlimited number of sales transactions daily.",
+        "Apply discounts to sales transactions.",
+        "Generate receipts for printing, email, and SMS delivery.",
+        "Export data in CSV and PDF formats with full access to view and analyze.",
         "Unlimited users per organization.",
       ],
     },
   ];
+
 
   return (
     <main>
@@ -98,7 +99,7 @@ const Page = () => {
             (cardContent: PriceCardContentOptions, index: number) => {
               return (
                 <div
-                  className="flex column items-center flex-col p-[32px] gap-[35px] bg-white rounded-[16px] border-[1px] border-[#dedede] w-[min(100%,351px)]"
+                  className="flex column items-center flex-col p-[32px] gap-[35px] bg-whit rounded-[16px] border-[1px] border-[#dedede] w-[min(100%,351px)]"
                   key={index}
                 >
                   <div className="flex flex-col gap-6 items-center *:font-[500] *:text-[#2a2a2a]">
@@ -110,31 +111,35 @@ const Page = () => {
                     </p>
                   </div>
                   <div className={`${horizontalRuleStyles}`}></div>
-                  <div className="flex flex-col items-start gap-[16px]">
+                  <div className="flex flex-col  items-start gap-[16px]">
                     {cardContent.item.map((item: string, i: number) => (
                       <p
                         key={i}
-                        className="text-[16px] leading-[24px] text-[#717171] flex gap-[10px]"
+                        className="text-[16px] leading-[24px] text-[#717171] flex gap-2 items-start"
                       >
-                        <span className="rounded-[4px] bg-[#009A49] flex items-center justify-center border-[1.4px] border-white h-[18px] w-[18px]">
+                        <span className="rounded-[4px] bg-[#009A49] flex items-center justify- border-[1.4px] border-white h-[18px] 
+                        w-[18px] mt-0.5">
                           <img
                             src="/pricing/tick.svg"
                             aria-hidden="true"
                             className="h-4 w-4"
                           />
                         </span>
-                        <span className="text-[16px] leading-[20px] text-[#717171] text-center">
+                        <span className="flex-1 text-[16px] leading-[20px] text-[#717171] text-left">
                           {item}
                         </span>
                       </p>
                     ))}
                   </div>
                   <div className={`${horizontalRuleStyles}`}></div>
-                  <Link href="/sign-up">
-                <Button className="w-full py-[10px] px-[18px] rounded-[8px] border-[1px] border-[#1b1b1b] bg-[#2a2a2a] mt-auto">
-                  Get Started
-                </Button>
-              </Link>
+                  <div className="flex-1">
+
+                  </div>
+                  <Link href="/sign-up">                  
+                    <Button className="w-full py-[10px] px-[18px] rounded-[8px] border-[1px] border-[#1b1b1b] bg-[#2a2a2a] mt-auto">
+                      Get Started
+                    </Button>
+                  </Link>
 
                 </div>
               );
