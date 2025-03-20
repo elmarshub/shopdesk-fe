@@ -38,6 +38,7 @@ import {
 } from "@tanstack/react-table";
 import { ChevronDown, Loader2, Plus, Search, X } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FaSortDown } from "react-icons/fa";
@@ -729,7 +730,7 @@ const Page = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem
-                className=" p-4  w-[200px] "
+                className=" p-4  w-[200px] flex"
                 onClick={() => setIsLogoutModalOpen(true)}
               >
                 <Image src={viewDeleted} alt="" width={20} height={20} />
@@ -739,8 +740,21 @@ const Page = () => {
                 className=" p-4  w-[200px] "
                 onClick={() => setIsLogoutModalOpen(true)}
               >
-                <Image src={settings} alt="" width={20} height={20} />
-                Settings
+                <Link
+                  href="/dashboard/settings"
+                  target="_"
+                  rel="noopener"
+                  className="flex items-center gap-2"
+                >
+                  <Image
+                    src={settings}
+                    className=""
+                    alt=""
+                    width={20}
+                    height={20}
+                  />
+                  Settings
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem
                 className=" p-4  w-[200px] text-[#ff1925] "
