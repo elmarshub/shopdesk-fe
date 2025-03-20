@@ -2,54 +2,21 @@
 
 import { getAccessToken } from "@/app/api/token";
 import LoadingAnimation from "@/components/functional/loading";
-import Logo from "@/components/functional/logo";
-import PaginationFeature from "@/components/functional/paginationfeature";
-import Sidebar from "@/components/functional/sidebar";
-import ImageUploader from "@/components/modal/add-image";
-import AddItemModal from "@/components/modal/add-item";
+
 import DeleteItem from "@/components/modal/delete-item";
 import EditItemModal from "@/components/modal/edit-stock";
 import LogoutConfirmModal from "@/components/modal/logoutConfirmationModal";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import logout from "@/public/icons/_ui-log-out-02.svg";
-import settings from "@/public/icons/_ui-settings-01.svg";
-import viewDeleted from "@/public/icons/_ui-trash-03.svg";
-import box from "@/public/icons/box.svg";
+
 import { deleteStock, GetProduct, GetStock } from "@/services/stock";
 import { useStore } from "@/store/useStore";
-import {
-  ColumnDef,
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import { ChevronDown, Loader2, Plus, Search, X } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { FaSortDown } from "react-icons/fa";
 import useTableAreaHeight from "./hooks/useTableAreaHeight";
-
-declare module "@tanstack/react-table" {
-  interface ColumnMeta<TData, TValue> {
-    className?: string;
-    updateData?: (rowIndex: number, key: string, value: string) => void;
-  }
-}
+import Footer from "./components/Footer";
+import Header from "./components/Header";
+import TableContent from "./components/TableContent";
+import Settings from "./components/Settings";
 
 export type StockItem = {
   id: string;
@@ -107,58 +74,25 @@ const Page = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
-  //Active Tab
-  const [activeTab, setActiveTab] = useState("stock");
-
   const [isOpen, setIsOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openAdd, setOpenAdd] = useState(false);
 
   const [selectedItem, setSelectedItem] = useState<StockItem | null>(null);
   const [user, setUser] = useState<any>(null);
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [stockItems, setStockItems] = useState<StockItem[]>([]);
   const [productItems, setProductItems] = useState<ProductItem[]>([]);
-  const [searchText, setSearchText] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
   const [isEditingTransition, setIsEditingTransition] = useState<string | null>(
     null
   );
   const [editedItem, setEditedItem] = useState<StockItem | null>(null);
   const [activeField, setActiveField] = useState<keyof StockItem | null>(null);
-  const nameInputRef = useRef<HTMLInputElement>(null);
-  const priceInputRef = useRef<HTMLInputElement>(null);
-  const quantityInputRef = useRef<HTMLInputElement>(null);
-  const filteredItems = stockItems.filter(
-    (item) =>
-      item.name.toLowerCase().includes(searchText.toLowerCase()) ||
-      (item.sku && item.sku.toLowerCase().includes(searchText.toLowerCase()))
-  );
+
   const [isLoading, setIsLoading] = useState(true);
-  const [showSales, setShowSales] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const [showProfit, setShowProfit] = useState(false);
-
-  const toggleSales = () => {
-    if (isSidebarOpen) {
-      alert("First close the sidebar to view Sales.");
-      return;
-    }
-    setShowSales((prev) => !prev);
-  };
-
-  const toggleProfit = () => {
-    if (isSidebarOpen) {
-      alert("First close the sidebar to view Profit.");
-      return;
-    }
-    setShowProfit((prev) => !prev);
-  };
+  const [showSettings, setShowSettings] = useState(false);
 
   const router = useRouter();
 
@@ -181,7 +115,6 @@ const Page = () => {
 
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState<StockItem | null>(null);
-  const [isPremium, setIsPremium] = useState(false);
 
   const handleImageClick = (item: StockItem) => {
     setCurrentItem(item);
@@ -299,18 +232,9 @@ const Page = () => {
     setCurrentPage(1);
   };
 
-  const handleInlineEdit = useCallback(
-    (item: StockItem, field: keyof StockItem = "name") => {
-      setIsEditingTransition(item.id);
-      setEditedItem({ ...item });
-      setActiveField(field);
-      setIsEditingTransition(null);
-    },
-    []
-  );
-
   const handleInputChange = useCallback(
     (field: keyof StockItem, value: string) => {
+      console.log("Input changed:", field, value);
       if (editedItem) {
         setEditedItem((prev) => ({
           ...prev!,
@@ -325,10 +249,28 @@ const Page = () => {
     [editedItem]
   );
 
+  const handleInlineEdit = useCallback(
+    (item: StockItem, field: keyof StockItem = "name") => {
+      console.log("Inline edit started:", item.id, field);
+      setIsEditingTransition(item.id);
+      setEditedItem({ ...item });
+      setActiveField(field);
+      setIsEditingTransition(null);
+    },
+    []
+  );
+
+  const cancelEdit = useCallback(() => {
+    setEditedItem(null);
+    setActiveField(null);
+  }, []);
+
   const handleSaveInline = async () => {
     if (!editedItem) return;
 
-    const organization_id = useStore.getState().organizationId;
+    console.log("Saving inline edit:", editedItem);
+
+    const organization_id = organizationId;
     try {
       const token = await getAccessToken();
       setIsEditingTransition(editedItem.id);
@@ -368,323 +310,17 @@ const Page = () => {
     }
   };
 
-  useEffect(() => {
-    if (organizationId === "160db8736a9d47989381e01a987e4413") {
-      setIsPremium(true);
-    } else {
-      setIsPremium(false);
-    }
-  }, []);
+  const handleSettingsClick = () => {
+    setShowSettings(true);
+  };
+
+  const handleBackToStock = () => {
+    setShowSettings(false);
+  };
 
   // if (organizationId !== "160db8736a9d47989381e01a987e4413" &&  stockItems.length >= 10){
   //   setIsPremium(false)
   // }
-
-  useEffect(() => {
-    if (editedItem && activeField) {
-      switch (activeField) {
-        case "name":
-          nameInputRef.current?.focus();
-          break;
-        case "buying_price":
-          priceInputRef.current?.focus();
-          break;
-        case "quantity":
-          quantityInputRef.current?.focus();
-          break;
-      }
-    }
-  }, [editedItem, activeField]);
-
-  const columns: ColumnDef<StockItem>[] = useMemo(
-    () => [
-      {
-        accessorKey: "name",
-        header: () => (
-          <span className="!px-4 flex flex-start font-circular-medium  text-[18px] leading-[28px] tracking-normal text-center  w-full">
-            ITEM NAME
-          </span>
-        ),
-        cell: ({ row }) => {
-          const isEditingThisRow = editedItem?.id === row.original.id;
-          const isTransitioning = isEditingTransition === row.original.id;
-
-          return (
-            <div
-              className="w-full h-full flex items-center overflow-hidden"
-              onClick={() =>
-                !isEditingThisRow && handleInlineEdit(row.original, "name")
-              }
-            >
-              {isTransitioning ? (
-                <Loader2 className="w-4 h-4 animate-spin mx-auto" />
-              ) : isEditingThisRow ? (
-                <input
-                  ref={nameInputRef}
-                  value={editedItem?.name || ""}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && handleSaveInline()}
-                  className="no-spinner w-full h-full min-w-0 border text-left box-border p-2 focus:outline-[#009A49]"
-                />
-              ) : (
-                <span className="block text-balance py-2 pl-4 capitalize">
-                  {row.original.name}
-                </span>
-              )}
-            </div>
-          );
-        },
-      },
-      {
-        accessorKey: "sell_price",
-        header: () => (
-          <span className="!px-4 font-circular-medium text-[18px] leading-[28px] tracking-normal text-center">
-            SELL PRICE
-          </span>
-        ),
-        cell: ({ row }) => {
-          const isEditingThisRow = editedItem?.id === row.original.id;
-          const isTransitioning = isEditingTransition === row.original.id;
-
-          return (
-            <div
-              className="flex w-full h-full items-center justify-center"
-              onClick={() =>
-                !isEditingThisRow &&
-                handleInlineEdit(row.original, "buying_price")
-              }
-            >
-              {isTransitioning ? (
-                <Loader2 className="w-4 h-4 animate-spin mx-auto" />
-              ) : isEditingThisRow ? (
-                <input
-                  ref={priceInputRef}
-                  type="number"
-                  value={editedItem?.buying_price ?? ""}
-                  onChange={(e) =>
-                    handleInputChange("buying_price", e.target.value)
-                  }
-                  onKeyDown={(e) => e.key === "Enter" && handleSaveInline()}
-                  className="no-spinner w-full h-full border text-center focus:outline-[#009A49]"
-                />
-              ) : (
-                <span className="block w-full overflow-x-clip">{`${
-                  row.original.currency_code
-                } ${row.original.buying_price?.toLocaleString()}`}</span>
-              )}
-            </div>
-          );
-        },
-      },
-      {
-        accessorKey: "available",
-        header: () => (
-          <span className="!px-4 font-circular-medium text-[18px] leading-[28px] tracking-normal text-center">
-            AVAILABLE
-          </span>
-        ),
-        cell: ({ row }) => {
-          const isEditingThisRow = editedItem?.id === row.original.id;
-          const isTransitioning = isEditingTransition === row.original.id;
-
-          return (
-            <div
-              className="flex h-full w-full items-center justify-center"
-              onClick={() =>
-                !isEditingThisRow && handleInlineEdit(row.original, "quantity")
-              }
-            >
-              {isTransitioning ? (
-                <Loader2 className="w-4 h-4 animate-spin mx-auto" />
-              ) : isEditingThisRow ? (
-                <input
-                  ref={quantityInputRef}
-                  type="number"
-                  value={editedItem?.quantity ?? ""}
-                  onChange={(e) =>
-                    handleInputChange("quantity", e.target.value)
-                  }
-                  onKeyDown={(e) => e.key === "Enter" && handleSaveInline()}
-                  className="no-spinner w-full h-full border px-2 py-1 text-center focus:outline-[#009A49]"
-                />
-              ) : (
-                row.original.quantity
-              )}
-            </div>
-          );
-        },
-        meta: { className: "" },
-      },
-      {
-        accessorKey: "sales",
-        header: () =>
-          showSales ? (
-            <div className="bg-[#CCEBDB] relative w-full h-full">
-              <div className="flex justify-between items-center max-w-[356px] py-4">
-                <span className="text-[#595959] font-circular-medium text-[14px] text-center w-full">
-                  SALES
-                </span>
-                <button
-                  onClick={toggleSales}
-                  className="rounded-[6px] border border-green-200 hover:bg-gray-200"
-                >
-                  <X className="rounded-[6px] py-[4px] px-[8px] bg-white w-full h-full" />
-                </button>
-              </div>
-
-              <div className="grid grid-cols-5 text-center border-t border-[#B2E1C8]">
-                {["MON", "TUE", "WED", "THU", "FRI"].map((day, index) => (
-                  <div
-                    key={day}
-                    className={`flex items-center justify-center text-[12px] gap-1 text-gray-700 font-circular-medium py-[9px] ${
-                      index !== 4 ? "border-r border-[#B2E1C8]" : ""
-                    }`}
-                  >
-                    {day}
-                    <FaSortDown className="w-[13px] h-[13px] text-[#83838B] mb-1" />
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <div className="flex justify-center items-center w-full p-4">
-              <button
-                onClick={toggleSales}
-                className="bg-[#F6F8FA] border border-[#DEE5ED] rounded-[6px] font-circular-medium text-[#090F1C] py-2 px-4"
-              >
-                SHOW SALES
-              </button>
-            </div>
-          ),
-        cell: ({ row }) =>
-          showSales ? (
-            <div className="grid grid-cols-5 h-full w-full px-0">
-              {["mon", "tue", "wed", "thu", "fri"].map((day) => (
-                <input
-                  key={day}
-                  type="number"
-                  className="no-spinner w-full h-full border-r px-2 py-1 text-center focus:outline-[#009A49]"
-                />
-              ))}
-            </div>
-          ) : null,
-      },
-      {
-        accessorKey: "profitGroup",
-        header: () =>
-          showProfit ? (
-            <div className="relative w-full h-full border border-[#CCEAFF]">
-              <div className="bg-[#E5F4FF] flex justify-between items-center max-w-[356px] p-3">
-                <span className="text-[#595959] font-circular-medium text-[14px] text-center w-full">
-                  PROFIT
-                </span>
-                <button
-                  onClick={toggleProfit}
-                  className="rounded-[6px] border border-green-200 hover:bg-gray-200"
-                >
-                  <X className="rounded-[6px] py-[4px] px-[8px] bg-white w-full h-full" />
-                </button>
-              </div>
-              <div className="bg-[#E5F4FF] grid grid-cols-2 text-center border-t border-[#B2E1C8]">
-                <div className="flex items-center justify-center gap-2 text-gray-700 font-circular-medium py-[9px] border-r border-[#B2E1C8]">
-                  <span>COST PRICE</span>
-                  <FaSortDown className="w-[12px] h-[12px] text-[#83838B] mb-1" />
-                </div>
-                <div className="flex items-center justify-center gap-2 text-gray-700 font-circular-medium py-[9px]">
-                  <span>PROFIT</span>
-                  <FaSortDown className="w-[12px] h-[12px] text-[#83838B] mb-1" />
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="flex justify-center items-center w-full p-4">
-              <button
-                onClick={toggleProfit}
-                className="bg-[#F6F8FA] border border-[#DEE5ED] rounded-[6px] font-circular-medium text-[#090F1C] py-2 px-4"
-              >
-                SHOW PROFIT
-              </button>
-            </div>
-          ),
-        cell: ({ row, column }) =>
-          showProfit ? (
-            <div
-              className={`flex items-center justify-between w-full h-full ${
-                showProfit ? "" : "hidden sm:table-cell"
-              }`}
-            >
-              <input
-                type="number"
-                onBlur={(e) =>
-                  column.columnDef.meta?.updateData?.(
-                    row.index,
-                    "costPrice",
-                    e.target.value
-                  )
-                }
-                className="w-1/2 px-2 py-1 border-r border-gray-300 h-full text-center"
-                placeholder="CP"
-              />
-              <input
-                type="number"
-                onBlur={(e) =>
-                  column.columnDef.meta?.updateData?.(
-                    row.index,
-                    "profit",
-                    e.target.value
-                  )
-                }
-                className="w-1/2 px-2 py-1 border-gray-300 h-full text-center"
-                placeholder="Profit"
-              />
-            </div>
-          ) : null,
-        meta: {
-          updateData: (rowIndex, key, value) => {
-            console.log(
-              `Updating row ${rowIndex}, key ${key} with value ${value}`
-            );
-          },
-        },
-      },
-
-      {
-        id: "actions",
-        header: () => (
-          <div className="flex justify-center items-center">
-            <Plus className="w-[15px] h-[15px] text-[#2A2A2A] self-center" />
-          </div>
-        ),
-        cell: () => null, // Empty cell
-        size: 8, // Set a small width for the column
-      },
-    ],
-    [
-      editedItem,
-      isEditingTransition,
-      handleInlineEdit,
-      handleSaveInline,
-      showSales,
-      showProfit,
-      toggleSales,
-      toggleProfit,
-    ]
-  );
-  const paginatedData = isSearching
-    ? filteredItems.slice(
-        (currentPage - 1) * rowsPerPage,
-        currentPage * rowsPerPage
-      )
-    : stockItems.slice(
-        (currentPage - 1) * rowsPerPage,
-        currentPage * rowsPerPage
-      );
-
-  const table = useReactTable({
-    data: paginatedData,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
 
   if (isLoading) {
     return (
@@ -694,18 +330,9 @@ const Page = () => {
     );
   }
 
-  const handleRowClick = (item: StockItem) => {
-    setSelectedItem(item);
-    setIsSidebarOpen(true);
-  };
-
-  const closeSidebar = () => {
-    setIsSidebarOpen(false);
-  };
-
   return (
     <main className="px-6 py-4 w-full max-w-7xl mx-auto container flex flex-col main-h-svh">
-      <div ref={tableAreaRef} className="space-y-8 w-full h-full ">
+      <div ref={tableAreaRef} className="space-y-8 w-full h-full mb-6">
         <LogoutConfirmModal
           open={isLogoutModalOpen}
           onOpenChange={setIsLogoutModalOpen}
@@ -724,422 +351,34 @@ const Page = () => {
           }
         />
 
-        <div className="lg:border px-4 py-2 lg:shadow-md rounded-lg lg:flex items-center justify-between mx-auto">
-          <div className="flex items-center gap-6">
-            <div className="flex justify-center lg:justify-start w-full lg:w-auto">
-              <Logo />
-            </div>
-            <small className="text-black text-left hidden lg:block">
-              The simplest way to manage your shop!
-            </small>
-          </div>
-
-          <DropdownMenu modal>
-            <DropdownMenuTrigger className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white">
-              <span className="py-2 px-4 rounded-lg bg-white text-black">
-                {organizationInitial}
-              </span>
-              {organizationName}
-              <ChevronDown strokeWidth={1.5} color="white" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem
-                className=" p-4  w-[200px] flex"
-                onClick={() => setIsLogoutModalOpen(true)}
-              >
-                <Image src={viewDeleted} alt="" width={20} height={20} />
-                View Deleted
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className=" p-4  w-[200px] "
-                onClick={() => setIsLogoutModalOpen(true)}
-              >
-                <Link
-                  href="/dashboard/settings"
-                  target="_"
-                  rel="noopener"
-                  className="flex items-center gap-2"
-                >
-                  <Image
-                    src={settings}
-                    className=""
-                    alt=""
-                    width={20}
-                    height={20}
-                  />
-                  Settings
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className=" p-4  w-[200px] text-[#ff1925] "
-                onClick={() => setIsLogoutModalOpen(true)}
-              >
-                <Image src={logout} alt="" width={20} height={20} />
-                Log out
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-
-        <div className="space-y-0 w-full ">
-          <div className="w-full flex justify-between max-[800px]:flex-col-reverse">
-            <div>
-              <div className="flex items-center justify-center gap-2 border border-b-white py-2 rounded-tr-lg rounded-tl-lg w-44 max-[800px]:w-full font-semibold px-9 shadow-inner">
-                Stock
-                <Image
-                  src="/icons/ui-box.svg"
-                  alt=""
-                  width={20}
-                  height={20}
-                  className="w-5 h-5"
-                />
-              </div>
-
-              {/*<SalesTab
-               // onAddSale={() => {
-                //  console.log("Add sale action triggered");
-                 // console.log("Active tab:", activeTab);
-                //}}
-             // /> */}
-            </div>
-            {stockItems.length > 0 && (
-              <div className="mb-2 max-[800px]:mb-4 max-[640px]:self-end flex items-center justify-center max-[1000px]:flex-row-reverse max-[800px]:w-full">
-                <div className="relative group inline-block">
-                  {/* Tooltip */}
-                  {!isPremium && stockItems.length >= 10 && (
-                    <div className="z-50 absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-sm rounded-md px-3 py-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
-                      Upgrade to Premium to add more.
-                      <a
-                        href="/pricing"
-                        className="text-blue-400 underline ml-1 "
-                      >
-                        Upgrade now
-                      </a>
-                    </div>
-                  )}
-
-                  {/* Button */}
-                  <button
-                    onClick={openModal}
-                    className="btn-primary max-[400px]:text-sm text-nowrap max-[1000px]:hidden mr-2 disabled:opacity-50"
-                    disabled={!isPremium && stockItems.length >= 10}
-                  >
-                    + Add New
-                  </button>
-                </div>
-                <button
-                  onClick={openModal}
-                  className="btn-primary max-[400px]:text-sm text-nowrap min-[1000px]:hidden ml-2"
-                >
-                  +
-                </button>
-
-                <div className="relative max-[800px]:w-full">
-                  <input
-                    type="text"
-                    className="h-12 border w-[327px] max-[800px]:w-full rounded-md focus:outline-2 focus:outline-[#009A49] px-10"
-                    onChange={(event) => {
-                      setIsSearching(true);
-                      setSearchText(event.target.value);
-                      if (!event.target.value) {
-                        setIsSearching(false);
-                      }
-                    }}
-                  />
-
-                  <Search className="text-[#667085] absolute top-3 left-3 " />
-                </div>
-
-                <div className="z-10">
-                  <AddItemModal
-                    isOpen={isOpen}
-                    onClose={closeModal}
-                    onSave={(newItem) => {
-                      setStockItems((prev) => [newItem, ...prev]); // Inserts new items at the top
-
-                      closeModal();
-                    }}
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="flex w-full overflow-hidden mx-auto">
-            <div
-              className={`border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg flex-1 overflow-auto w-full transition-all duration-300 ease-in-out ${
-                isSidebarOpen ? "w-full max-w-[989px] mr-1" : "w-full"
-              }`}
-            >
-              {stockItems.length === 0 ||
-              (isSearching && filteredItems.length === 0) ? (
-                <div className="relative w-full overflow-x-auto">
-                  <div className="min-w-[800px]">
-                    <Table className="bg-white border-0 border-collapse w-full">
-                      <TableHeader>
-                        <TableRow className="h-[50px]">
-                          <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r px-6 w-[25%] max-w-[300px]">
-                            ITEM NAME
-                          </TableHead>
-                          <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r px-6 w-[15%]">
-                            SELLING PRICE
-                          </TableHead>
-                          <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r px-6 w-[15%]">
-                            AVAILABLE
-                          </TableHead>
-                          <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r px-6 w-[20%]">
-                            SHOW SALES
-                          </TableHead>
-                          <TableHead className="text-[#090F1C] font-circular-medium text-center border-b px-6 w-[20%]">
-                            SHOW PROFIT
-                          </TableHead>
-                          <TableHead className="px-4 border-b w-[5%]">
-                            <Plus className="w-[16px] h-[16px] self-center" />
-                          </TableHead>
-                        </TableRow>
-                      </TableHeader>
-                    </Table>
-                    <div className="w-full overflow-x-auto">
-                      <span className="w-full h-px bg-[#DEDEDE] block"></span>
-                      <div className="relative h-[80vh] w-full">
-                        {!(isSearching && filteredItems.length === 0) ? (
-                          <div className="absolute space-y-4 right-0 left-0 top-28 w-56 mx-auto text-center">
-                            <Image
-                              src="/icons/empty-note-pad.svg"
-                              alt=""
-                              width={56}
-                              height={56}
-                              className="mx-auto"
-                            />
-                            <p className="text-[#888888] text-sm">
-                              You have 0 items in stock
-                            </p>
-                            <button
-                              type="button"
-                              onClick={openModal}
-                              className="btn-outline hover:cursor-pointer"
-                            >
-                              + Add New Stock
-                            </button>
-                            <AddItemModal
-                              isOpen={isOpen}
-                              onClose={closeModal}
-                              onSave={(newItem) => {
-                                setStockItems((prev) => [newItem, ...prev]);
-                                closeModal();
-                              }}
-                            />
-                          </div>
-                        ) : (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="bg-[#F8FAFB] border border-[#DEDEDE] w-[563px] h-[200px] rounded-lg flex flex-col items-center justify-center gap-3 max-[800px]:w-[343px] max-[800px]:h-[334px]">
-                              <Image
-                                src={box}
-                                alt=""
-                                width={56}
-                                height={56}
-                                className="size-8"
-                              />
-                              <p className="text-[#2A2A2A] text-sm">
-                                Search Item not found.
-                              </p>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div style={{ overflowX: "auto" }}>
-                  <Table
-                    style={{ minWidth: "800px", borderCollapse: "collapse" }}
-                  >
-                    <TableHeader>
-                      {table.getHeaderGroups().map((headerGroup) => (
-                        <TableRow key={headerGroup.id} className="h-[50px]">
-                          {headerGroup.headers.map((header) => {
-                            let widthClass = "w-auto"; // Default width of the header columns
-
-                            if (header.column.id === "name") {
-                              widthClass =
-                                showSales && showProfit
-                                  ? "max-w-[259px]"
-                                  : showSales
-                                  ? "max-w-[292px]"
-                                  : showProfit
-                                  ? "max-w-[292px]"
-                                  : "max-w-[374px] pl-4";
-                            } else if (header.column.id === "sell_price") {
-                              widthClass =
-                                showSales && showProfit
-                                  ? "w-auto px-4"
-                                  : showSales || showProfit
-                                  ? "w-[262px]"
-                                  : "w-[280px]";
-                            } else if (header.column.id === "available") {
-                              widthClass =
-                                showSales && showProfit
-                                  ? "w-auto px-4"
-                                  : showSales || showProfit
-                                  ? "w-[206px]"
-                                  : "w-[198px]";
-                            } else if (header.column.id === "sales") {
-                              widthClass = showSales ? "w-[30px]" : "w-auto ";
-                            } else if (header.column.id === "profitGroup") {
-                              widthClass = showProfit ? "w-[350px]" : "w-auto ";
-                            }
-
-                            return (
-                              <TableHead
-                                key={header.id}
-                                className={`text-[#090F1C] font-circular-medium text-center border-b border-r min-w-[100px] 
-    ${
-      (showSales && !["name", "sales", "actions"].includes(header.id)) ||
-      (showProfit && !["name", "profitGroup", "actions"].includes(header.id))
-        ? "hidden sm:table-cell"
-        : ""
-    } ${widthClass}`}
-                              >
-                                {flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext()
-                                )}
-                              </TableHead>
-                            );
-                          })}
-                        </TableRow>
-                      ))}
-                    </TableHeader>
-                    <TableBody>
-                      {Array.from({ length: rowsPerPage }).map((_, index) => {
-                        const row = table.getRowModel().rows[index] || null;
-                        return (
-                          <TableRow
-                            key={index}
-                            className="h-[50px] cursor-pointer"
-                            onClick={() => row && handleRowClick(row.original)}
-                          >
-                            {row
-                              ? row.getVisibleCells().map((cell) => {
-                                  let cellWidthClass = "w-auto"; // Default width
-
-                                  if (cell.column.id === "name") {
-                                    cellWidthClass =
-                                      showSales && showProfit
-                                        ? "w-[259px]"
-                                        : showSales
-                                        ? "w-[292px]"
-                                        : showProfit
-                                        ? "w-[292px]"
-                                        : "w-[374px]";
-                                  } else if (
-                                    cell.column.id === "price" ||
-                                    cell.column.id === "available"
-                                  ) {
-                                    cellWidthClass =
-                                      showSales && showProfit
-                                        ? "w-auto px-4"
-                                        : showSales || showProfit
-                                        ? "w-[262px]"
-                                        : "w-[280px]";
-                                  } else if (cell.column.id === "sales") {
-                                    cellWidthClass = showSales
-                                      ? "w-[356px]"
-                                      : "w-auto px-3";
-                                  } else if (cell.column.id === "profit") {
-                                    cellWidthClass = showProfit
-                                      ? "w-[362px]"
-                                      : "w-auto px-3";
-                                  }
-
-                                  return (
-                                    <TableCell
-                                      key={cell.id}
-                                      className={`p-0 py-0 align-middle h-[50px] text-center border-r ${
-                                        (showSales &&
-                                          ![
-                                            "name",
-                                            "sales",
-                                            "actions",
-                                          ].includes(cell.column.id)) ||
-                                        (showProfit &&
-                                          ![
-                                            "name",
-                                            "profitGroup",
-                                            "actions",
-                                          ].includes(cell.column.id))
-                                          ? "hidden sm:table-cell"
-                                          : ""
-                                      } ${cellWidthClass}`}
-                                    >
-                                      {flexRender(
-                                        cell.column.columnDef.cell,
-                                        cell.getContext()
-                                      )}
-                                    </TableCell>
-                                  );
-                                })
-                              : columns.map((column) => (
-                                  <TableCell
-                                    key={column.id}
-                                    className="text-center border-r text-gray-400"
-                                  >
-                                    {""} {/* Placeholder for missing row */}
-                                  </TableCell>
-                                ))}
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-
-                  <Table>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell colSpan={columns.length} className="">
-                          <PaginationFeature
-                            totalItems={
-                              isSearching
-                                ? filteredItems.length
-                                : stockItems.length
-                            }
-                            currentPage={currentPage}
-                            itemsPerPage={rowsPerPage}
-                            totalPages={totalPages}
-                            onPageChange={handlePageChange}
-                            onItemsPerPageChange={handleItemsPerPageChange}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </div>
-              )}
-            </div>
-            {isSidebarOpen && (
-              <Sidebar
-                key={
-                  selectedItem?.id + "-" + (selectedItem?.images?.length || 0)
-                }
-                isOpen={isSidebarOpen}
-                onClose={closeSidebar}
-                selectedItem={selectedItem}
-                onSave={handleSaveEdit}
-              />
-            )}
-            {/*Image Upload Modal */}
-            {imageModalOpen && (
-              <ImageUploader
-                itemName={currentItem?.name || ""}
-                existingImages={currentItem?.images || []}
-                onSave={handleSaveImages}
-                onCancel={() => setImageModalOpen(false)}
-                isOpen={imageModalOpen}
-              />
-            )}
-          </div>
-        </div>
+        <Header onSettingsClick={handleSettingsClick} />
       </div>
+
+      {showSettings ? (
+        <div>
+          <div className="mb-4">
+            <button
+              onClick={handleBackToStock}
+              className="flex items-center text-[#009A49] hover:underline"
+            >
+              ← Back to Stock
+            </button>
+          </div>
+          <Settings />
+        </div>
+      ) : (
+        <TableContent
+          stockItems={stockItems}
+          setStockItems={setStockItems}
+          handleInputChange={handleInputChange}
+          handleInlineEdit={handleInlineEdit}
+          handleSaveInline={handleSaveInline}
+          editedItem={editedItem}
+          isEditingTransition={isEditingTransition}
+          activeField={activeField}
+          cancelEdit={cancelEdit}
+        />
+      )}
 
       <EditItemModal
         isOpen={openEdit}
@@ -1148,11 +387,7 @@ const Page = () => {
         onSave={handleSaveEdit}
       />
 
-      <div className="flex flex-col gap-2 mt-4">
-        <p className="text-center mt-4">
-          © {new Date().getFullYear()}, Powered by Timbu Business
-        </p>
-      </div>
+      <Footer />
     </main>
   );
 };
