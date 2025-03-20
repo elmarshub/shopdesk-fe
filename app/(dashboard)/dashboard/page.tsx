@@ -183,7 +183,7 @@ const Page = () => {
 
   useEffect(() => {
   let isMounted = true; // Prevents state updates if component unmounts
-  setIsLoading(true);
+  //setIsLoading(true);
 
   const fetchProductsAndStocks = async () => {
     try {
