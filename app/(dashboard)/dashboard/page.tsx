@@ -185,6 +185,7 @@ const Page = () => {
 
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [currentItem, setCurrentItem] = useState<StockItem | null>(null);
+  const [isPremium, setIsPremium] = useState(false);
 
   const handleImageClick = (item: StockItem) => {
     setCurrentItem(item);
@@ -369,6 +370,21 @@ const Page = () => {
       setIsEditingTransition(null);
     }
   };
+
+  useEffect(() => {
+    if (organizationId === "160db8736a9d47989381e01a987e4413") {
+      setIsPremium(true);
+    }  else {
+      setIsPremium(false);
+    }
+  }, [])
+
+  
+  
+  
+  // if (organizationId !== "160db8736a9d47989381e01a987e4413" &&  stockItems.length >= 10){
+  //   setIsPremium(false)
+  // }
 
   useEffect(() => {
     if (editedItem && activeField) {
@@ -772,6 +788,7 @@ const Page = () => {
                 <button
                   onClick={openModal}
                   className="btn-primary max-[400px]:text-sm text-nowrap max-[1000px]:hidden mr-2"
+                  disabled={!isPremium && stockItems.length>=10}
                 >
                   + Add New
                 </button>
