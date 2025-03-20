@@ -36,7 +36,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ChevronDown, Loader2, Plus, Search, X } from "lucide-react";
+import { ChevronDown, Loader2, Menu, Plus, Search, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -118,7 +118,8 @@ const Page = () => {
   const [user, setUser] = useState<any>(null);
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
-  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isMobileLogoutModalOpen, setIsMobileLogoutModalOpen] = useState(false);
+  const [isDesktopLogoutModalOpen, setIsDesktopLogoutModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const [stockItems, setStockItems] = useState<StockItem[]>([]);
@@ -141,6 +142,7 @@ const Page = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [showSales, setShowSales] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isNavbarOpen, setIsNavbarOpen] = useState(false);
 
   const [showProfit, setShowProfit] = useState(false);
 
@@ -699,21 +701,40 @@ const Page = () => {
 
   const handleRowClick = (item: StockItem) => {
     setSelectedItem(item);
-    setIsSidebarOpen(false);
+    setIsSidebarOpen(true);
   };
 
   const closeSidebar = () => {
     setIsSidebarOpen(false);
   };
 
+  const toggleNavbar = () => {
+    setIsNavbarOpen(!isNavbarOpen);
+  };
+ 
+ 
+  const closeNavbar = () => {
+    setIsNavbarOpen(false);
+  };
+ 
+
   return (
     <main className="px-6 py-4 w-full max-w-7xl mx-auto flex flex-col main-h-svh ">
       <div ref={tableAreaRef} className="space-y-8 w-full h-full ">
-        <LogoutConfirmModal
-          open={isLogoutModalOpen}
-          onOpenChange={setIsLogoutModalOpen}
-          onCancel={() => setIsLogoutModalOpen(false)}
-        />
+      <LogoutConfirmModal
+         organizationName={organizationName}
+         open={isMobileLogoutModalOpen || isDesktopLogoutModalOpen}
+         onOpenChange={(open) => {
+           if (!open) {
+             setIsMobileLogoutModalOpen(false);
+             setIsDesktopLogoutModalOpen(false);
+           }
+         }}
+         onCancel={() => {
+           setIsMobileLogoutModalOpen(false);
+           setIsDesktopLogoutModalOpen(false);
+         }}
+       />
 
         <DeleteItem
           open={isDeleteModalOpen}
@@ -728,15 +749,63 @@ const Page = () => {
         />
         <div className="lg:border px-4 py-2 lg:shadow-md rounded-lg lg:flex items-center justify-between mx-auto">
           <div className="flex items-center gap-6">
-            <div className="flex justify-center lg:justify-start w-full lg:w-auto">
+            <div className="flex justify-start w-full lg:w-auto">
               <Logo />
             </div>
             <small className="text-black text-left hidden lg:block">
               The simplest way to manage your shop!
             </small>
+            <button onClick={toggleNavbar} className="lg:hidden hover:cursor-pointer">
+             <Menu strokeWidth={1.5} color="#667085" />
+           </button>
           </div>
 
-          <DropdownMenu modal>
+           {/* Mobile Slide-In Navbar */}
+           <div
+  className={`fixed inset-y-0 right-0 w-full sm:w-3/4 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:hidden z-50 ${
+    isNavbarOpen ? 'translate-x-0' : 'translate-x-full'
+  }`}
+>
+  <div className="flex items-center justify-between p-4">
+    {/* Dropdown Menu */}
+    <DropdownMenu>
+      <DropdownMenuTrigger className="btn-primary hover:cursor-pointer flex items-center gap-2 text-white">
+        <span className="py-2 px-4 rounded-lg bg-white text-black">
+          {organizationInitial}
+        </span>
+        {organizationName}
+        <ChevronDown strokeWidth={1.5} color="white" />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem className="p-4 w-[200px] flex">
+          <Image src={viewDeleted} alt="" width={20} height={20} />
+          View Deleted
+        </DropdownMenuItem>
+        <DropdownMenuItem className="p-4 w-[200px]">
+          <Link href="/dashboard/settings" target="_" rel="noopener" className="flex items-center gap-2">
+            <Image src={settings} alt="" width={20} height={20} />
+            Settings
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="p-4 w-[200px] text-[#414141] bg-[#FEF6F6]"
+          onClick={() => setIsMobileLogoutModalOpen(true)}
+        >
+          <Image src={logout} alt="" width={20} height={20} />
+          Log out
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+
+    {/* Close Button */}
+    <button onClick={closeNavbar} className="hover:cursor-pointer">
+      <X strokeWidth={1.5} color="black" />
+    </button>
+  </div>
+</div>
+
+         <div className="hidden lg:block">
+         <DropdownMenu modal>
             <DropdownMenuTrigger className="btn-primary hover:cursor-pointer hidden lg:flex items-center gap-2 text-white">
               <span className="py-2 px-4 rounded-lg bg-white text-black">
                 {organizationInitial}
@@ -747,14 +816,13 @@ const Page = () => {
             <DropdownMenuContent>
               <DropdownMenuItem
                 className=" p-4  w-[200px] flex"
-                onClick={() => setIsLogoutModalOpen(true)}
+                onClick={() => setIsDesktopLogoutModalOpen(true)}
               >
                 <Image src={viewDeleted} alt="" width={20} height={20} />
                 View Deleted
               </DropdownMenuItem>
               <DropdownMenuItem
                 className=" p-4  w-[200px] "
-                onClick={() => setIsLogoutModalOpen(true)}
               >
                 <Link
                   href="/dashboard/settings"
@@ -774,13 +842,15 @@ const Page = () => {
               </DropdownMenuItem>
               <DropdownMenuItem
                 className=" p-4  w-[200px] text-[#ff1925] "
-                onClick={() => setIsLogoutModalOpen(true)}
+                onClick={() => setIsDesktopLogoutModalOpen(true)}
               >
                 <Image src={logout} alt="" width={20} height={20} />
                 Log out
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+         </div>
+          
         </div>
 
         <div className="space-y-0 w-full ">
@@ -807,23 +877,23 @@ const Page = () => {
             {stockItems.length > 0 && (
               <div className="mb-2 max-[800px]:mb-4 max-[640px]:self-end flex items-center justify-center max-[1000px]:flex-row-reverse max-[800px]:w-full">
                 <div className="relative group inline-block">
-  {/* Tooltip */}
-  {!isPremium && stockItems.length >= 10 && (
-    <div className="z-50 absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-sm rounded-md px-3 py-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
-      Upgrade to Premium to add more. 
-      <a href="/dashboard/billing" className="text-blue-400 underline ml-1 ">Upgrade now</a>
-    </div>
-  )}
+                {/* Tooltip */}
+                {!isPremium && stockItems.length >= 10 && (
+                  <div className="z-50 absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-sm rounded-md px-3 py-2 shadow-md opacity-0 group-hover:opacity-100 transition-opacity">
+                    Upgrade to Premium to add more. 
+                    <a href="/pricing" className="text-blue-400 underline ml-1 ">Upgrade now</a>
+                  </div>
+                )}
 
-  {/* Button */}
-  <button
-    onClick={openModal}
-    className="btn-primary max-[400px]:text-sm text-nowrap max-[1000px]:hidden mr-2 disabled:opacity-50"
-    disabled={!isPremium && stockItems.length >= 10}
-  >
-    + Add New
-  </button>
-</div>
+                {/* Button */}
+                <button
+                  onClick={openModal}
+                  className="btn-primary max-[400px]:text-sm text-nowrap max-[1000px]:hidden mr-2 disabled:opacity-50"
+                  disabled={!isPremium && stockItems.length >= 10}
+                >
+                  + Add New
+                </button>
+              </div>
                 <button
                   onClick={openModal}
                   className="btn-primary max-[400px]:text-sm text-nowrap min-[1000px]:hidden ml-2"
@@ -834,6 +904,7 @@ const Page = () => {
                 <div className="relative max-[800px]:w-full">
                   <input
                     type="text"
+                    placeholder="Search by item name"
                     className="h-12 border w-[327px] max-[800px]:w-full rounded-md focus:outline-2 focus:outline-[#009A49] px-10"
                     onChange={(event) => {
                       setIsSearching(true);
@@ -844,7 +915,11 @@ const Page = () => {
                     }}
                   />
 
-                  <Search className="text-[#667085] absolute top-3 left-3 " />
+                 <img
+                   src='/icons/search_icon.svg'
+                   alt="Search Icon"
+                   className="absolute top-3 left-3 w-5 h-5"
+                 />
                 </div>
 
                 <div className="z-10">
@@ -861,10 +936,10 @@ const Page = () => {
               </div>
             )}
           </div>
-          <div className="flex w-full overflow-hidden mx-auto">
+          <div className="flex w-full overflow-hidden mx-auto gap-4">
             <div
               className={`border shadow-md rounded-b-lg rounded-bl-lg relative rounded-tr-lg flex-1 overflow-auto w-full transition-all duration-300 ease-in-out ${
-                isSidebarOpen ? "w-full max-w-[989px] mr-1" : "w-full"
+                isSidebarOpen ? "w-full max-w-[989px]" : "w-full"
               }`}
             >
               {stockItems.length === 0 ||
@@ -929,7 +1004,7 @@ const Page = () => {
                         </div>
                       ) : (
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="bg-[#F8FAFB] border border-[#DEDEDE] w-[563px] h-[200px] rounded-lg flex flex-col items-center justify-center gap-3 max-[800px]:w-[343px] max-[800px]:h-[334px]">
+                          <div className="bg-[#F8FAFB] border border-[#DEDEDE] min-w-[563px] h-[200px] rounded-lg flex flex-col items-center justify-center gap-3 max-[800px]:w-[343px] max-[800px]:h-[334px]">
                             <Image
                               src={box}
                               alt=""
@@ -1023,12 +1098,12 @@ const Page = () => {
                                   if (cell.column.id === "name") {
                                     cellWidthClass =
                                       showSales && showProfit
-                                        ? "w-[259px]"
+                                        ? "min-w-[259px]"
                                         : showSales
-                                        ? "w-[292px]"
+                                        ? "min-w-[292px]"
                                         : showProfit
-                                        ? "w-[292px]"
-                                        : "w-[374px]";
+                                        ? "min-w-[292px]"
+                                        : "min-w-[374px]";
                                   } else if (
                                     cell.column.id === "price" ||
                                     cell.column.id === "available"
@@ -1037,22 +1112,22 @@ const Page = () => {
                                       showSales && showProfit
                                         ? "w-auto px-4"
                                         : showSales || showProfit
-                                        ? "w-[262px]"
+                                        ? "min-w-[262px]"
                                         : "w-[280px]";
                                   } else if (cell.column.id === "sales") {
                                     cellWidthClass = showSales
-                                      ? "w-[356px]"
-                                      : "w-auto px-3";
+                                      ? "min-w-[356px]"
+                                      : "min-w-auto px-3";
                                   } else if (cell.column.id === "profit") {
                                     cellWidthClass = showProfit
-                                      ? "w-[362px]"
+                                      ? "min-w-[362px]"
                                       : "w-auto px-3";
                                   }
 
                                   return (
                                     <TableCell
                                       key={cell.id}
-                                      className={`p-0 py-0 align-middle h-[50px] text-center border-r ${
+                                      className={`p-0 py-0 align-middle h-[50px] text-center border-r shrink-0 ${
                                         (showSales &&
                                           ![
                                             "name",
@@ -1079,7 +1154,7 @@ const Page = () => {
                               : columns.map((column) => (
                                   <TableCell
                                     key={column.id}
-                                    className="text-center border-r text-gray-400"
+                                    className="text-center border-r text-gray-400 shrink-0"
                                   >
                                     {""} {/* Placeholder for missing row */}
                                   </TableCell>
