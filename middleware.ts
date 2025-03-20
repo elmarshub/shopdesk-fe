@@ -5,7 +5,12 @@ export function middleware(req: NextRequest) {
   const refreshToken = req.cookies.get("refresh_token");
 
   if (!refreshToken) {
-    return NextResponse.redirect(new URL("/sign-in", req.url));
+    const requestedUrl = req.nextUrl.pathname + req.nextUrl.search;
+    const signInUrl = new URL("/sign-in", req.url);
+    signInUrl.searchParams.set("redirectTo", requestedUrl);
+    console.log(signInUrl)
+
+    return NextResponse.redirect(signInUrl);
   }
 
   return NextResponse.next();

@@ -12,6 +12,7 @@ import { AuthFooter } from "./footer";
 import Logo from "@/components/functional/logo";
 import { loginUser } from "@/services/auth";
 import { useStore } from "@/store/useStore";
+import { useSearchParams } from "next/navigation";
 
 
 export default function SignIn() {
@@ -23,6 +24,8 @@ export default function SignIn() {
   const { setOrganizationId, setOrganizationName } = useStore();
 
   const router = useRouter();
+
+  const searchParams = useSearchParams();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,7 +54,8 @@ export default function SignIn() {
         throw new Error(data?.message || "Invalid email or password.");
       }
       router.refresh();
-      router.push("/dashboard");
+      const redirectTo = searchParams.get("redirectTo") || "/dashboard";
+      router.push(redirectTo);
     } catch (err: any) {
       setError(err.message || "Something went wrong. Please try again.");
       setLoading(false);
