@@ -63,7 +63,7 @@ jobs:
           # TYPE lead_time_for_changes gauge
           lead_time_for_changes{workflow="ci"} $((${{ env.CI_END_TIME }} - ${{ env.COMMIT_TIMESTAMP }}))
           # TYPE mttr_seconds gauge
-          mttr_seconds{workflow="cd", branch="${{ github.ref_name }}"} $(($(date +%s) - ${{ env.DEPLOY_START_TIME }}))
+          mttr_seconds{workflow="ci", branch="${{ github.ref_name }}"} $(($(date +%s) - ${{ env.CI_START_TIME }}))
           EOF
 
       - name: Push failure metrics to Prometheus
