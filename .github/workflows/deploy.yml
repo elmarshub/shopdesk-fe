@@ -72,7 +72,7 @@ jobs:
       - name: Push deployment metrics to Prometheus
         if: always()
         run: |
-          curl -X POST http://${{ secrets.SSH_IP }}/metrics/job/github_actions \
+          curl -X POST http://${{ secrets.SSH_IP }}:9171/metrics/job/github_actions \
             --data-binary @- <<EOF
           # TYPE deploy_duration_seconds gauge
           deploy_duration_seconds{workflow="cd", branch="${{ github.ref_name }}"} ${{ env.DEPLOY_DURATION }}
