@@ -7,6 +7,7 @@ import twitter from "../../public/icons/twitter.svg";
 import facebook from "../../public/icons/facebook.svg";
 import instagram from "../../public/icons/instagram.svg";
 import github from "../../public/icons/github.svg";
+import { FaTiktok } from "react-icons/fa6";
 import Logo from "./logo";
 
 const Footer = () => {
@@ -73,20 +74,28 @@ const Footer = () => {
             </p>
 
             <div className="flex gap-4 mt-[70px] max-[500px]:hidden">
-  <a href="https://x.com/shopdesk_?s=21" target="_blank" rel="noopener noreferrer" className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-    <Image src={twitter} alt="twitter" />
-  </a>
-  <a href="https://www.facebook.com/share/18weYAqtPe/" target="_blank" rel="noopener noreferrer" className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-    <Image src={facebook} alt="facebook" />
-  </a>
-  <a href="https://www.instagram.com/shopdesk_?igsh=MXIybG5sNXhvazI5dg==" target="_blank" rel="noopener noreferrer" className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-    <Image src={instagram} alt="instagram" />
-  </a>
-  <a href="https://www.tiktok.com/@shopdesk_?_t=ZM-8urzNXSQ1PL&_r=1" target="_blank" rel="noopener noreferrer" className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-    <Image src={tiktok} alt="tiktok" />
-  </a>
-</div>
-
+            <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+    <a href="https://x.com/shopdesk_?s=21" target="_blank" rel="noopener noreferrer">
+      <Image src={twitter} alt="twitter" />
+    </a>
+  </div>
+  <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+    <a href="https://www.facebook.com/share/18weYAqtPe/" target="_blank" rel="noopener noreferrer">
+      <Image src={facebook} alt="facebook" />
+    </a>
+  </div>
+  <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+    <a href="https://www.instagram.com/shopdesk_?igsh=MXIybG5sNXhvazI5dg==" target="_blank" rel="noopener noreferrer">
+      <Image src={instagram} alt="instagram" />
+    </a>
+  </div>
+  <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+    <a href="https://www.tiktok.com/@shopdesk_?_t=ZM-8urzNXSQ1PL&_r=1" target="_blank" rel="noopener noreferrer">
+      {/* <Image src={tiktok} alt="tiktok" /> */}
+      <FaTiktok />
+    </a>
+  </div>
+            </div>
           </div>
 
           <div>
@@ -146,19 +155,28 @@ const Footer = () => {
         <hr className="border border-[#E2E8F0]  mb-6 md:my-12" />
 
         <div className="w-full mb-12 flex justify-center gap-4 mt-[70px] min-[500px]:hidden">
-          <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-            <Image src={twitter} alt="twitter" />
-          </div>
-          <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-            <Image src={facebook} alt="facebook" />
-          </div>
-          <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-            <Image src={instagram} alt="instagram" />
-          </div>
-          <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-            <Image src={github} alt="github" />
-          </div>
-        </div>
+        <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+    <a href="https://x.com/shopdesk_?s=21" target="_blank" rel="noopener noreferrer">
+      <Image src={twitter} alt="twitter" />
+    </a>
+  </div>
+  <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+    <a href="https://www.facebook.com/share/18weYAqtPe/" target="_blank" rel="noopener noreferrer">
+      <Image src={facebook} alt="facebook" />
+    </a>
+  </div>
+  <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+    <a href="https://www.instagram.com/shopdesk_?igsh=MXIybG5sNXhvazI5dg==" target="_blank" rel="noopener noreferrer">
+      <Image src={instagram} alt="instagram" />
+    </a>
+  </div>
+  <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+    <a href="https://www.tiktok.com/@shopdesk_?_t=ZM-8urzNXSQ1PL&_r=1" target="_blank" rel="noopener noreferrer">
+      {/* <Image src={tiktok} alt="tiktok" /> */}
+      <FaTiktok />
+    </a>
+  </div>
+</div>
 
         <div className="w-full flex items-center gap-4 text-[14px] text-[#71717A] mb-8 justify-center">
           <p>© Copyright 2025, Powered by Timbu Business</p>
