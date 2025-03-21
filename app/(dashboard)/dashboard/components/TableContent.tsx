@@ -672,7 +672,27 @@ function TableContent({
              // /> */}
         </div>
         {stockItems.length > 0 && (
-          <div className="mb-2 max-[800px]:mb-4 max-[640px]:self-end flex items-center justify-center max-[1000px]:flex-row-reverse max-[800px]:w-full">
+          <div className="mb-2 max-[800px]:mb-4 max-[640px]:self-end gap-2 md:gap-0 flex items-center justify-center max-[1000px]:flex-row-reverse max-[800px]:w-full">
+            <div className="relative max-[800px]:w-full mr-5 gap-2.5 md:gap-0">
+              <input
+                type="text"
+                className="h-12 border w-[327px] max-[800px]:w-full rounded-md focus:outline-2 focus:outline-[#009A49] pl-10 text-lg placeholder:text-[#DEDEDE]"
+                placeholder="Search by item name, SKU code"
+                onChange={(event) => {
+                  setIsSearching(true);
+                  setSearchText(event.target.value);
+                  if (!event.target.value) {
+                    setIsSearching(false);
+                  }
+                }}
+              />
+
+              <Search
+                className="text-[#667085] absolute top-3 left-3 text-lg"
+                size={20}
+              />
+            </div>
+
             <div className="relative group inline-block">
               {/* Tooltip */}
               {!isPremium && stockItems.length >= 10 && (
@@ -687,10 +707,10 @@ function TableContent({
               {/* Button */}
               <button
                 onClick={openModal}
-                className="btn-primary max-[400px]:text-sm text-nowrap max-[1000px]:hidden mr-2 disabled:opacity-50"
+                className="text-[#2A2A2A] cursor-pointer bg-white py-3 border font-circular-normal border-[#1B1B1B] rounded-[12px] pr-6 pl-4 max-[400px]:text-sm text-nowrap max-[1000px]:hidden mr-2 disabled:opacity-50"
                 disabled={!isPremium && stockItems.length >= 10}
               >
-                + Add New
+                + Add New Stock
               </button>
             </div>
             <button
@@ -699,22 +719,6 @@ function TableContent({
             >
               +
             </button>
-
-            <div className="relative max-[800px]:w-full">
-              <input
-                type="text"
-                className="h-12 border w-[327px] max-[800px]:w-full rounded-md focus:outline-2 focus:outline-[#009A49] px-10"
-                onChange={(event) => {
-                  setIsSearching(true);
-                  setSearchText(event.target.value);
-                  if (!event.target.value) {
-                    setIsSearching(false);
-                  }
-                }}
-              />
-
-              <Search className="text-[#667085] absolute top-3 left-3 " />
-            </div>
 
             <div className="z-10">
               <AddItemModal
@@ -742,23 +746,25 @@ function TableContent({
                 <Table className="bg-white border-0 border-collapse w-full">
                   <TableHeader>
                     <TableRow className="h-[50px]">
-                      <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r px-6 w-[25%] max-w-[300px]">
+                      <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r px-6 max-w-[198px]">
+                        IMAGE
+                      </TableHead>
+                      <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r px-6 max-w-[418px]">
                         ITEM NAME
                       </TableHead>
-                      <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r px-6 w-[15%]">
+
+                      <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r px-6 max-w-[280px]">
                         SELLING PRICE
                       </TableHead>
-                      <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r px-6 w-[15%]">
+                      <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r px-6 max-w-[198px]">
                         AVAILABLE
                       </TableHead>
-                      <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r px-6 w-[20%]">
-                        SHOW SALES
+                      <TableHead className="text-[#090F1C] font-circular-medium text-center border-b border-r px-6 max-w-[280px]">
+                        ACTION
                       </TableHead>
-                      <TableHead className="text-[#090F1C] font-circular-medium text-center border-b px-6 w-[20%]">
-                        SHOW PROFIT
-                      </TableHead>
-                      <TableHead className="px-4 border-b w-[5%]">
-                        <Plus className="w-[16px] h-[16px] self-center" />
+
+                      <TableHead className="px-auto border-b max-w-[72px] text-center">
+                        <Plus className="w-[16px] h-[16px] self-center items-center" />
                       </TableHead>
                     </TableRow>
                   </TableHeader>
