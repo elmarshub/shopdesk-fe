@@ -42,8 +42,8 @@ const Header = () => {
       <div className="py-4 flex items-center justify-between max-w-screen-xl">
         <Logo />
 
-        <nav className="hidden add-this-back-flex gap-6 text-[16px] max-[850px]:hidden">
-          <Link href="/features" className="hover:text-green-500 transition">
+        <nav className="flex gap-6 text-[16px] max-[850px]:hidden">
+          <Link href="/#features" className="hover:text-green-500 transition">
             Features
           </Link>
           <Link href="/pricing" className="hover:text-green-500 transition">
@@ -60,24 +60,24 @@ const Header = () => {
           </Link>
         </nav>
 
-        <div className="flex items-center gap-4">
-          <button
-            type="button"
-            onClick={() => router.push("/sign-up")}
-            className="btn-primary"
-          >
-            Sign up
-          </button>
+        <div className="flex items-center gap-4 max-[900px]:hidden">
           <button
             type="button"
             onClick={() => router.push("/dashboard")}
-            className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition hidden"
+            className="btn-outline"
+          >
+            Sign in
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push("/sign-up")}
+            className="btn-primary hover:bg-gray-800 transition"
           >
             Start for free
           </button>
         </div>
 
-        <div className="hidden  add-this-back-flex items-center gap-2 min-[900px]:hidden">
+        <div className="flex items-center gap-2 min-[900px]:hidden">
           <button 
           onClick={() => router.push("/dashboard")}
           className="btn-primary min-[900px]:hidden max-[500]:hidden max-[600px]:text-[14px]">
