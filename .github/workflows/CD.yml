@@ -21,7 +21,7 @@ jobs:
       - name: Restore build artifacts
         uses: actions/cache@v3
         with:
-          path: .next  # Adjust this path based on your framework (e.g., Next.js)
+          path: .next 
           key: build-${{ github.sha }}
           restore-keys: |
             build-
