@@ -73,19 +73,20 @@ const Footer = () => {
             </p>
 
             <div className="flex gap-4 mt-[70px] max-[500px]:hidden">
-              <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-                <Image src={twitter} alt="twitter" />
-              </div>
-              <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-                <Image src={facebook} alt="facebook" />
-              </div>
-              <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-                <Image src={instagram} alt="instagram" />
-              </div>
-              <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-                <Image src={github} alt="github" />
-              </div>
-            </div>
+  <a href="https://x.com/shopdesk_?s=21" target="_blank" rel="noopener noreferrer" className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+    <Image src={twitter} alt="twitter" />
+  </a>
+  <a href="https://www.facebook.com/share/18weYAqtPe/" target="_blank" rel="noopener noreferrer" className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+    <Image src={facebook} alt="facebook" />
+  </a>
+  <a href="https://www.instagram.com/shopdesk_?igsh=MXIybG5sNXhvazI5dg==" target="_blank" rel="noopener noreferrer" className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+    <Image src={instagram} alt="instagram" />
+  </a>
+  <a href="https://www.tiktok.com/@shopdesk_?_t=ZM-8urzNXSQ1PL&_r=1" target="_blank" rel="noopener noreferrer" className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+    <Image src={tiktok} alt="tiktok" />
+  </a>
+</div>
+
           </div>
 
           <div>
