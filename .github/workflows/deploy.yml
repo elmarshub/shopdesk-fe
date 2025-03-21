@@ -82,6 +82,8 @@ jobs:
           deploy_failure{workflow="cd", branch="${{ github.ref_name }}"} $([ "${{ env.DEPLOY_STATUS }}" == "failure" ] && echo 1 || echo 0)
           # TYPE lead_time_for_changes gauge
           lead_time_for_changes{workflow="cd", branch="${{ github.ref_name }}"} $((${{ env.DEPLOY_END_TIME }} - ${{ env.COMMIT_TIMESTAMP }}))
+          # TYPE mttr_seconds gauge
+          mttr_seconds{workflow="cd", branch="${{ github.ref_name }}"} $(($(date +%s) - ${{ env.DEPLOY_START_TIME }}))
           EOF
           
       - name: Rollback on failure
