@@ -119,7 +119,11 @@ export default function Home() {
           </p>
         </div>
 
-        <Link href="/sign-up" className="w-full flex justify-center items-center mt-8 -mb-4">
+        <Link href="/sign-up" className="w-full flex justify-center items-center mt-8 -mb-4"
+        data-aos="fade-up"
+        data-aos-delay="200"
+        data-aos-once="false"
+        >
           <button className="btn-primary">
             Start your free trial
           </button>
