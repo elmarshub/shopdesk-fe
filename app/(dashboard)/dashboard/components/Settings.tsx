@@ -13,6 +13,12 @@ import user from "@/public/icons/_ui-user-edit.svg";
 import deleteIcon from "@/public/icons/_ui-trash-03-red.svg";
 import { Plus, Search } from "lucide-react";
 import { useState } from "react";
+import Account from "./Account";
+import Buisness from "./Buisness";
+import StockPreference from "./stockpreference";
+import Notification from "./notification";
+import Billing from "./billing";
+import UserPermission from "./userpermission";
 
 function Settings() {
   const [searchText, setSearchText] = useState("");
@@ -88,128 +94,42 @@ function Settings() {
             value="account"
             className="w-full md:border-[1px] border-0  md:border-t-1 p-8 rounded-[12px] rounded-t-none flex flex-col justify-between gap-12"
           >
-            <div>
-              <div className="flex flex-row w-full justify-between items-center gap-4  md:border-b border-[#e9eaeb] pb-6">
-                <div className="w-full flex flex-col gap-4 text-[#181d27]">
-                  <p className="text-xl font-[500]">Personal info</p>
-                  <p>Update your photo and personal details here.</p>
-                </div>
-                <div className="md:flex flex-row gap-4 hidden">
-                  <Button className="py-3 px-6 w-[120px] bg-white border border-[#1b1b1b] text-[#1b1b1b]">
-                    Cancel
-                  </Button>
-                  <Button className="py-3 px-6 w-[120px]">Save</Button>
-                </div>
-              </div>
-
-              <div className="flex flex-row w-full  items-center gap-4  md:border-b border-[#e9eaeb] pb-6 mt-6">
-                <div className="w-1/2 md:flex flex-col gap-4 text-[#181d27] hidden">
-                  <p className="text-xl font-[500] ">Your photo</p>
-                  <p>This will be displayed on your profile</p>
-                </div>
-                <div className="flex flex-col gap-5 items-center justify-center w-full ">
-                  <Image
-                    src={profilePhoto}
-                    alt="profile"
-                    className="w-[100px] h-[100px] rounded-full"
-                  />
-                  <Button className="py-3 px-6 rounded-[12px] bg-white border border-[#1b1b1b] text-[#1b1b1b]">
-                    <Plus className="w-6 h-6" />
-                    Change Photo
-                  </Button>
-                </div>
-              </div>
-              <div className="flex-col flex ">
-                <div className="flex flex-col w-full items-center justify-start gap-4  md:border-b border-[#e9eaeb] pb-6 mt-6">
-                  <div className="flex w-full md:items-center items-start md:flex-row flex-col gap-2 md:gap-4">
-                    <p className="w-1/5">Name</p>
-
-                    <div className="border-[1px] md:w-1/3 w-full border-[#dedede] p-4 rounded-[9px]">
-                      <p className="text-[#b8b8b8]">Roland</p>
-                    </div>
-                    <div className="border-[1px] md:w-1/3 w-full border-[#dedede] p-4 rounded-[9px] hidden lg:block">
-                      <p className="text-[#b8b8b8]">Eze</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-col w-full items-center justify-start gap-2 md:gap-4">
-                  <div className="md:mt-4 mt-0 w-full flex md:flex-row flex-col items-center gap-2 md:gap-4">
-                    <p className="md:w-1/5 w-full ">Email</p>
-                    <div className="border-[1px] border-[#dedede] p-4 rounded-[9px] md:w-1/3 w-full ">
-                      <p className="text-[#b8b8b8] ">Ihamrolan@gmail.com</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div>
-              <Button className="bg-[#ff000d] px-6 py-3 hover:bg-[#ff000e]  cursor-pointer hidden md:block">
-                Deactivate Account
-              </Button>
-              <p className="text-[#ff000d] text-sm hover:bg-[#ff000e] cursor-pointer md:hidden block">
-                Deactivate Account
-              </p>
-            </div>
+            <Account />
           </TabsContent>
 
           <TabsContent
             value="business"
-            className="border rounded-tr-lg rounded-b-lg shadow-lg min-h-[80vh] flex flex-col bg-white"
+            className="w-full md:border-[1px] border-0  md:border-t-1 p-8 rounded-[12px] rounded-t-none flex flex-col justify-between gap-12"
           >
-            <h2 className="text-[24px] font-semibold p-6 border-b">
-              Business Settings
-            </h2>
-            <div className="p-6">
-              <p>Business settings content</p>
-            </div>
+            <Buisness />
           </TabsContent>
 
           <TabsContent
             value="stockPreference"
-            className="border rounded-tr-lg rounded-b-lg shadow-lg min-h-[80vh] flex flex-col bg-white"
+            className="w-full md:border-[1px] border-0  md:border-t-1 p-8 rounded-[12px] rounded-t-none flex flex-col justify-between gap-12"
           >
-            <h2 className="text-[24px] font-semibold p-6 border-b">
-              Stock Preference Settings
-            </h2>
-            <div className="p-6">
-              <p>Stock preference settings content</p>
-            </div>
+            <StockPreference />
           </TabsContent>
 
           <TabsContent
             value="notification"
-            className="border rounded-tr-lg rounded-b-lg shadow-lg min-h-[80vh] flex flex-col bg-white"
+            className="w-full md:border-[1px] border-0  md:border-t-1 p-8 rounded-[12px] rounded-t-none flex flex-col justify-between gap-12"
           >
-            <h2 className="text-[24px] font-semibold p-6 border-b">
-              Notification Settings
-            </h2>
-            <div className="p-6">
-              <p>Notification settings content</p>
-            </div>
+            <Notification />
           </TabsContent>
 
           <TabsContent
             value="billingSubscription"
-            className="border rounded-tr-lg rounded-b-lg shadow-lg min-h-[80vh] flex flex-col bg-white"
+            className="w-full md:border-[1px] border-0  md:border-t-1 p-8 rounded-[12px] rounded-t-none flex flex-col justify-between gap-12"
           >
-            <h2 className="text-[24px] font-semibold p-6 border-b">
-              Billing & Subscription
-            </h2>
-            <div className="p-6">
-              <p>Billing and subscription settings content</p>
-            </div>
+            <Billing />
           </TabsContent>
 
           <TabsContent
             value="userPermission"
-            className="border rounded-tr-lg rounded-b-lg shadow-lg min-h-[80vh] flex flex-col bg-white"
+            className="w-full md:border-[1px] border-0  md:border-t-1 p-8 rounded-[12px] rounded-t-none flex flex-col justify-between gap-12"
           >
-            <h2 className="text-[24px] font-semibold p-6 border-b">
-              User Permission Settings
-            </h2>
-            <div className="p-6">
-              <p>User permission settings content</p>
-            </div>
+            <UserPermission />
           </TabsContent>
         </Tabs>
       </div>
