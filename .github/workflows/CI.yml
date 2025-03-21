@@ -62,6 +62,8 @@ jobs:
           ci_failure{workflow="ci"} $([ "${{ env.CI_STATUS }}" == "failure" ] && echo 1 || echo 0)
           # TYPE lead_time_for_changes gauge
           lead_time_for_changes{workflow="ci"} $((${{ env.CI_END_TIME }} - ${{ env.COMMIT_TIMESTAMP }}))
+          # TYPE mttr_seconds gauge
+          mttr_seconds{workflow="cd", branch="${{ github.ref_name }}"} $(($(date +%s) - ${{ env.DEPLOY_START_TIME }}))
           EOF
 
       - name: Push failure metrics to Prometheus
