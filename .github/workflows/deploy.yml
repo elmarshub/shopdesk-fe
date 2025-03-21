@@ -13,6 +13,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Log deployment start time
+        id: deploy_start
+        run: |
+          echo "DEPLOY_START_TIME=$(date +%s)" >> $GITHUB_ENV
+          echo "COMMIT_TIMESTAMP=$(git log -1 --format=%ct)" >> $GITHUB_ENV
+          
       - name: Restore build artifacts
         uses: actions/cache@v3
         with:
@@ -56,7 +62,30 @@ jobs:
             sudo fuser -k $PORT/tcp || echo 'No process found on port $PORT' &&
             pm2 start \"bun run start:$ENV\" --name \"shopdesk-${{ github.ref_name }}\" --watch
           "
+      - name: Log deployment end time
+        if: always()
+        run: |
+          echo "DEPLOY_END_TIME=$(date +%s)" >> $GITHUB_ENV
+          echo "DEPLOY_DURATION=$((${{ env.DEPLOY_END_TIME }} - ${{ env.DEPLOY_START_TIME }}))" >> $GITHUB_ENV
+          echo "DEPLOY_STATUS=${{ job.status }}" >> $GITHUB_ENV
 
+      - name: Push deployment metrics to Prometheus
+        if: always()
+        run: |
+          curl -X POST http://${{ secrets.SSH_IP }}:9091/metrics/job/github_actions \
+            --data-binary @- <<EOF
+          # TYPE deploy_duration_seconds gauge
+          deploy_duration_seconds{workflow="cd", branch="${{ github.ref_name }}"} ${{ env.DEPLOY_DURATION }}
+          # TYPE deploy_success gauge
+          deploy_success{workflow="cd", branch="${{ github.ref_name }}"} $([ "${{ env.DEPLOY_STATUS }}" == "success" ] && echo 1 || echo 0)
+          # TYPE deploy_failure gauge
+          deploy_failure{workflow="cd", branch="${{ github.ref_name }}"} $([ "${{ env.DEPLOY_STATUS }}" == "failure" ] && echo 1 || echo 0)
+          # TYPE lead_time_for_changes gauge
+          lead_time_for_changes{workflow="cd", branch="${{ github.ref_name }}"} $((${{ env.DEPLOY_END_TIME }} - ${{ env.COMMIT_TIMESTAMP }}))
+          # TYPE mttr_seconds gauge
+          mttr_seconds{workflow="cd", branch="${{ github.ref_name }}"} $(($(date +%s) - ${{ env.DEPLOY_START_TIME }}))
+          EOF
+          
       - name: Rollback on failure
         if: failure()
         env:
@@ -76,3 +105,13 @@ jobs:
             sudo fuser -k $PORT/tcp || echo 'No process found on port $PORT' &&
             pm2 start \"bun run start:$ENV\" --name \"shopdesk-${{ github.ref_name }}\" --watch
           "
+      - name: Push rollback metrics to Prometheus
+        if: failure()
+        run: |
+          curl -X POST http://${{ secrets.SSH_IP }}:9091/metrics/job/github_actions \
+            --data-binary @- <<EOF
+          # TYPE rollback_success gauge
+          rollback_success{workflow="cd", branch="${{ github.ref_name }}"} $([ "${{ job.status }}" == "success" ] && echo 1 || echo 0)
+          # TYPE mttr_seconds gauge
+          mttr_seconds{workflow="cd", branch="${{ github.ref_name }}"} $(($(date +%s) - ${{ env.DEPLOY_START_TIME }}))
+          EOF
