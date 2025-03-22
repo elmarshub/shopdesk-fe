@@ -1,214 +1,431 @@
+"use client"
+import {  useState } from "react";
 import Logo from "@/components/functional/logo";
-import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import instagram from "@/public/icons/instagram.svg"
-import facebook from "@/public/icons/facebook.svg"
-import twitter from "@/public/icons/twitter.svg"
-import mans from "@/public/smart-business/Group 362.png"
+import { motion } from "framer-motion";
+import TestimonialCarousel from "./carousel";
+import instagram from "@/public/icons/instagram.svg";
+import facebook from "@/public/icons/facebook.svg";
+import twitter from "@/public/icons/twitter.svg";
+import manWithOranges from "@/public/smart-business/Group 362.png";
+import greenStroke from "@/public/smart-business/Group 2282.svg";
+import cardImage from "@/public/smart-business/Group 138.svg";
+import Star from "@/public/smart-business/Star 9.svg";
+import UnStar from "@/public/smart-business/Star 9 (1).svg";
+import Log from "@/public/smart-business/_Logo Wrapper.svg";
 
 const Page = () => {
-  return (
-    <div className="flex flex-col min-h-screen max">
-      {/* Header */}
-      <header className="flex items-center justify-between max-[768px]:justify-center py-4">
-        <div className="flex items-center">
-          <Logo />
-        </div>
 
-        <div className="flex space-x-4 max-[768px]:hidden">
-          <a href="https://x.com/shopdesk_?s=21" target="_blank" className="size-[50px] border border-[#D0D0D0] rounded-full flex items-center justify-center cursor-pointer">
-          <Image 
-              src={twitter}
-              alt="instagram logo"
-              className="size-6"
-            />
+  const fadeRight = {
+    hidden: { opacity: 0, x: -50 },
+    visible: { 
+      opacity: 1, 
+      x: 0,
+      transition: { duration: 0.8, ease: "easeInOut" }
+    }
+  };
+
+  const fadeLeft = {
+    hidden: { opacity: 0, x: 50 },
+    visible: { 
+      opacity: 1, 
+      x: 0,
+      transition: { duration: 0.8, ease: "easeInOut" }
+    }
+  };
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.8, ease: "easeInOut" }
+    }
+  };
+
+  const zoomIn = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { 
+      opacity: 1, 
+      scale: 1,
+      transition: { duration: 0.8, ease: "easeInOut" }
+    }
+  };
+
+  const features = [
+    {
+      icon: "/smart-business/activity 1.svg",
+      title: "Automated Inventory Management",
+      description:
+        "Shopdesk helps small business owners like yours manage inventory, track sales and profits without the headache.",
+    },
+    {
+      icon: "/smart-business/pie-chart 1.svg",
+      title: "Easy Sales & Discount Management",
+      description:
+        "Apply discounts seamlessly and track every sale without errors.",
+    },
+    {
+      icon: "/smart-business/command 1.svg",
+      title: "Simple, Click-to-Generate Reports",
+      description:
+        "Instantly view best-selling products, total sales, and profit margins—no spreadsheets needed.",
+    },
+  ];
+
+  return (
+    <div className="flex flex-col min-h-screen bg-[#FAFAFA]">
+      <header className="flex items-center justify-between py-4 px-6 md:px-12 lg:px-16">
+        <motion.div 
+          className="flex items-center"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeRight}
+        >
+          <Logo />
+        </motion.div>
+
+        <motion.div 
+          className="flex space-x-4 max-[768px]:hidden"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeLeft}
+        >
+          <a
+            href="https://x.com/shopdesk_?s=21"
+            target="_blank"
+            className="size-[50px] border border-[#D0D0D0] rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
+          >
+            <Image src={twitter} alt="Twitter logo" className="size-6" />
           </a>
-          <a href="https://www.facebook.com/share/18weYAqtPe/" target="_blank" className="size-[50px] border border-[#D0D0D0] rounded-full flex items-center justify-center cursor-pointer">
-          <Image 
-              src={facebook}
-              alt="instagram logo"
-              className="size-6"
-            />
+          <a
+            href="https://www.facebook.com/share/18weYAqtPe/"
+            target="_blank"
+            className="size-[50px] border border-[#D0D0D0] rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
+          >
+            <Image src={facebook} alt="Facebook logo" className="size-6" />
           </a>
-          <a href="https://www.instagram.com/shopdesk_?igsh=MXIybG5sNXhvazI5dg==" target="_blank" className="size-[50px] border border-[#D0D0D0] rounded-full flex items-center justify-center cursor-pointer">
-            <Image 
-              src={instagram}
-              alt="instagram logo"
-              className="size-6"
-            />
+          <a
+            href="https://www.instagram.com/shopdesk_?igsh=MXIybG5sNXhvazI5dg=="
+            target="_blank"
+            className="size-[50px] border border-[#D0D0D0] rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors"
+          >
+            <Image src={instagram} alt="Instagram logo" className="size-6" />
           </a>
-        </div>
+        </motion.div>
       </header>
 
-      <section className="flex flex-col md:flex-row items-center justify-between">
-        <div className="flex flex-col max-[768px]:items-center max-w-[587px] flex-1 max-[1000px]:scale-90 max-[900px]:scale-85 max-[800px]:scale-75 max-[768px]:text-center">
-          <p className="font-circular-bold text-[96px] text-[#19A45B] ">
-            ShopDesk
-          </p>
-
-          <p className="font-circular-bold text-[40px]">
-            Your Smart Business Sidekick!
-          </p>
-
-          <p className="font-circular-light text-[24px] text-[#5F5F5F] mt-6 ">
-            Shopdesk helps small business owners like yours manage inventory, track sales and profits without the headache.
-          </p>
-        </div>
-
-        <div className="max-[768px]:max-w-[400px]">
-          <Image 
-            src={mans}
-            alt="mans holding fruits"
-          />
-        </div>
-
-      </section>
-
-      <section className=" px-4 py-8 md:py-12">
-        <div className="relative mt-16 mb-8 h-3 bg-[#19A45B] w-full">  
-          <a href="/sign-up" className="absolute bg-[#19A45B] p-4 px-6 rounded-full text-white text-[20px] top-1/2 -translate-y-1/2 max-[768px]:left-1/2 max-[768px]:-translate-x-1/2">
-            Try Shopdesk now
-          </a>        
-        </div>
-      </section>
-
-      {/* What to Expect Section */}
-      <section className="py-12 px-4">
-        
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          {/* Free Trial Section */}
-          <div className="p-4">
-            
-            <form className="space-y-4">
-              <input
-                type="text"
-                placeholder="Full Name"
-                className="w-full p-3 border border-gray-300 rounded"
-              />
-              <input
-                type="email"
-                placeholder="Email address"
-                className="w-full p-3 border border-gray-300 rounded"
-              />
-              <div className="relative">
-                <select disabled
-                  className="w-full p-3 border border-gray-300 rounded appearance-none"
-                  defaultValue=""
-                >
-                  <option value="" disabled>Business Type</option>
-                  <option>Retail</option>
-                  <option>Wholesale</option>
-                  <option>Manufacturing</option>
-                </select>
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <ChevronDown size={20} />
-                </div>
-              </div>
-              <input
-                type="text"
-                placeholder="Business Name (Optional)"
-                className="w-full p-3 border border-gray-300 rounded"
-              />
-              <Button className="w-full p-6 bg-[#B8B8B8] hover:bg-black text-white rounded">
-                <span>Join Waitlist</span>
-                <ArrowRight className="ml-2" size={16} />
-              </Button>
-            </form>
+      <section className="flex flex-col md:flex-row items-center justify-between px-6 md:px-12 lg:px-16 py-8 md:py-10">
+        <motion.div 
+          className="flex flex-col max-[768px]:items-center max-w-[587px] flex-1 max-[768px]:text-center"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeRight}
+        >
+          <h1 className="font-bold text-[75px] leading-[4rem] text-[#1A1A1A]">
+            Run Your Business with Ease
+          </h1>
+          <div className="relative w-[300px] h-[10px] mt-2 mb-6">
+            <Image
+              src={greenStroke}
+              alt="decorative green stroke"
+              width={300}
+              height={10}
+              className="object-contain"
+            />
           </div>
-          
-          {/* Features Section */}
-          <div className="grid gap-6">
+          <p className="text-[28px] text-[#5F5F5F] mt-4">
+            Tired of missing stock, sales mix-ups, and endless paperwork? You're
+            not alone! Whether you run a boutique, online store, or physical
+            shop, managing your business shouldn't be this stressful.
+          </p>
+        </motion.div>
 
-            <p className="text-[40px] font-circular-medium">
-              What we <span> </span> <span className="text-[#19A45B]">offer?</span>
+        <motion.div 
+          className="relative mt-8 md:mt-0 max-w-[400px]"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeLeft}
+        >
+          <div className="">
+            <Image
+              src={manWithOranges}
+              alt="Person holding a crate of oranges"
+              width={800}
+              height={800}
+            />
+          </div>
+        </motion.div>
+      </section>
+
+       <section className="px-6 md:px-12 flex justify-center flex-col items-center lg:px-16 py-8 md:py-12">
+      <motion.div
+        className="relative w-full max-w-4xl border-[24px] border-[#00000080] rounded-lg overflow-hidden shadow-lg"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={zoomIn}
+      >
+        <motion.div
+          className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeRight}
+        >
+          <Image
+              src={Log}
+              alt="Person holding a crate of oranges"
+              width={100}
+              height={100}
+              className="w-full h-full"
+            />
+        </motion.div>
+
+     
+        <div className="relative w-full h-[500px]">
+  <iframe
+    className="w-full h-full"
+    src="https://drive.google.com/file/d/18nzV42E0r84vpeq9OxnZXsdmcrLhl16r/preview"
+    allow="autoplay"
+  ></iframe>
+  <div className="absolute inset-0 bg-black/30 bg-opacity-50 pointer-events-none"></div>
+</div>
+
+      </motion.div>
+
+      <h2 className="text-center text-2xl font-bold mt-6">Your Smart Business Sidekick!</h2>
+    </section>
+
+      <section className="bg-[#005026] text-white py-12 px-6 md:px-16">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeRight}
+          >
+            <h2 className="text-4xl font-bold leading-tight mb-4">
+              Do you run out of bestsellers or overstock slow-moving products?
+            </h2>
+            <p className="text-[16px] text-gray-300 mb-6">
+              Imagine focusing on selling more, delighting customers, and
+              growing your brand—without stressing over inventory and reports.
             </p>
-            <div className="flex">
-              <div className="flex-shrink-0 mr-4">
-                <div className="w-12 h-12 bg-blue-500 rounded flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"></path><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"></path><path d="M2 7h20"></path><path d="M22 7v3a2 2 0 0 1-2 2v0a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12v0a2 2 0 0 1-2-2V7"></path></svg>
-                </div>
-              </div>
-              <div>
-                <h4 className="font-semibold text-lg">Automated Inventory Management</h4>
-                <p className="text-gray-600 text-sm">
-                Confirm your stock level at a glance
-                </p>
-              </div>
-            </div>
-            
-            <div className="flex">
-              <div className="flex-shrink-0 mr-4">
-                <div className="w-12 h-12 bg-green-500 rounded flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20"></path><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                </div>
-              </div>
-              <div>
-                <h4 className="font-semibold text-lg">Easy Sales & Discount Management</h4>
-                <p className="text-gray-600 text-sm">
-                Apply discounts seamlessly and track every sale without
-                </p>
-              </div>
-            </div>
-            
-            <div className="flex">
-              <div className="flex-shrink-0 mr-4">
-                <div className="w-12 h-12 bg-orange-400 rounded flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
-                </div>
-              </div>
-              <div>
-                <h4 className="font-semibold text-lg">User-Friendly & Fast</h4>
-                <p className="text-gray-600 text-sm">
-                Designed for small and medium business owners—no tech skills required
-                </p>
-              </div>
-            </div>
 
-            <div className="flex">
-              <div className="flex-shrink-0 mr-4">
-                <div className="w-12 h-12 bg-orange-400 rounded flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
+            <div className="flex gap-[5rem] mt-[5rem]">
+              <motion.div 
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeUp}
+                transition={{ delay: 0.1 }}
+                className="flex flex-col gap-2"
+              >
+                <div className="flex gap-1">
+                  {[...Array(5)].map((_, i) => (
+                    <Image
+                    src={Star}
+                    alt="Star"
+                    width={22}
+                    height={22}
+                    key={i}
+                    >
+
+                    </Image>
+                  ))}
                 </div>
-              </div>
-              <div>
-                <h4 className="font-semibold text-lg">Secure, Role-Based Access</h4>
-                <p className="text-gray-600 text-sm">
-                Designed for small and medium business owners—no tech skills required
-                </p>
-              </div>
+                <p className="font-bold mt-1">4.9 / 5 rating</p>
+                <p className="text-white">ekon</p>
+              </motion.div>
+
+              <motion.div 
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeUp}
+                transition={{ delay: 0.2 }}
+                className="flex flex-col gap-2"
+
+              >
+                <div className="flex gap-1">
+                  {[...Array(4)].map((_, i) => (
+                     <Image
+                     src={Star}
+                     alt="Star"
+                     width={22}
+                     height={22}
+                     key={i}
+                     >
+ 
+                     </Image>
+                  ))}
+                  <Image
+                     src={UnStar}
+                     alt="Star"
+                     width={22}
+                     height={22}
+                     >
+ 
+                     </Image>
+                </div>
+                <p className="font-bold mt-1">4.8 / 5 rating</p>
+                <p className="text-white">roland</p>
+              </motion.div>
             </div>
+          </motion.div>
+          <div className="space-y-6">
+            {features.map((feature, index) => (
+              <motion.div 
+                key={index} 
+                className="flex gap-4 items-start"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeLeft}
+                transition={{ delay: index * 0.1 }}
+              >
+                <div className="p-1 flex justify-center items-center bg-white w-8 h-8">
+                  <Image
+                    src={feature.icon}
+                    width={30}
+                    height={30}
+                    alt={feature.title}
+                    className="size-6"
+                  />
+                </div>
+                <div>
+                  <h3 className="font-bold text-xl mb-1">{feature.title}</h3>
+                  <p className="text-gray-300">{feature.description}</p>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      <section className="w-full mx-4 bg-[#E5F5ED] flex flex-col justify-center items-center p-8 gap-6">
-        <p className="text-[#19A45B]">
-        Reviews from Beta Users
-        </p>
+      <section className="w-full flex flex-col md:flex-row justify-between items-center p-8 gap-10 px-6 md:px-12 lg:px-16 py-16">
+        <motion.div 
+          className="relative max-w-xl self-start"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeRight}
+        >
+          <div className="relative h-[300px] w-full">
+            <Image 
+              src={cardImage} 
+              alt="Payment dashboard" 
+              width={400} 
+              height={300}
+              className="w-full"
+            />
+            
+            
+          </div>
+        </motion.div>
 
-        <p className="font-circular-light text-[24px]">
-        As someone who isn’t tech-savvy, I was worried about switching systems. But ShopDesk is incredibly user-friendly, and the onboarding was a breeze!
-        </p>
-
-        <p className=" text-[24px]">
-        — Mark M, Small Business Owner
-        </p>
+        <motion.div 
+          className="max-w-lg w-full p-6"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeLeft}
+        >
+          <h2 className="text-[48px] font-bold text-[#2A425D] text-center leading-[3rem]">
+            Sign Up for <br /> Free Today
+          </h2>
+          <div className="relative w-full flex h-full justify-center my-4">
+            <Image
+              src={greenStroke}
+              alt="Decorative stroke"
+              width={600}
+              height={20}
+              className="object-contain"
+            />
+          </div>
+          <form className="mt-4 flex flex-col gap-4">
+            <input
+              type="text"
+              placeholder="Full Name"
+              className="border border-gray-300 p-3 rounded-md w-full"
+            />
+            <input
+              type="email"
+              placeholder="Email address"
+              className="border border-gray-300 p-3 rounded-md w-full"
+            />
+            <div className="relative">
+              <select className="border border-gray-300 p-3 rounded-md w-full appearance-none">
+                <option>Business Type</option>
+                <option>Retail</option>
+                <option>Food Service</option>
+                <option>E-commerce</option>
+                <option>Other</option>
+              </select>
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                <ChevronDown size={20} />
+              </div>
+            </div>
+            <input
+              type="text"
+              placeholder="Business Name (Optional)"
+              className="border border-gray-300 p-3 rounded-md w-full"
+            />
+            <button className="bg-gray-800 text-white p-3 rounded-md w-full hover:bg-gray-900 transition-colors flex items-center justify-center">
+              <span>Join Waitlist</span>
+              <ArrowRight size={18} className="ml-2" />
+            </button>
+          </form>
+        </motion.div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-6 px-4 border-t border-gray-200">
+      <motion.section 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeUp}
+      >
+        <TestimonialCarousel />
+      </motion.section>
+
+      <footer className="py-6 px-4 border-t border-gray-200 bg-white">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-500 text-sm">
             © Copyright 2025, Powered by Timbu Business
           </p>
-          
+
           <div className="flex gap-6 mt-4 md:mt-0">
-            <Link href="#" className="text-gray-500 text-sm hover:text-gray-800">Cookies</Link>
-            <Link href="#" className="text-gray-500 text-sm hover:text-gray-800">Terms of Service</Link>
-            <Link href="#" className="text-gray-500 text-sm hover:text-gray-800">Privacy Policy</Link>
-            <Link href="#" className="text-gray-500 text-sm hover:text-gray-800">Manage privacy</Link>
+            <Link
+              href="#"
+              className="text-gray-500 text-sm hover:text-gray-800"
+            >
+              Cookies
+            </Link>
+            <Link
+              href="#"
+              className="text-gray-500 text-sm hover:text-gray-800"
+            >
+              Terms of Service
+            </Link>
+            <Link
+              href="#"
+              className="text-gray-500 text-sm hover:text-gray-800"
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              href="#"
+              className="text-gray-500 text-sm hover:text-gray-800"
+            >
+              Manage privacy
+            </Link>
           </div>
         </div>
       </footer>
