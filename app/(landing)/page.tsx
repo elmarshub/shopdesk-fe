@@ -54,8 +54,10 @@ export default function Home() {
     >
       <img src={iconSrc} alt={title} className="w-8 h-8 mb-4 mt-2.5" />
       <h3 className="text-2xl leading-6 font-medium text-gray-900">{title}</h3>
-      <p className="text-gray-700 text-lg leading-6 font-circular-light">{description}</p>
-      
+      <p className="text-gray-700 text-lg leading-6 font-circular-light">
+        {description}
+      </p>
+
       <Link className="flex items-center gap-2" href="/sign-up">
         <button className="w-full cursor-pointer font-medium flex items-center text-left md:text-base text-sm ">
           {buttonText}
@@ -64,9 +66,8 @@ export default function Home() {
           src={right}
           alt="Arrow Right"
           className="w-3.5 h-3.5 cursor-pointer"
-        />        
+        />
       </Link>
-      
     </div>
   );
 
@@ -106,7 +107,8 @@ export default function Home() {
             data-aos="fade-down"
             data-aos-once="false" // Allow this element to re-animate
           >
-            <span className="text-[#19A45B]">Simplify</span> Inventory Management for Your Business
+            <span className="text-[#19A45B]">Simplify</span> Inventory
+            Management for Your Business
           </h1>
 
           <p
@@ -115,18 +117,20 @@ export default function Home() {
             data-aos-delay="200"
             data-aos-once="false" // Allow this element to re-animate
           >
-            ShopDesk is a cloud based inventory management software that helps you track stock, process sales, and generate business records so you can focus on growing your business.
+            ShopDesk is a cloud based inventory management software that helps
+            you track stock, process sales, and generate business records so you
+            can focus on growing your business.
           </p>
         </div>
 
-        <Link href="/sign-up" className="w-full flex justify-center items-center mt-8 -mb-4"
-        data-aos="fade-up"
-        data-aos-delay="200"
-        data-aos-once="false"
+        <Link
+          href="/sign-up"
+          className="w-full flex justify-center items-center mt-8 -mb-4"
+          data-aos="fade-up"
+          data-aos-delay="200"
+          data-aos-once="false"
         >
-          <button className="btn-primary">
-            Start your free trial
-          </button>
+          <button className="btn-primary">Start your free trial</button>
         </Link>
 
         <div className="w-full md:mt-[40px] mt-[20px] flex flex-col items-center">
@@ -148,6 +152,7 @@ export default function Home() {
           />
 
           <div
+            hidden // hidden for now
             className="bg-[#19A45B] w-full px-[clamp(18px,_3vw,_80px)] p-6 flex items-center gap-[clamp(16px,_3vw,_48px)] justify-center flex-wrap h-fit"
             data-aos="fade-up"
             data-aos-once="false" // Allow this element to re-animate
@@ -174,7 +179,10 @@ export default function Home() {
           </div>
         </div>
 
-        <div id="features" className="mx-auto max-w-[1198px] px-5 min-[600px]:px-10">
+        <div
+          id="features"
+          className="mx-auto max-w-[1198px] px-5 min-[600px]:px-10 pt-12"
+        >
           <h2
             className="text-center py-4 md:py-3 font-medium leading-6 text-[#009A49]"
             data-aos="fade-up"
