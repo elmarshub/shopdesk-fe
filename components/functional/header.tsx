@@ -21,16 +21,16 @@ const Header = () => {
         event.target instanceof Node &&
         !menuRef.current.contains(event.target) &&
         !menuBtnRef.current.contains(event.target) // Prevent closing if clicking the button
-      ){
+      ) {
         setIsOpen(false);
       }
     };
-  
+
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
       document.addEventListener("touchstart", handleClickOutside);
     }
-  
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("touchstart", handleClickOutside);
@@ -49,7 +49,7 @@ const Header = () => {
           <Link href="/pricing" className="hover:text-green-500 transition">
             Pricing
           </Link>
-          <Link href="/blog" className="hover:text-green-500 transition">
+          <Link hidden href="/blog" className="hover:text-green-500 transition">
             Blog
           </Link>
           <Link href="/faq" className="hover:text-green-500 transition">
@@ -78,9 +78,10 @@ const Header = () => {
         </div>
 
         <div className="flex items-center gap-2 min-[900px]:hidden">
-          <button 
-          onClick={() => router.push("/dashboard")}
-          className="btn-primary min-[900px]:hidden max-[500]:hidden max-[600px]:text-[14px]">
+          <button
+            onClick={() => router.push("/dashboard")}
+            className="btn-primary min-[900px]:hidden max-[500]:hidden max-[600px]:text-[14px]"
+          >
             Get Started
           </button>
 
@@ -92,15 +93,17 @@ const Header = () => {
             ref={menuBtnRef}
           >
             <Image src={menu} alt="menu" width={28} height={28} />
-          </button>          
+          </button>
         </div>
-
       </div>
 
       {isOpen && (
-        <div ref={menuRef} className="absolute z-50 top-16 left-0 w-screen bg-white shadow-lg flex flex-col items-left py-6 overflow-hidden px-4 min-[850px]:hidden">
+        <div
+          ref={menuRef}
+          className="absolute z-50 top-16 left-0 w-screen bg-white shadow-lg flex flex-col items-left py-6 overflow-hidden px-4 min-[850px]:hidden"
+        >
           <Link
-            href="/features"
+            href="/#features"
             className="hover:text-green-500 transition py-5"
             onClick={() => setIsOpen(false)}
           >
@@ -114,6 +117,7 @@ const Header = () => {
             Pricing
           </Link>
           <Link
+            hidden
             href="/blog"
             className="hover:text-green-500 transition py-5"
             onClick={() => setIsOpen(false)}
