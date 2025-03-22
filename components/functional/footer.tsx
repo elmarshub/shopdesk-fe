@@ -1,5 +1,4 @@
 import Link from "next/link";
-import React from "react";
 import Image from "next/image";
 import appStore from "../../public/icons/App Store.png";
 import playStore from "../../public/icons/Play Store.png";
@@ -61,7 +60,7 @@ const Footer = () => {
       <div className="mt-20">
         <div className="flex justify-between max-[950px]:grid max-[950px]:grid-cols-4 max-[650px]:grid-cols-3 max-[500px]:flex max-[500px]:flex-col max-[500px]:items-center max-[500px]:text-center max-[950px]:gap-y-12 gap-x-4">
           <div className="w-[248px] max-[950px]:col-span-2 ">
-            <div className="mb-8">
+            <div className="mb-8 flex justify-center min-[500px]:justify-start">
               <Logo />
             </div>
 
@@ -74,27 +73,47 @@ const Footer = () => {
             </p>
 
             <div className="flex gap-4 mt-[70px] max-[500px]:hidden">
-            <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-    <a href="https://x.com/shopdesk_?s=21" target="_blank" rel="noopener noreferrer">
-      <Image src={twitter} alt="twitter" />
-    </a>
-  </div>
-  <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-    <a href="https://www.facebook.com/share/18weYAqtPe/" target="_blank" rel="noopener noreferrer">
-      <Image src={facebook} alt="facebook" />
-    </a>
-  </div>
-  <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-    <a href="https://www.instagram.com/shopdesk_?igsh=MXIybG5sNXhvazI5dg==" target="_blank" rel="noopener noreferrer">
-      <Image src={instagram} alt="instagram" />
-    </a>
-  </div>
-  <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-    <a href="https://www.tiktok.com/@shopdesk_?_t=ZM-8urzNXSQ1PL&_r=1" target="_blank" rel="noopener noreferrer">
-      {/* <Image src={tiktok} alt="tiktok" /> */}
-      <FaTiktok />
-    </a>
-  </div>
+              <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+                <Link
+                  aria-label="Twitter"
+                  href="https://x.com/shopdesk_?s=21"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image src={twitter} alt="twitter" />
+                </Link>
+              </div>
+              <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+                <Link
+                  aria-label="Facebook"
+                  href="https://www.facebook.com/share/18weYAqtPe/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image src={facebook} alt="facebook" />
+                </Link>
+              </div>
+              <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+                <Link
+                  aria-label="Instagram"
+                  href="https://www.instagram.com/shopdesk_?igsh=MXIybG5sNXhvazI5dg=="
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Image src={instagram} alt="instagram" />
+                </Link>
+              </div>
+              <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+                <Link
+                  aria-label="Tiktok"
+                  href="https://www.tiktok.com/@shopdesk_?_t=ZM-8urzNXSQ1PL&_r=1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {/* <Image src={tiktok} alt="tiktok" /> */}
+                  <FaTiktok />
+                </Link>
+              </div>
             </div>
           </div>
 
@@ -104,10 +123,39 @@ const Footer = () => {
             </p>
 
             <ul className="text-[14px] text-[#52525B] flex flex-col gap-6 mt-8">
-              <li>Overview</li>
-              <li>Fetaures</li>
-              <li>Pricing</li>
-              <li>Tutorials</li>
+              <li>
+                <Link
+                  href="/overview"
+                  className="hover:text-black transition duration-200"
+                >
+                  Overview
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/features"
+                  className="hover:text-black transition duration-200"
+                >
+                  Features
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/pricing"
+                  className="hover:text-black transition duration-200"
+                >
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link
+                  hidden
+                  href="/tutorials"
+                  className="hover:text-black transition duration-200"
+                >
+                  Tutorials
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -117,13 +165,46 @@ const Footer = () => {
             </p>
 
             <ul className="text-[14px] text-[#52525B] flex flex-col gap-6 mt-8">
-              <li>About us</li>
-              <li>
-                <Link href="/careers">Careers</Link>
+              <li hidden>
+                <Link
+                  href=""
+                  className="hover:text-black transition duration-200"
+                >
+                  About us
+                </Link>
               </li>
-              <li>Blog</li>
-              <li>Contact</li>
-              <li>Newsletter</li>
+              <li>
+                <Link
+                  href="/careers"
+                  className="hover:text-black transition duration-200"
+                >
+                  Careers
+                </Link>
+              </li>
+              <li hidden>
+                <Link
+                  href="/blog"
+                  className="hover:text-black transition duration-200"
+                >
+                  Blog
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/contact"
+                  className="hover:text-black transition duration-200"
+                >
+                  Contact
+                </Link>
+              </li>
+              <li hidden>
+                <Link
+                  href="/newsletter"
+                  className="hover:text-black transition duration-200"
+                >
+                  Newsletter
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -133,14 +214,42 @@ const Footer = () => {
             </p>
 
             <ul className="text-[14px] text-[#52525B] flex flex-col gap-6 mt-8">
-              <li>Customer Support</li>
-              <li>FAQ</li>
-              <li>Help center</li>
-              <li>Youtube Playlist</li>
+              <li>
+                <Link
+                  href="/support"
+                  className="hover:text-black transition duration-200"
+                >
+                  Customer Support
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/faq"
+                  className="hover:text-black transition duration-200"
+                >
+                  FAQ
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/help"
+                  className="hover:text-black transition duration-200"
+                >
+                  Help center
+                </Link>
+              </li>
+              <li hidden>
+                <Link
+                  href="/tutorials"
+                  className="hover:text-black transition duration-200"
+                >
+                  Youtube Playlist
+                </Link>
+              </li>
             </ul>
           </div>
 
-          <div>
+          <div hidden>
             <p className="uppercase text-[14px] font-circular-bold text-[#19A45B] mb-8">
               Get the app
             </p>
@@ -152,47 +261,85 @@ const Footer = () => {
           </div>
         </div>
 
-        <hr className="border border-[#E2E8F0]  mb-6 md:my-12" />
+        <hr className="border border-[#E2E8F0] my-6 md:my-12" />
 
-        <div className="w-full mb-12 flex justify-center gap-4 mt-[70px] min-[500px]:hidden">
-        <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-    <a href="https://x.com/shopdesk_?s=21" target="_blank" rel="noopener noreferrer">
-      <Image src={twitter} alt="twitter" />
-    </a>
-  </div>
-  <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-    <a href="https://www.facebook.com/share/18weYAqtPe/" target="_blank" rel="noopener noreferrer">
-      <Image src={facebook} alt="facebook" />
-    </a>
-  </div>
-  <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-    <a href="https://www.instagram.com/shopdesk_?igsh=MXIybG5sNXhvazI5dg==" target="_blank" rel="noopener noreferrer">
-      <Image src={instagram} alt="instagram" />
-    </a>
-  </div>
-  <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
-    <a href="https://www.tiktok.com/@shopdesk_?_t=ZM-8urzNXSQ1PL&_r=1" target="_blank" rel="noopener noreferrer">
-      {/* <Image src={tiktok} alt="tiktok" /> */}
-      <FaTiktok />
-    </a>
-  </div>
-</div>
+        <div className="w-full mb-12 flex justify-center gap-4 min-[500px]:hidden">
+          <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+            <Link
+              href="https://x.com/shopdesk_?s=21"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image src={twitter} alt="twitter" />
+            </Link>
+          </div>
+          <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+            <Link
+              href="https://www.facebook.com/share/18weYAqtPe/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image src={facebook} alt="facebook" />
+            </Link>
+          </div>
+          <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+            <Link
+              href="https://www.instagram.com/shopdesk_?igsh=MXIybG5sNXhvazI5dg=="
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image src={instagram} alt="instagram" />
+            </Link>
+          </div>
+          <div className="size-7 flex items-center justify-center border border-[#D4D4D8] rounded-full">
+            <Link
+              href="https://www.tiktok.com/@shopdesk_?_t=ZM-8urzNXSQ1PL&_r=1"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {/* <Image src={tiktok} alt="tiktok" /> */}
+              <FaTiktok />
+            </Link>
+          </div>
+        </div>
 
-        <div className="w-full flex items-center gap-4 text-[14px] text-[#71717A] mb-8 justify-center">
-          <p>© Copyright 2025, Powered by Timbu Business</p>
+        <div className="w-full flex items-center gap-4 text-[14px] text-[#71717A] mb-8 justify-center lg:justify-between">
+          <p>
+            © Copyright {new Date().getFullYear()}, Powered by Timbu Business
+          </p>
 
           <ul className="flex gap-5 max-[900px]:hidden">
             <li>
-              <Link href="/cookies">Cookies</Link>
+              <Link
+                href="/cookies"
+                className="hover:text-black transition duration-200"
+              >
+                Cookies
+              </Link>
             </li>
             <li>
-              <Link href="/terms-of-service">Terms of service</Link>
+              <Link
+                href="/terms-of-service"
+                className="hover:text-black transition duration-200"
+              >
+                Terms of service
+              </Link>
             </li>
             <li>
-              <Link href="/privacy-policy">Privacy Policy</Link>
+              <Link
+                href="/policy"
+                className="hover:text-black transition duration-200"
+              >
+                Privacy Policy
+              </Link>
             </li>
-            <li>
-              <Link href="/manage-policy">Manage Policy</Link>
+            <li hidden>
+              <Link
+                href=""
+                className="hover:text-black transition duration-200"
+              >
+                Manage Policy
+              </Link>
             </li>
           </ul>
         </div>
