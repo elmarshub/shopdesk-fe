@@ -1,28 +1,22 @@
 "use client"
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import Logo from "@/components/functional/logo";
-import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import TestimonialCarousel from "./carousel";
-
-// Social media icons
 import instagram from "@/public/icons/instagram.svg";
 import facebook from "@/public/icons/facebook.svg";
 import twitter from "@/public/icons/twitter.svg";
-
-// Images
 import manWithOranges from "@/public/smart-business/Group 362.png";
 import greenStroke from "@/public/smart-business/Group 2282.svg";
 import cardImage from "@/public/smart-business/Group 138.svg";
 import Star from "@/public/smart-business/Star 9.svg";
 import UnStar from "@/public/smart-business/Star 9 (1).svg";
-import playButton from "@/public/smart-business/play.svg";
+import Log from "@/public/smart-business/_Logo Wrapper.svg";
 
 const Page = () => {
-    const [isPlaying, setIsPlaying] = useState(false);
 
   const fadeRight = {
     hidden: { opacity: 0, x: -50 },
@@ -83,7 +77,6 @@ const Page = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#FAFAFA]">
-      {/* Header */}
       <header className="flex items-center justify-between py-4 px-6 md:px-12 lg:px-16">
         <motion.div 
           className="flex items-center"
@@ -126,7 +119,6 @@ const Page = () => {
         </motion.div>
       </header>
 
-      {/* Hero Section */}
       <section className="flex flex-col md:flex-row items-center justify-between px-6 md:px-12 lg:px-16 py-8 md:py-10">
         <motion.div 
           className="flex flex-col max-[768px]:items-center max-w-[587px] flex-1 max-[768px]:text-center"
@@ -172,16 +164,14 @@ const Page = () => {
         </motion.div>
       </section>
 
-      {/* Video Section */}
        <section className="px-6 md:px-12 flex justify-center flex-col items-center lg:px-16 py-8 md:py-12">
       <motion.div
-        className="relative w-full max-w-4xl border-[1rem] border-gray-600 rounded-lg overflow-hidden shadow-lg"
+        className="relative w-full max-w-4xl border-[24px] border-[#00000080] rounded-lg overflow-hidden shadow-lg"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
         variants={zoomIn}
       >
-        {/* Logo Positioned at the Top Center */}
         <motion.div
           className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10"
           initial="hidden"
@@ -189,38 +179,32 @@ const Page = () => {
           viewport={{ once: true }}
           variants={fadeRight}
         >
-          <Logo />
+          <Image
+              src={Log}
+              alt="Person holding a crate of oranges"
+              width={100}
+              height={100}
+              className="w-full h-full"
+            />
         </motion.div>
 
-        {/* Video or Placeholder */}
-        {/* {!isPlaying ? (
-          <div className="relative w-full h-[500px] flex items-center justify-center bg-black">
-            <button onClick={() => setIsPlaying(true)} className="absolute z-20">
-              <Image
-                src={playButton}
-                alt="Play button"
-                width={100}
-                height={100}
-                className="cursor-pointer hover:opacity-75 transition"
-              />
-            </button>
-          </div>
-        ) : ( */}
-          <iframe
-            className="w-full h-[500px] "
-            src="https://drive.google.com/file/d/18nzV42E0r84vpeq9OxnZXsdmcrLhl16r/preview"
-            allow="autoplay"
-          ></iframe>
-        {/* )} */}
+     
+        <div className="relative w-full h-[500px]">
+  <iframe
+    className="w-full h-full"
+    src="https://drive.google.com/file/d/18nzV42E0r84vpeq9OxnZXsdmcrLhl16r/preview"
+    allow="autoplay"
+  ></iframe>
+  <div className="absolute inset-0 bg-black/30 bg-opacity-50 pointer-events-none"></div>
+</div>
+
       </motion.div>
 
       <h2 className="text-center text-2xl font-bold mt-6">Your Smart Business Sidekick!</h2>
     </section>
 
-      {/* Features Section */}
       <section className="bg-[#005026] text-white py-12 px-6 md:px-16">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center">
-          {/* Left Section */}
           <motion.div 
             initial="hidden"
             whileInView="visible"
@@ -235,7 +219,6 @@ const Page = () => {
               growing your brand—without stressing over inventory and reports.
             </p>
 
-            {/* Reviews */}
             <div className="flex gap-[5rem] mt-[5rem]">
               <motion.div 
                 initial="hidden"
@@ -247,7 +230,6 @@ const Page = () => {
               >
                 <div className="flex gap-1">
                   {[...Array(5)].map((_, i) => (
-                    // <Star key={i} className="text-yellow-400" fill="yellow" />
                     <Image
                     src={Star}
                     alt="Star"
@@ -298,8 +280,6 @@ const Page = () => {
               </motion.div>
             </div>
           </motion.div>
-
-          {/* Right Section - Features */}
           <div className="space-y-6">
             {features.map((feature, index) => (
               <motion.div 
@@ -330,9 +310,7 @@ const Page = () => {
         </div>
       </section>
 
-      {/* Sign Up Section */}
       <section className="w-full flex flex-col md:flex-row justify-between items-center p-8 gap-10 px-6 md:px-12 lg:px-16 py-16">
-        {/* Left Side - Image and Graphics */}
         <motion.div 
           className="relative max-w-xl self-start"
           initial="hidden"
@@ -353,7 +331,6 @@ const Page = () => {
           </div>
         </motion.div>
 
-        {/* Right Side - Form */}
         <motion.div 
           className="max-w-lg w-full p-6"
           initial="hidden"
@@ -409,7 +386,6 @@ const Page = () => {
         </motion.div>
       </section>
 
-      {/* Testimonials */}
       <motion.section 
         initial="hidden"
         whileInView="visible"
@@ -419,7 +395,6 @@ const Page = () => {
         <TestimonialCarousel />
       </motion.section>
 
-      {/* Footer */}
       <footer className="py-6 px-4 border-t border-gray-200 bg-white">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-500 text-sm">
