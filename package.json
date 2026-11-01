@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node api.js && next dev --turbopack",
-    "build": "node api.js && next build",
-    "start:staging": "next start -p 7777",
-    "start:prod": "next start -p 3000",
+    "dev": "node init && next dev --turbopack",
+    "build": "node init && next build",
+    "start:staging": "node init && next start -p 7777",
+    "start:prod": "node init && next start -p 3000",
     "lint": "next lint",
     "test": "vitest"
   },
